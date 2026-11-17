@@ -1,0 +1,275 @@
+.why {
+  padding-top: var(--section-pad);
+}
+
+.pin {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  align-items: center;
+  padding-block: calc(var(--header-h) + 1rem) 2rem;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--col-gap);
+  align-items: center;
+  width: 100%;
+}
+
+/* ---- List of differentiators ------------------------------------------ */
+
+.list {
+  grid-column: 1 / span 5;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 0.75rem;
+  padding: 0.85rem 0;
+  border-top: 1px solid var(--line);
+  transition: opacity 0.5s var(--ease-out);
+}
+
+.item:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.itemNum {
+  padding-top: 0.2rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--fg-faint);
+  transition: color 0.4s var(--ease-out);
+}
+
+.itemTitle {
+  font-size: clamp(1.05rem, 0.85rem + 0.55vw, 1.4rem);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.itemText {
+  display: grid;
+  max-width: 40ch;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--fg-dim);
+  margin-top: 0.35rem;
+}
+
+/* Desktop: the active layer's item is emphasised, others step back */
+@media (min-width: 1024px) {
+  :global(html:not([data-motion='reduced'])) .item {
+    opacity: 0.38;
+  }
+
+  :global(html:not([data-motion='reduced'])) .itemText {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    margin-top: 0;
+    transition:
+      max-height 0.6s var(--ease-expo),
+      opacity 0.4s var(--ease-out),
+      margin-top 0.6s var(--ease-expo);
+  }
+
+  .list[data-active='0'] .item[data-i='0'],
+  .list[data-active='1'] .item[data-i='1'],
+  .list[data-active='2'] .item[data-i='2'],
+  .list[data-active='3'] .item[data-i='3'],
+  .list[data-active='4'] .item[data-i='4'],
+  .list[data-active='5'] .item[data-i='5'],
+  .list[data-active='6'] .item[data-i='6'],
+  .why[data-assembled='true'] .item {
+    opacity: 1;
+  }
+
+  .list[data-active='0'] .item[data-i='0'] .itemText,
+  .list[data-active='1'] .item[data-i='1'] .itemText,
+  .list[data-active='2'] .item[data-i='2'] .itemText,
+  .list[data-active='3'] .item[data-i='3'] .itemText,
+  .list[data-active='4'] .item[data-i='4'] .itemText,
+  .list[data-active='5'] .item[data-i='5'] .itemText,
+  .list[data-active='6'] .item[data-i='6'] .itemText {
+    max-height: 6rem;
+    opacity: 1;
+    margin-top: 0.35rem;
+  }
+
+  .list[data-active='0'] .item[data-i='0'] .itemNum,
+  .list[data-active='1'] .item[data-i='1'] .itemNum,
+  .list[data-active='2'] .item[data-i='2'] .itemNum,
+  .list[data-active='3'] .item[data-i='3'] .itemNum,
+  .list[data-active='4'] .item[data-i='4'] .itemNum,
+  .list[data-active='5'] .item[data-i='5'] .itemNum,
+  .list[data-active='6'] .item[data-i='6'] .itemNum {
+    color: var(--c-cobalt);
+  }
+}
+
+/* ---- 3D stack ----------------------------------------------------------- */
+
+.stage {
+  --gap: 4.2rem;
+  --size: min(30vw, 52svh, 26rem);
+  position: relative;
+  grid-column: 6 / -1;
+  display: grid;
+  place-items: center;
+  height: min(78svh, 46rem);
+  perspective: 1800px;
+  perspective-origin: 50% 35%;
+}
+
+.stack {
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  --rx: 56deg;
+  --rz: -40deg;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx)) rotateZ(var(--rz));
+  margin-top: calc(var(--gap) * 3.2);
+}
+
+.layer {
+  --layer-bg: rgb(255 255 255 / 0.72);
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: translateZ(calc(var(--i) * var(--gap)));
+}
+
+.face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  border-radius: 10px;
+  background: var(--layer-bg);
+  box-shadow:
+    inset 0 0 0 1px rgb(33 69 232 / 0.25),
+    0 1px 0 rgb(255 255 255 / 0.8);
+  color: var(--c-cobalt-deep);
+  overflow: hidden;
+  transition:
+    transform 0.7s var(--ease-expo),
+    box-shadow 0.5s var(--ease-out),
+    background-color 0.5s var(--ease-out);
+}
+
+.face svg {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+}
+
+.faceNum {
+  grid-area: 1 / 1;
+  align-self: end;
+  justify-self: start;
+  margin: 0.6rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgb(16 19 26 / 0.45);
+}
+
+.layer[data-face='craft'] .face {
+  color: #fff;
+}
+
+.layer[data-face='craft'] .faceNum {
+  color: rgb(255 255 255 / 0.7);
+}
+
+.layer[data-face='service'] .face {
+  --layer-bg: var(--c-white);
+}
+
+/* Active layer lifts out of the stack */
+.stage[data-active='0'] .layer[data-i='0'] .face,
+.stage[data-active='1'] .layer[data-i='1'] .face,
+.stage[data-active='2'] .layer[data-i='2'] .face,
+.stage[data-active='3'] .layer[data-i='3'] .face,
+.stage[data-active='4'] .layer[data-i='4'] .face,
+.stage[data-active='5'] .layer[data-i='5'] .face,
+.stage[data-active='6'] .layer[data-i='6'] .face {
+  transform: translateZ(1.6rem);
+  box-shadow:
+    inset 0 0 0 2px var(--c-cobalt),
+    0 30px 50px -20px rgb(33 69 232 / 0.45);
+}
+
+/* Assembled: one solid product */
+.why[data-assembled='true'] .face {
+  box-shadow:
+    inset 0 0 0 1px rgb(33 69 232 / 0.35),
+    0 10px 30px -18px rgb(16 19 26 / 0.5);
+}
+
+.closing {
+  position: absolute;
+  bottom: 0;
+  inset-inline: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: var(--fs-h4);
+  font-weight: 700;
+  text-align: center;
+  opacity: 0;
+  translate: 0 1rem;
+  transition:
+    opacity 0.6s var(--ease-out),
+    translate 0.8s var(--ease-expo);
+}
+
+.closingMark {
+  width: 0.7em;
+  height: 0.7em;
+  background: var(--c-lime);
+  box-shadow: 0 0 0 4px rgb(16 19 26);
+}
+
+.why[data-assembled='true'] .closing {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* ---- Tablet & mobile --------------------------------------------------- */
+
+@media (max-width: 1023.98px) {
+  .pin {
+    min-height: 0;
+    padding-block: 2rem var(--section-pad);
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+    row-gap: 2.5rem;
+  }
+
+  .stage {
+    --size: min(62vw, 20rem);
+    grid-column: 1;
+    grid-row: 1;
+    height: auto;
+    min-height: 26rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .stack {
+    margin-top: calc(var(--gap) * 4);
+  }
+
+  .list {
+    grid-column: 1;
+  }
+}

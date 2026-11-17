@@ -1,0 +1,26 @@
+.logo {
+  display: block;
+  height: auto;
+  overflow: visible;
+}
+
+.arrow,
+.lime {
+  transition: transform 0.5s var(--ease-expo);
+  transform-box: fill-box;
+}
+
+.lime {
+  transform-origin: center;
+}
+
+/* Hover on the parent link pushes the arrow outward and pulses the idea. */
+:global(a:hover) > .logo .arrow,
+:global(a:focus-visible) > .logo .arrow {
+  transform: translate(3px, -3px);
+}
+
+:global(a:hover) > .logo .lime,
+:global(a:focus-visible) > .logo .lime {
+  transform: scale(1.2);
+}

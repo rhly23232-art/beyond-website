@@ -1,0 +1,330 @@
+.services {
+  padding-block: var(--section-pad);
+  --grid-line: var(--line);
+}
+
+/* ==== Desktop: unfolding columns ======================================= */
+
+.board {
+  --body-w: min(44rem, calc(min(100vw, var(--container)) * 0.52));
+  display: flex;
+  gap: 0.5rem;
+  height: clamp(36rem, 76vh, 47rem);
+  margin-top: clamp(3rem, 2rem + 3vw, 5rem);
+}
+
+.col {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  border-radius: var(--r-xl);
+  background: var(--c-white);
+  box-shadow: inset 0 0 0 1px var(--line);
+  overflow: hidden;
+  transition:
+    flex-grow 0.95s var(--ease-expo),
+    background-color 0.6s var(--ease-out),
+    box-shadow 0.6s var(--ease-out);
+}
+
+.col:not([data-active='true']):hover {
+  background: var(--c-cobalt-mist);
+  box-shadow: inset 0 0 0 1px rgb(53 92 255 / 0.3);
+}
+
+.col[data-active='true'] {
+  flex-grow: 5.4;
+  background: var(--c-ink);
+  color: var(--c-soft-white);
+  box-shadow: none;
+}
+
+.head {
+  font-size: inherit;
+}
+
+.toggle {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.5rem 1.5rem 0;
+  text-align: start;
+  border-radius: var(--r-xl);
+}
+
+/* Collapsed columns are clickable over their whole surface */
+.col:not([data-active='true']) .toggle::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+}
+
+.num {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--fg-faint);
+}
+
+.col[data-active='true'] .num {
+  color: var(--c-lime);
+}
+
+.category {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.3;
+  visibility: hidden;
+  opacity: 0;
+  translate: 0 8px;
+  transition:
+    opacity 0.4s var(--ease-out),
+    translate 0.6s var(--ease-expo);
+}
+
+.col[data-active='true'] .category {
+  visibility: visible;
+  opacity: 1;
+  translate: 0 0;
+  transition-delay: 0.25s;
+}
+
+/* Short label sits at the bottom of a collapsed column */
+.short {
+  position: absolute;
+  inset-inline: 1.5rem;
+  bottom: 1.5rem;
+  font-size: clamp(1.05rem, 0.7rem + 0.6vw, 1.35rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  transition:
+    opacity 0.35s var(--ease-out),
+    translate 0.6s var(--ease-expo);
+}
+
+.col[data-active='true'] .short {
+  opacity: 0;
+  translate: 0 16px;
+}
+
+.plus {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  margin-top: 3px;
+}
+
+.plus::before,
+.plus::after {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 1.5px;
+  translate: 0 -50%;
+  background: currentColor;
+  transition: rotate 0.6s var(--ease-expo);
+}
+
+.plus::after {
+  rotate: 90deg;
+}
+
+.col[data-active='true'] .plus::after {
+  rotate: 0deg;
+}
+
+.glyphWrap {
+  position: absolute;
+  inset-inline-start: 1.5rem;
+  top: 42%;
+  color: var(--c-cobalt);
+  transition:
+    opacity 0.35s var(--ease-out),
+    scale 0.6s var(--ease-expo);
+}
+
+.col:hover .glyphWrap {
+  scale: 1.12;
+}
+
+.col[data-active='true'] .glyphWrap {
+  opacity: 0;
+  scale: 0.6;
+}
+
+/* Expanded body: fixed width so text never reflows while unfolding */
+.body {
+  position: absolute;
+  inset-block: 4.25rem 0;
+  inset-inline-start: 0;
+  width: var(--body-w);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out);
+}
+
+.col[data-active='true'] .body {
+  opacity: 1;
+  transition: opacity 0.6s var(--ease-out) 0.2s;
+}
+
+.bodyInner {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  height: 100%;
+  padding: 1rem 1.5rem 1.75rem;
+  gap: 0.75rem;
+}
+
+.graphic {
+  min-height: 0;
+  padding: 0.5rem 0 0;
+}
+
+.hint {
+  font-size: 0.75rem;
+  color: rgb(245 246 248 / 0.45);
+}
+
+@media (hover: none) {
+  .hint {
+    display: none;
+  }
+}
+
+.text {
+  display: grid;
+  gap: 0.65rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid rgb(245 246 248 / 0.12);
+}
+
+.title {
+  font-size: clamp(1.4rem, 1rem + 1vw, 1.9rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--c-white);
+}
+
+.desc {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: rgb(245 246 248 / 0.72);
+}
+
+.benefit {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--c-soft-white);
+}
+
+.benefitLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--c-lime);
+}
+
+.talk {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  justify-self: start;
+  margin-top: 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--c-soft-white);
+  background: linear-gradient(var(--c-lime), var(--c-lime)) no-repeat 100% 100% / 100% 1px;
+  padding-bottom: 3px;
+  transition: background-size 0.5s var(--ease-expo);
+}
+
+.talk:hover {
+  background-size: 0 1px;
+}
+
+.talk svg {
+  transition: translate 0.5s var(--ease-expo);
+}
+
+.talk:hover svg {
+  translate: -3px -3px;
+}
+
+/* ==== Tablet & mobile: accordion ======================================= */
+
+@media (max-width: 1023.98px) {
+  .board {
+    flex-direction: column;
+    height: auto;
+    gap: 0.5rem;
+  }
+
+  .col {
+    flex: none;
+    transition:
+      background-color 0.5s var(--ease-out),
+      box-shadow 0.5s var(--ease-out);
+  }
+
+  .toggle {
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    padding: 1.25rem;
+  }
+
+  .col:not([data-active='true']) .toggle::after {
+    display: none;
+  }
+
+  .category {
+    visibility: visible;
+    opacity: 1;
+    translate: none;
+    font-size: 1.0625rem;
+  }
+
+  .short,
+  .glyphWrap {
+    display: none;
+  }
+
+  .body {
+    position: static;
+    width: auto;
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 1;
+    transition: grid-template-rows 0.7s var(--ease-expo);
+  }
+
+  .col[data-active='true'] .body {
+    grid-template-rows: 1fr;
+    transition: grid-template-rows 0.7s var(--ease-expo);
+  }
+
+  .bodyInner {
+    min-height: 0;
+    overflow: hidden;
+    grid-template-rows: auto auto auto;
+    padding: 0 1.25rem;
+  }
+
+  .col[data-active='true'] .bodyInner {
+    padding-bottom: 1.5rem;
+  }
+
+  .graphic {
+    height: clamp(15rem, 62vw, 21rem);
+  }
+}

@@ -1,0 +1,48 @@
+.grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  column-gap: var(--col-gap);
+  width: 100%;
+  max-width: calc(var(--container) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  pointer-events: none;
+}
+
+.cell {
+  position: relative;
+  transform-origin: 50% 0;
+}
+
+.cell::before,
+.cell::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--grid-line, rgb(245 246 248 / 0.06));
+}
+
+.cell::before {
+  inset-inline-start: 0;
+}
+
+.cell::after {
+  inset-inline-end: 0;
+}
+
+@media (max-width: 767.98px) {
+  .cell:nth-child(n + 5) {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .cell:nth-child(n + 9) {
+    display: none;
+  }
+}

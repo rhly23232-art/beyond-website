@@ -1,0 +1,245 @@
+.btn {
+  --btn-h: 3.5rem;
+  --btn-pad: 0.5rem;
+  --btn-icon: 2.5rem;
+  --btn-radius: var(--r-m);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: var(--btn-h);
+  padding-block: var(--btn-pad);
+  padding-inline: 1.5rem var(--btn-pad);
+  border-radius: var(--btn-radius);
+  font-family: var(--font-he);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.2;
+  letter-spacing: 0;
+  white-space: nowrap;
+  isolation: isolate;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    scale var(--dur-fast) var(--ease-out);
+}
+
+.btn::before {
+  /* Light sweep on hover — a thin diagonal highlight passing across */
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgb(255 255 255 / 0.18) 45%,
+    rgb(255 255 255 / 0) 60%
+  );
+  translate: 110% 0;
+  transition: translate 0.9s var(--ease-expo);
+}
+
+.btn:hover::before {
+  translate: -110% 0;
+}
+
+.btn:active {
+  scale: 0.98;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.label {
+  position: relative;
+  display: inline-block;
+}
+
+.icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--btn-icon);
+  height: var(--btn-icon);
+  border-radius: calc(var(--btn-radius) - 4px);
+  overflow: hidden;
+  flex: none;
+  transition:
+    background-color var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    scale 0.5s var(--ease-expo);
+}
+
+.arrows {
+  position: relative;
+  display: grid;
+  font-size: 1rem;
+}
+
+.arrows > * {
+  grid-area: 1 / 1;
+  transition: translate 0.55s var(--ease-expo);
+}
+
+/* Direction vectors for the looping arrow on hover */
+.arrows[data-dir='out'] {
+  --ax: -1;
+  --ay: -1;
+}
+.arrows[data-dir='up-right'] {
+  --ax: 1;
+  --ay: -1;
+}
+.arrows[data-dir='down'] {
+  --ax: 0;
+  --ay: 1;
+}
+.arrows[data-dir='left'] {
+  --ax: -1;
+  --ay: 0;
+}
+.arrows[data-dir='right'] {
+  --ax: 1;
+  --ay: 0;
+}
+.arrows[data-dir='up'] {
+  --ax: 0;
+  --ay: -1;
+}
+
+.arrowB {
+  translate: calc(var(--ax) * -180%) calc(var(--ay) * -180%);
+}
+
+.btn:hover .arrowA,
+.btn:focus-visible .arrowA {
+  translate: calc(var(--ax) * 180%) calc(var(--ay) * 180%);
+}
+
+.btn:hover .arrowB,
+.btn:focus-visible .arrowB {
+  translate: 0 0;
+}
+
+.btn:hover .icon {
+  scale: 1.06;
+}
+
+/* ---- Variants ---------------------------------------------------------- */
+
+.primary {
+  background: var(--c-cobalt);
+  color: var(--c-white);
+}
+
+.primary .icon {
+  background: var(--c-lime);
+  color: var(--c-ink);
+}
+
+.primary:hover {
+  background: var(--c-cobalt-deep);
+}
+
+.primary:focus-visible {
+  outline-color: var(--focus, var(--c-lime));
+}
+
+.secondary {
+  background: transparent;
+  color: var(--fg, var(--c-soft-white));
+  box-shadow: inset 0 0 0 1px var(--line-strong, rgb(245 246 248 / 0.24));
+}
+
+.secondary .icon {
+  box-shadow: inset 0 0 0 1px var(--line-strong, rgb(245 246 248 / 0.24));
+}
+
+.secondary:hover {
+  box-shadow: inset 0 0 0 1px var(--c-cobalt);
+  background: var(--surface, rgb(245 246 248 / 0.04));
+}
+
+.secondary:hover .icon {
+  background: var(--c-lime);
+  color: var(--c-ink);
+  box-shadow: none;
+}
+
+.secondary::before {
+  display: none;
+}
+
+.ghost {
+  padding-inline: 0;
+  min-height: auto;
+  gap: 0.75rem;
+  color: var(--fg, var(--c-soft-white));
+  overflow: visible;
+}
+
+.ghost::before {
+  display: none;
+}
+
+.ghost .label {
+  background: linear-gradient(currentColor, currentColor) no-repeat 100% 100% / 0 1px;
+  transition: background-size 0.5s var(--ease-expo);
+  padding-bottom: 2px;
+}
+
+.ghost:hover .label {
+  background-size: 100% 1px;
+}
+
+.ghost .icon {
+  --btn-icon: 2rem;
+  box-shadow: inset 0 0 0 1px var(--line-strong, rgb(245 246 248 / 0.24));
+}
+
+.ghost:hover .icon {
+  background: var(--c-lime);
+  color: var(--c-ink);
+  box-shadow: none;
+}
+
+/* ---- Sizes ------------------------------------------------------------- */
+
+.lg {
+  --btn-h: 4rem;
+  --btn-icon: 3rem;
+  font-size: 1.0625rem;
+  padding-inline-start: 1.75rem;
+}
+
+.xl {
+  --btn-h: 5rem;
+  --btn-icon: 4rem;
+  --btn-pad: 0.5rem;
+  --btn-radius: var(--r-l);
+  font-size: clamp(1.0625rem, 0.95rem + 0.5vw, 1.375rem);
+  font-weight: 700;
+  padding-inline-start: 2rem;
+  gap: 1.5rem;
+}
+
+.xl .arrows {
+  font-size: 1.375rem;
+}
+
+@media (max-width: 480px) {
+  .btn {
+    white-space: normal;
+  }
+
+  .xl {
+    --btn-h: 4.25rem;
+    --btn-icon: 3.25rem;
+  }
+}

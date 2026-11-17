@@ -1,0 +1,315 @@
+.manifesto {
+  padding-top: var(--section-pad);
+}
+
+/* ---- Statement --------------------------------------------------------- */
+
+.statementWrap {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  column-gap: var(--col-gap);
+  row-gap: 2.5rem;
+  padding-bottom: var(--section-pad);
+}
+
+.statementMeta {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: var(--fs-micro);
+  color: var(--fg-faint);
+}
+
+.statement {
+  grid-column: 1 / span 11;
+  font-family: var(--font-en);
+  font-size: clamp(2.4rem, 0.9rem + 5.4vw, 7rem);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  text-wrap: initial;
+}
+
+.wordWrap {
+  position: relative;
+  display: inline;
+}
+
+.word {
+  position: relative;
+  z-index: 1;
+}
+
+.wordWrap[data-tone='cobalt'] .word {
+  color: #7f9bff;
+}
+
+.wordWrap[data-tone='strong'] .word {
+  color: var(--c-white);
+}
+
+.wordWrap[data-tone='lime'] .word {
+  color: var(--c-ink);
+  padding-inline: 0.08em;
+}
+
+.highlight {
+  position: absolute;
+  inset: 0.08em -0.02em 0.02em 0.12em;
+  z-index: 0;
+  background: var(--c-lime);
+}
+
+.statementBody {
+  grid-column: 6 / span 6;
+  max-width: 52ch;
+  font-size: var(--fs-lead);
+  line-height: 1.7;
+  color: var(--fg-dim);
+}
+
+/* ---- Desktop scene ----------------------------------------------------- */
+
+.scene {
+  --scene-bg: var(--c-ink);
+  position: relative;
+  height: 100svh;
+  min-height: 40rem;
+  background: var(--scene-bg);
+  border-top: 1px solid var(--line);
+  overflow: clip;
+}
+
+.sceneInner {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+  padding-block: calc(var(--header-h) + 1.5rem) 2rem;
+  gap: 1.5rem;
+}
+
+.sceneTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.counter {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.counterTotal {
+  color: var(--fg-faint);
+}
+
+.sceneGrid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--col-gap);
+  align-items: center;
+  min-height: 0;
+}
+
+.textCol {
+  grid-column: 1 / span 6;
+  display: grid;
+  gap: 2rem;
+  align-content: center;
+}
+
+.bigWords {
+  position: relative;
+  height: 0.84em;
+  font-size: clamp(4.5rem, 1rem + 8.4vw, 10.5rem);
+  font-weight: 700;
+  line-height: 0.84;
+  letter-spacing: -0.045em;
+  color: var(--c-white);
+  overflow: clip;
+  direction: ltr;
+  text-align: right;
+}
+
+.bigWord {
+  position: absolute;
+  inset-inline-end: 0;
+  top: 0;
+  display: flex;
+}
+
+.bigWord span {
+  display: inline-block;
+}
+
+.bigWord:last-child span:last-child {
+  color: var(--c-lime);
+}
+
+.steps {
+  display: grid;
+}
+
+.step {
+  grid-area: 1 / 1;
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+  max-width: 34rem;
+}
+
+.stepTitle {
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--fg-strong);
+}
+
+.stepBody {
+  font-size: var(--fs-body);
+  line-height: 1.7;
+  color: var(--fg-dim);
+  max-width: 46ch;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.tags li {
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  font-size: 0.8125rem;
+  color: var(--fg-dim);
+}
+
+.canvasCol {
+  grid-column: 7 / -1;
+  padding-inline-start: 2rem;
+  align-self: center;
+  max-height: 100%;
+}
+
+.canvasCol > * {
+  max-width: min(100%, calc((100svh - 15rem) / 0.92));
+  margin-inline: auto;
+}
+
+/* Progress — three clickable segments */
+.progress {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.seg {
+  display: grid;
+  gap: 0.6rem;
+  text-align: start;
+  padding-block: 0.4rem;
+  border-radius: 6px;
+}
+
+.segTrack {
+  position: relative;
+  height: 2px;
+  background: var(--line-strong);
+  overflow: hidden;
+}
+
+.segFill {
+  position: absolute;
+  inset: 0;
+  background: var(--c-lime);
+  transform-origin: 100% 50%;
+  transform: scaleX(0);
+}
+
+.segLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--fg-faint);
+  transition: color var(--dur-base) var(--ease-out);
+}
+
+.seg:hover .segLabel,
+.scene[data-phase='0'] .seg:nth-child(1) .segLabel,
+.scene[data-phase='1'] .seg:nth-child(2) .segLabel,
+.scene[data-phase='2'] .seg:nth-child(3) .segLabel {
+  color: var(--fg);
+}
+
+/* ---- Mobile list ------------------------------------------------------- */
+
+.mobileList {
+  display: none;
+}
+
+.mobileStep {
+  display: grid;
+  gap: 1.25rem;
+  padding-block: 3rem;
+  border-top: 1px solid var(--line);
+}
+
+.mobileWord {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: clamp(3.5rem, 1rem + 13vw, 6rem);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  direction: ltr;
+  justify-content: flex-end;
+}
+
+.mobileWord span {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--c-lime);
+}
+
+.mobileCanvas {
+  margin-block: 0.5rem 1rem;
+}
+
+@media (max-width: 1023.98px) {
+  .statement {
+    grid-column: 1 / -1;
+  }
+
+  .statementBody {
+    grid-column: 1 / -1;
+  }
+
+  .scene {
+    display: none;
+  }
+
+  .mobileList {
+    display: grid;
+    gap: 0;
+    padding-bottom: var(--section-pad);
+  }
+
+  .mobileList > .kicker,
+  .mobileList > :global(.kicker) {
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .statementBody {
+    grid-column: 3 / -1;
+  }
+}

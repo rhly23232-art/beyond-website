@@ -1,0 +1,128 @@
+.cta {
+  overflow: clip;
+}
+
+.pin {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  padding-block: calc(var(--header-h) + 2rem) 3rem;
+  background:
+    radial-gradient(50% 45% at 50% 34%, rgb(53 92 255 / 0.22), transparent 70%),
+    var(--c-ink);
+}
+
+.grid {
+  --grid-line: rgb(245 246 248 / 0.05);
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: clamp(1.25rem, 0.8rem + 1.5vw, 2rem);
+  padding-inline: var(--gutter);
+  text-align: center;
+}
+
+/* ---- Assembling symbol -------------------------------------------------- */
+
+.symbolWrap {
+  position: relative;
+  width: clamp(5.5rem, 3rem + 7vw, 9.5rem);
+  aspect-ratio: 1;
+  margin-bottom: 0.5rem;
+  direction: ltr;
+}
+
+.symbol {
+  position: absolute;
+  inset: 0;
+}
+
+.bar,
+.lime {
+  position: absolute;
+  transform-origin: 50% 50%;
+}
+
+.bar {
+  background: var(--c-soft-white);
+}
+
+.lime {
+  background: var(--c-lime);
+  box-shadow: 0 0 30px rgb(199 243 74 / 0.55);
+}
+
+.glow {
+  position: absolute;
+  inset: -80%;
+  background: radial-gradient(closest-side, rgb(199 243 74 / 0.16), rgb(53 92 255 / 0.12) 50%, transparent 72%);
+  pointer-events: none;
+}
+
+.debris {
+  position: absolute;
+  border: 1px solid rgb(245 246 248 / 0.4);
+}
+
+/* ---- Text --------------------------------------------------------------- */
+
+.kicker {
+  color: var(--fg-dim);
+}
+
+.title {
+  display: grid;
+  justify-items: center;
+  font-size: clamp(2.4rem, 0.6rem + 6.6vw, 8rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  color: var(--c-white);
+}
+
+.line {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.charMask {
+  display: inline-block;
+  overflow: clip;
+  padding-block: 0.06em 0.1em;
+  margin-block: -0.06em -0.1em;
+}
+
+.char {
+  display: inline-block;
+}
+
+.accent {
+  color: var(--c-lime);
+}
+
+.he {
+  display: grid;
+  gap: 0.2rem;
+  font-size: var(--fs-h4);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--fg-dim);
+}
+
+.he > span {
+  display: block;
+}
+
+.he > span:last-child {
+  color: var(--fg-strong);
+}
+
+.action {
+  margin-top: 0.75rem;
+}

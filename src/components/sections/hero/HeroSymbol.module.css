@@ -1,0 +1,104 @@
+.scene {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  perspective: 1400px;
+  perspective-origin: 50% 40%;
+}
+
+.entrance,
+.rig {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.rig {
+  transform: rotateX(10deg) rotateY(-22deg);
+}
+
+.rig > * {
+  position: absolute;
+}
+
+/* Focused cobalt light behind the object */
+.flare {
+  inset: -30%;
+  background: radial-gradient(closest-side, rgb(53 92 255 / 0.55), rgb(53 92 255 / 0.12) 55%, transparent 75%);
+  transform: translateZ(-260px);
+  filter: blur(10px);
+}
+
+/* Faint echo of the frame far behind — gives the space depth */
+.ghost {
+  inset: 2%;
+  transform: translateZ(-190px);
+  border: 1px solid rgb(245 246 248 / 0.12);
+  clip-path: polygon(0 0, 62% 0, 62% 6%, 94% 38%, 100% 38%, 100% 100%, 0 100%);
+}
+
+.gridPlate {
+  inset: 10%;
+  transform: translateZ(-120px);
+  border-radius: var(--r-xl);
+  background-image:
+    linear-gradient(rgb(245 246 248 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(245 246 248 / 0.07) 1px, transparent 1px);
+  background-size: 8.333% 8.333%;
+  mask-image: radial-gradient(closest-side, #000 55%, transparent 100%);
+}
+
+/* Matte glass: frosted, slightly lit from the top-left */
+.glass {
+  inset: 12% 14% 8% 6%;
+  transform: translateZ(-56px);
+  border-radius: var(--r-xl);
+  background:
+    linear-gradient(140deg, rgb(255 255 255 / 0.14), rgb(255 255 255 / 0.02) 45%, rgb(53 92 255 / 0.1)),
+    rgb(23 28 39 / 0.35);
+  box-shadow:
+    inset 0 0 0 1px rgb(245 246 248 / 0.14),
+    inset 0 1px 0 rgb(255 255 255 / 0.25),
+    0 40px 80px -30px rgb(0 0 0 / 0.6);
+  overflow: hidden;
+}
+
+.glassSheen {
+  position: absolute;
+  inset: -50%;
+  background: linear-gradient(115deg, transparent 40%, rgb(255 255 255 / 0.12) 50%, transparent 60%);
+  transform: translateX(calc(var(--sheen, 0) * 30%));
+}
+
+.slice {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  transform: translateZ(var(--z));
+}
+
+.arrowFront {
+  filter: drop-shadow(0 0 18px rgb(53 92 255 / 0.35));
+}
+
+.lime {
+  left: var(--x);
+  top: var(--y);
+  width: var(--s);
+  height: var(--s);
+  background: var(--c-lime);
+  transform: translateZ(84px);
+  box-shadow:
+    0 0 24px rgb(199 243 74 / 0.55),
+    0 0 80px rgb(199 243 74 / 0.25);
+  animation: lime-breathe 4s ease-in-out infinite;
+}
+
+@keyframes lime-breathe {
+  50% {
+    box-shadow:
+      0 0 34px rgb(199 243 74 / 0.75),
+      0 0 120px rgb(199 243 74 / 0.32);
+  }
+}

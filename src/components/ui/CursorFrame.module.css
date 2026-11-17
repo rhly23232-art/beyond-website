@@ -1,0 +1,111 @@
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-cursor);
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+.frame {
+  position: absolute;
+  top: -22px;
+  left: -22px;
+  width: 44px;
+  height: 44px;
+  opacity: 0;
+  scale: 0.4;
+  transition:
+    opacity 0.3s var(--ease-out),
+    scale 0.5s var(--ease-expo);
+}
+
+/* Four corner brackets — an open frame around the pointer */
+.frame i {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid var(--c-lime);
+}
+
+.frame i:nth-child(1) {
+  top: 0;
+  left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+.frame i:nth-child(2) {
+  top: 0;
+  right: 0;
+  border-left: 0;
+  border-bottom: 0;
+  /* the open corner — the brand frame never fully closes */
+  opacity: 0;
+}
+.frame i:nth-child(3) {
+  bottom: 0;
+  left: 0;
+  border-right: 0;
+  border-top: 0;
+}
+.frame i:nth-child(4) {
+  bottom: 0;
+  right: 0;
+  border-left: 0;
+  border-top: 0;
+}
+
+.dot {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  width: 6px;
+  height: 6px;
+  background: var(--c-lime);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out);
+}
+
+.label {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  padding: 0.45rem 0.75rem;
+  border-radius: 6px;
+  background: var(--c-lime);
+  color: var(--c-ink);
+  font-family: var(--font-he);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  opacity: 0;
+  scale: 0.6;
+  transform-origin: 0 0;
+  transition:
+    opacity 0.25s var(--ease-out),
+    scale 0.45s var(--ease-expo);
+}
+
+.cursor[data-state='frame'] .frame {
+  opacity: 1;
+  scale: 1;
+}
+
+.cursor[data-state='frame'] .dot {
+  opacity: 1;
+}
+
+.cursor[data-state='label'] .label {
+  opacity: 1;
+  scale: 1;
+}
+
+.cursor[data-state='label'] .dot {
+  opacity: 1;
+}
+
+.pressed .frame {
+  scale: 0.8;
+}

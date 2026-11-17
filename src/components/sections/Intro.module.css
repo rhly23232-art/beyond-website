@@ -1,0 +1,166 @@
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-intro);
+  display: none;
+  background: var(--c-ink);
+  color: var(--c-soft-white);
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+:global(html.js[data-intro='pending']) .intro,
+:global(html.js[data-intro='reveal']) .intro {
+  display: block;
+}
+
+:global(html.js[data-intro='reveal']) .intro {
+  pointer-events: none;
+}
+
+.grid {
+  --grid-line: rgb(245 246 248 / 0.07);
+}
+
+.grid > span {
+  transform: scaleY(0);
+}
+
+:global(html[data-intro-mode='short']) .grid > span {
+  transform: none;
+}
+
+/* ---- The expanding window (open frame) ------------------------------- */
+
+.window {
+  --bw: 10px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+  box-shadow: 0 0 0 200vmax var(--c-ink);
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  background: var(--c-ink);
+}
+
+.window i {
+  position: absolute;
+  background: var(--c-soft-white);
+}
+
+/* Proportions follow the symbol: the top-right corner stays open. */
+.bTop {
+  top: calc(var(--bw) / -2);
+  left: calc(var(--bw) / -2);
+  width: calc(62.5% + var(--bw) / 2);
+  height: var(--bw);
+}
+
+.bLeft {
+  top: calc(var(--bw) / -2);
+  left: calc(var(--bw) / -2);
+  width: var(--bw);
+  height: calc(100% + var(--bw));
+}
+
+.bBottom {
+  left: calc(var(--bw) / -2);
+  bottom: calc(var(--bw) / -2);
+  width: calc(100% + var(--bw));
+  height: var(--bw);
+}
+
+.bRight {
+  right: calc(var(--bw) / -2);
+  bottom: calc(var(--bw) / -2);
+  width: var(--bw);
+  height: calc(48.2% + var(--bw) / 2);
+}
+
+/* ---- Lockup ------------------------------------------------------------ */
+
+.center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: clamp(1.5rem, 1rem + 2vw, 2.75rem);
+  padding-inline: var(--gutter);
+}
+
+.lockup {
+  width: clamp(17rem, 9rem + 30vw, 36rem);
+  height: auto;
+  overflow: visible;
+  direction: ltr;
+}
+
+.draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+/* SVG transforms are owned by GSAP (attribute-based), so pre-JS hiding uses opacity. */
+.lime {
+  fill: var(--c-lime);
+  opacity: 0;
+}
+
+.glyph {
+  opacity: 0;
+}
+
+:global(html[data-intro-mode='short']) .draw {
+  stroke-dashoffset: 0;
+}
+
+:global(html[data-intro-mode='short']) .lime,
+:global(html[data-intro-mode='short']) .glyph {
+  opacity: 1;
+}
+
+.caption {
+  font-size: clamp(0.6875rem, 0.6rem + 0.25vw, 0.8125rem);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: rgb(245 246 248 / 0.6);
+  white-space: nowrap;
+  opacity: 0;
+}
+
+:global(html[data-intro-mode='short']) .caption {
+  opacity: 1;
+}
+
+/* ---- Skip -------------------------------------------------------------- */
+
+.skip {
+  position: fixed;
+  inset-block-end: clamp(1rem, 0.6rem + 1.5vw, 2rem);
+  inset-inline-start: var(--gutter);
+  z-index: calc(var(--z-intro) + 1);
+  display: none;
+  padding: 0.5rem 0.25rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: rgb(245 246 248 / 0.6);
+  background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 100% 1px;
+  transition: color var(--dur-base) var(--ease-out);
+}
+
+.skip:hover,
+.skip:focus-visible {
+  color: var(--c-lime);
+}
+
+:global(html.js[data-intro='pending']) .skip {
+  display: block;
+}

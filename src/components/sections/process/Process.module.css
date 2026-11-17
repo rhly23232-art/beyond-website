@@ -1,0 +1,242 @@
+.process {
+  padding-top: var(--section-pad);
+}
+
+.pin {
+  display: grid;
+  align-items: center;
+  min-height: 100svh;
+  padding-block: calc(var(--header-h) + 1rem) 3rem;
+}
+
+.inner {
+  position: relative;
+  width: 100%;
+}
+
+/* ---- Rail -------------------------------------------------------------- */
+
+.rail {
+  position: absolute;
+  inset-inline: var(--gutter);
+  top: 0.55rem;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.railFill {
+  position: absolute;
+  inset: 0;
+  background: var(--c-lime);
+  transform-origin: 100% 50%;
+  transform: scaleX(0);
+}
+
+.runner {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: 12px;
+  height: 12px;
+  translate: -50% -50%;
+  background: var(--c-lime);
+  box-shadow: 0 0 20px rgb(199 243 74 / 0.6);
+}
+
+/* ---- Steps ------------------------------------------------------------- */
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--col-gap);
+}
+
+.step {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.85rem;
+  padding-inline-end: 0.5rem;
+}
+
+.stepHead {
+  display: grid;
+  justify-items: start;
+  gap: 0.6rem;
+  text-align: start;
+  border-radius: var(--r-s);
+}
+
+.node {
+  width: 1.1rem;
+  height: 1.1rem;
+  background: var(--bg);
+  box-shadow: inset 0 0 0 1.5px var(--fg-faint);
+  transition:
+    background-color 0.5s var(--ease-out),
+    box-shadow 0.5s var(--ease-out),
+    rotate 0.7s var(--ease-expo);
+}
+
+.num {
+  margin-top: 1.25rem;
+  font-size: clamp(3.5rem, 2rem + 3.4vw, 6.5rem);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(245 246 248 / 0.35);
+  background: linear-gradient(var(--c-lime), var(--c-lime)) no-repeat 0 100% / 100% 0%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition:
+    background-size 0.9s var(--ease-expo),
+    -webkit-text-stroke-color 0.5s var(--ease-out);
+}
+
+.enName {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--fg-faint);
+  transition: color 0.4s var(--ease-out);
+}
+
+.title {
+  font-size: var(--fs-h4);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--fg-strong);
+}
+
+.summary {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.body {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--fg-dim);
+}
+
+.deliverables {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.delLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--fg-faint);
+}
+
+.deliverables ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.deliverables li {
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  font-size: 0.75rem;
+  color: var(--fg-dim);
+  transition:
+    background-color 0.4s var(--ease-out),
+    color 0.4s var(--ease-out),
+    box-shadow 0.4s var(--ease-out);
+}
+
+/* States — content reveals as the line reaches each step */
+:global(html:not([data-motion='reduced'])) .step[data-state='idle'] > :not(.stepHead),
+:global(html:not([data-motion='reduced'])) .step[data-state='idle'] .title {
+  opacity: 0.32;
+}
+
+.step > * {
+  transition: opacity 0.6s var(--ease-out);
+}
+
+.step[data-state='done'] .node,
+.step[data-state='active'] .node {
+  background: var(--c-lime);
+  box-shadow: none;
+}
+
+.step[data-state='active'] .node {
+  rotate: 45deg;
+}
+
+.step[data-state='done'] .num,
+.step[data-state='active'] .num {
+  background-size: 100% 100%;
+  -webkit-text-stroke-color: transparent;
+}
+
+.step[data-state='done'] .num {
+  background-image: linear-gradient(rgb(245 246 248 / 0.9), rgb(245 246 248 / 0.9));
+}
+
+.step[data-state='active'] .enName {
+  color: var(--c-lime);
+}
+
+.step[data-state='active'] .deliverables li {
+  background: rgb(199 243 74 / 0.12);
+  color: var(--c-soft-white);
+  box-shadow: inset 0 0 0 1px rgb(199 243 74 / 0.35);
+}
+
+.stepHead:hover .node {
+  rotate: 45deg;
+}
+
+/* ---- Mobile: vertical timeline ---------------------------------------- */
+
+@media (max-width: 1023.98px) {
+  .pin {
+    min-height: 0;
+    padding-block: 3rem var(--section-pad);
+  }
+
+  .rail {
+    inset-inline: auto;
+    inset-inline-start: calc(var(--gutter) + 0.55rem);
+    top: 0.5rem;
+    bottom: 0;
+    width: 1px;
+    height: auto;
+  }
+
+  .railFill {
+    transform-origin: 50% 0;
+    transform: scaleY(0);
+  }
+
+  .runner {
+    display: none;
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .step {
+    padding-inline-start: 2.5rem;
+  }
+
+  .node {
+    position: absolute;
+    inset-inline-start: 0;
+    top: 0;
+  }
+
+  .num {
+    margin-top: 0;
+  }
+}

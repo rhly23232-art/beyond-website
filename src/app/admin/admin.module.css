@@ -1,0 +1,88 @@
+.admin {
+  min-height: 100svh;
+  padding: calc(var(--header-h) + 3rem) var(--gutter) 4rem;
+  background: var(--c-soft-white);
+  color: var(--c-ink);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 90rem;
+  margin: 0 auto 2rem;
+}
+
+.head h1 {
+  font-size: var(--fs-h2);
+}
+
+.head p {
+  color: var(--fg-dim);
+}
+
+.notice {
+  max-width: 90rem;
+  margin: 0 auto 1.5rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--r-m);
+  background: var(--c-cobalt-mist);
+}
+
+.tableWrap {
+  max-width: 90rem;
+  margin: 0 auto;
+  overflow-x: auto;
+  border-radius: var(--r-l);
+  background: var(--c-white);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.table th,
+.table td {
+  padding: 0.85rem 1rem;
+  text-align: start;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+
+.table th {
+  font-size: 0.8125rem;
+  color: var(--fg-dim);
+  background: var(--c-soft-white);
+}
+
+.table tr[data-status='new'] td:first-child {
+  box-shadow: inset -3px 0 0 var(--c-cobalt);
+}
+
+.table a {
+  color: var(--c-cobalt-deep);
+}
+
+.msg {
+  min-width: 18rem;
+  max-width: 32rem;
+  white-space: pre-wrap;
+}
+
+.status {
+  padding: 0.4rem 0.7rem;
+  border-radius: var(--r-s);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+.table tr[data-status='new'] .status {
+  background: var(--c-lime);
+  box-shadow: none;
+}

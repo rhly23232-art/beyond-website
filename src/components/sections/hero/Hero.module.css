@@ -1,0 +1,266 @@
+.hero {
+  min-height: 100svh;
+  overflow: clip;
+}
+
+/* ---- Background layers ------------------------------------------------- */
+
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.grid {
+  --grid-line: rgb(245 246 248 / 0.055);
+}
+
+.glow {
+  position: absolute;
+  width: 70vmax;
+  height: 70vmax;
+  inset-inline-end: -18vmax;
+  top: -22vmax;
+  background: radial-gradient(closest-side, rgb(53 92 255 / 0.34), rgb(53 92 255 / 0.08) 55%, transparent 72%);
+}
+
+.particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---- Stage ------------------------------------------------------------- */
+
+.stage {
+  position: relative;
+  z-index: 1;
+  min-height: 100svh;
+  transform-origin: 50% 40%;
+}
+
+.visual {
+  position: absolute;
+  z-index: 0;
+  inset-inline-end: max(2vw, calc((100vw - var(--container)) / 2 - 2vw));
+  top: clamp(5rem, 9vh, 7rem);
+  width: min(33vw, 32rem);
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  grid-template-rows: auto 1fr auto auto;
+  column-gap: var(--col-gap);
+  min-height: 100svh;
+  padding-block: calc(var(--header-h) + 2.25rem) clamp(1.5rem, 3vh, 2.5rem);
+  pointer-events: none;
+}
+
+.inner > * {
+  pointer-events: auto;
+}
+
+.meta {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  font-size: var(--fs-micro);
+  color: var(--fg-faint);
+}
+
+.disciplines {
+  margin-inline-start: auto;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ---- Title ------------------------------------------------------------- */
+
+.title {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  align-self: end;
+  font-family: var(--font-en);
+  font-size: clamp(3.4rem, 0.6rem + 9.2vw, 10.75rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: var(--c-white);
+  text-wrap: initial;
+}
+
+.line {
+  display: block;
+  will-change: transform;
+}
+
+.mask {
+  display: inline-block;
+  overflow: clip;
+  padding-block: 0.06em 0.12em;
+  margin-block: -0.06em -0.12em;
+  vertical-align: top;
+}
+
+.lineInner {
+  display: inline-block;
+  transform-origin: 100% 100%;
+}
+
+/* Line 1 — outlined: the thing we are NOT building */
+.l1 .lineInner {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgb(245 246 248 / 0.6);
+  font-weight: 700;
+}
+
+.l2 {
+  white-space: nowrap;
+}
+
+.l3 {
+  padding-inline-start: clamp(0rem, 8vw, 9rem);
+}
+
+.dot {
+  display: inline-block;
+  width: 0.19em;
+  height: 0.19em;
+  margin-inline-start: 0.07em;
+  background: var(--c-lime);
+  box-shadow: 0 0 40px rgb(199 243 74 / 0.45);
+}
+
+/* ---- Bottom row -------------------------------------------------------- */
+
+.bottom {
+  grid-column: 8 / -1;
+  grid-row: 3;
+  display: grid;
+  gap: 1.75rem;
+  margin-top: clamp(-9rem, -8vw, -3rem);
+  align-self: end;
+}
+
+.subtitle {
+  max-width: 34ch;
+  font-size: var(--fs-lead);
+  line-height: 1.6;
+  color: var(--fg-dim);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.cue {
+  grid-column: 1 / span 4;
+  grid-row: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  justify-self: start;
+  margin-top: clamp(1.5rem, 4vh, 3rem);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--fg-faint);
+  transition: color var(--dur-base) var(--ease-out);
+}
+
+.cue:hover {
+  color: var(--fg);
+}
+
+.cueLine {
+  position: relative;
+  width: 1px;
+  height: 2.75rem;
+  background: var(--line-strong);
+  overflow: hidden;
+}
+
+.cueLine::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: -40%;
+  height: 40%;
+  background: var(--c-lime);
+  animation: cue 2.2s var(--ease-in-out) infinite;
+}
+
+@keyframes cue {
+  to {
+    top: 100%;
+  }
+}
+
+/* ---- Tablet ------------------------------------------------------------ */
+
+@media (max-width: 1023.98px) {
+  .visual {
+    width: min(56vw, 30rem);
+    top: 12vh;
+  }
+
+  .bottom {
+    grid-column: 1 / -1;
+    margin-top: 2rem;
+  }
+
+  .disciplines {
+    display: none;
+  }
+}
+
+/* ---- Mobile: its own composition, not a shrunk desktop ----------------- */
+
+@media (max-width: 767.98px) {
+  .visual {
+    width: 74vw;
+    inset-inline-end: -10vw;
+    top: 10svh;
+    opacity: 0.9;
+  }
+
+  .title {
+    font-size: clamp(3rem, 0.4rem + 13.6vw, 4.6rem);
+    line-height: 0.98;
+    margin-top: 38vw;
+  }
+
+  .l2 {
+    white-space: normal;
+  }
+
+  /* "נוכחות / דיגיטלית" — a deliberate break on small screens */
+  .word {
+    display: block;
+    width: fit-content;
+  }
+
+  .l3 {
+    padding-inline-start: 0;
+  }
+
+  .bottom {
+    gap: 1.5rem;
+  }
+
+  .actions {
+    display: grid;
+  }
+
+  .cue {
+    grid-column: 1 / -1;
+  }
+}

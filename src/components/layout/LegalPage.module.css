@@ -1,0 +1,55 @@
+.page {
+  padding-block: calc(var(--header-h) + 5rem) var(--section-pad);
+}
+
+.article {
+  max-width: calc(52rem + var(--gutter) * 2);
+}
+
+.header {
+  display: grid;
+  gap: 1.25rem;
+  padding-bottom: 2.5rem;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.title {
+  font-size: var(--fs-h1);
+  letter-spacing: -0.03em;
+}
+
+.updated {
+  font-size: 0.875rem;
+  color: var(--fg-faint);
+}
+
+.body {
+  display: grid;
+  gap: 1.25rem;
+  font-size: var(--fs-body);
+  line-height: 1.8;
+  color: var(--fg-dim);
+}
+
+.body h2 {
+  margin-top: 1.5rem;
+  font-size: var(--fs-h4);
+  color: var(--fg-strong);
+}
+
+.body ul {
+  display: grid;
+  gap: 0.5rem;
+  padding-inline-start: 1.25rem;
+}
+
+.body li::marker {
+  color: var(--c-cobalt);
+}
+
+.body a {
+  color: var(--c-cobalt-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

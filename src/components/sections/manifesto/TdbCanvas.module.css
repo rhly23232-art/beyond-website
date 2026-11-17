@@ -1,0 +1,355 @@
+.canvas {
+  --line: rgb(245 246 248 / 0.18);
+  position: relative;
+  aspect-ratio: 1 / 0.92;
+  width: 100%;
+  border-radius: var(--r-xl);
+  background:
+    radial-gradient(80% 70% at 50% 45%, rgb(53 92 255 / 0.14), transparent 70%),
+    linear-gradient(180deg, rgb(36 43 57 / 0.55), rgb(23 28 39 / 0.55));
+  box-shadow: inset 0 0 0 1px rgb(245 246 248 / 0.08);
+  overflow: visible;
+  isolation: isolate;
+  direction: ltr;
+  container-type: inline-size;
+}
+
+:global(html:not(.js)) .canvas {
+  display: none;
+}
+
+.dots {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: radial-gradient(rgb(245 246 248 / 0.22) 1px, transparent 1.4px);
+  background-size: 22px 22px;
+  background-position: 11px 11px;
+  mask-image: radial-gradient(closest-side, #000 60%, transparent 100%);
+}
+
+/* ---- THINK ------------------------------------------------------------- */
+
+.rings {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.rings span {
+  position: absolute;
+  width: calc((var(--i) + 1) * 14cqw);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border: 1px dashed rgb(245 246 248 / calc(0.32 - var(--i) * 0.08));
+}
+
+.links {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.links path {
+  fill: none;
+  stroke: rgb(140 164 255 / 0.75);
+  stroke-width: 0.28;
+  stroke-dasharray: 1 1;
+}
+
+.node {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  translate: -50% -50%;
+  white-space: nowrap;
+  direction: rtl;
+}
+
+.node i {
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 1.5px solid var(--c-soft-white);
+  background: var(--c-ink);
+}
+
+.node span {
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
+  background: rgb(245 246 248 / 0.08);
+  box-shadow: inset 0 0 0 1px rgb(245 246 248 / 0.14);
+  font-size: clamp(0.7rem, 0.55rem + 0.35vw, 0.875rem);
+  font-weight: 600;
+  color: var(--c-soft-white);
+}
+
+.insight {
+  position: absolute;
+  z-index: 3;
+  width: 7%;
+  aspect-ratio: 1;
+  background: var(--c-lime);
+  box-shadow: 0 0 30px rgb(199 243 74 / 0.5);
+}
+
+/* ---- DESIGN ------------------------------------------------------------ */
+
+.browser {
+  position: absolute;
+  inset: 9% 6% 13% 6%;
+}
+
+.browser [data-seg] {
+  position: absolute;
+  background: rgb(245 246 248 / 0.75);
+}
+
+.browser [data-seg='top'] {
+  top: 0;
+  left: 0;
+  width: 64%;
+  height: 1.5px;
+  transform-origin: 0 50%;
+}
+
+.browser [data-seg='left'] {
+  top: 0;
+  left: 0;
+  width: 1.5px;
+  height: 100%;
+  transform-origin: 50% 0;
+}
+
+.browser [data-seg='bottom'] {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  transform-origin: 0 50%;
+}
+
+.browser [data-seg='right'] {
+  bottom: 0;
+  right: 0;
+  width: 1.5px;
+  height: 58%;
+  transform-origin: 50% 100%;
+}
+
+.chrome {
+  position: absolute;
+  top: 2.6%;
+  left: 2.4%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 50%;
+}
+
+.chrome i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgb(245 246 248 / 0.3);
+}
+
+.url {
+  flex: 1;
+  height: 8px;
+  margin-inline-start: 10px;
+  border-radius: 4px;
+  background: rgb(245 246 248 / 0.1);
+}
+
+.block {
+  position: absolute;
+}
+
+.wire {
+  position: absolute;
+  inset: 0;
+  border: 1px dashed rgb(245 246 248 / 0.45);
+  border-radius: 6px;
+}
+
+.solid {
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.block[data-kind='bar'] .solid {
+  background: rgb(245 246 248 / 0.06);
+  box-shadow: inset 0 0 0 1px rgb(245 246 248 / 0.1);
+}
+
+.navLogo {
+  position: absolute;
+  right: 3%;
+  top: 30%;
+  width: 9%;
+  height: 40%;
+  border-radius: 2px;
+  background: var(--c-soft-white);
+}
+
+.navLinks {
+  position: absolute;
+  left: 3%;
+  top: 38%;
+  width: 34%;
+  height: 24%;
+  border-radius: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgb(245 246 248 / 0.4) 0 18%,
+    transparent 18% 26%
+  );
+}
+
+.block[data-kind='hero'] .solid {
+  background:
+    radial-gradient(70% 90% at 15% 85%, rgb(199 243 74 / 0.2), transparent 60%),
+    linear-gradient(135deg, var(--c-cobalt) 0%, var(--c-cobalt-deep) 60%, #1a2fa8 100%);
+}
+
+.block[data-kind='text'] .solid {
+  border-radius: 3px;
+  background: var(--c-white);
+}
+
+.block[data-kind='cta'] .solid {
+  background: var(--c-ink);
+  box-shadow: inset 0 0 0 1px rgb(245 246 248 / 0.2);
+}
+
+.ctaLabel {
+  position: absolute;
+  right: 12%;
+  top: 38%;
+  width: 46%;
+  height: 24%;
+  border-radius: 2px;
+  background: rgb(245 246 248 / 0.75);
+}
+
+.block[data-kind='card'] .solid {
+  background: rgb(36 43 57 / 0.9);
+  box-shadow: inset 0 0 0 1px rgb(245 246 248 / 0.1);
+}
+
+.icon {
+  position: absolute;
+  right: 10%;
+  top: 14%;
+  width: 16%;
+  aspect-ratio: 1;
+  border: 1.5px solid var(--c-lime);
+}
+
+.lineA,
+.lineB {
+  position: absolute;
+  right: 10%;
+  height: 7%;
+  border-radius: 2px;
+  background: rgb(245 246 248 / 0.55);
+}
+
+.lineA {
+  top: 56%;
+  width: 70%;
+}
+
+.lineB {
+  top: 72%;
+  width: 46%;
+  background: rgb(245 246 248 / 0.25);
+}
+
+/* ---- BUILD ------------------------------------------------------------- */
+
+.code {
+  position: absolute;
+  left: -2.5%;
+  bottom: -7%;
+  z-index: 4;
+  width: 50%;
+  padding: 0.75rem 0.9rem 0.9rem;
+  border-radius: var(--r-m);
+  background: rgb(13 16 22 / 0.94);
+  box-shadow:
+    inset 0 0 0 1px rgb(245 246 248 / 0.12),
+    0 30px 60px -20px rgb(0 0 0 / 0.7);
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: clamp(0.58rem, 0.4rem + 0.42vw, 0.78rem);
+  line-height: 1.75;
+  color: rgb(245 246 248 / 0.7);
+  white-space: pre;
+}
+
+.codeHead {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.85em;
+  color: rgb(245 246 248 / 0.45);
+}
+
+.codeHead i {
+  width: 6px;
+  height: 6px;
+  background: var(--c-lime);
+}
+
+.code p {
+  width: fit-content;
+}
+
+.punct {
+  color: rgb(245 246 248 / 0.45);
+}
+
+.tag {
+  color: #8ca4ff;
+}
+
+.attr {
+  color: var(--c-lime);
+}
+
+.live {
+  position: absolute;
+  z-index: 4;
+  top: 3.5%;
+  right: 6%;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  background: var(--c-lime);
+  color: var(--c-ink);
+  font-family: var(--font-en);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.live i {
+  width: 6px;
+  height: 6px;
+  background: var(--c-ink);
+  animation: blink 1.4s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
