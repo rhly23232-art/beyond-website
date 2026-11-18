@@ -187,7 +187,7 @@ export function Intro() {
 
   return (
     <>
-      <div ref={root} className={styles.intro} aria-hidden="true">
+      <div ref={root} className={styles.intro} aria-hidden="true" data-intro-root>
         <GridLines className={styles.grid} hook="introline" />
 
         <div data-window className={styles.window}>

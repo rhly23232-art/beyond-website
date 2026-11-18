@@ -103,6 +103,13 @@ export function ContactForm() {
       return;
     }
 
+    if (process.env.NEXT_PUBLIC_STATIC_PREVIEW === '1') {
+      // Static preview (no server): say so instead of pretending to send.
+      setStatus('error');
+      setServerError(contact.errors.preview);
+      return;
+    }
+
     setStatus('sending');
     setServerError('');
     try {

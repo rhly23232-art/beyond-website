@@ -66,5 +66,9 @@ export function onIntroDone(cb: () => void): () => void {
   return () => window.removeEventListener(INTRO_DONE_EVENT, handler);
 }
 
-/** Inline script executed in <head> before first paint (kept tiny on purpose). */
-export const headScript = `(function(){var d=document.documentElement;d.classList.add('js');var r=false;try{var m=localStorage.getItem('${MOTION_STORAGE_KEY}');r=m==='reduced'||(m!=='full'&&matchMedia('(prefers-reduced-motion: reduce)').matches);}catch(e){r=matchMedia('(prefers-reduced-motion: reduce)').matches;}d.dataset.motion=r?'reduced':'full';var s=false,k=false;try{s=!!sessionStorage.getItem('${INTRO_STORAGE_KEY}');k=!!sessionStorage.getItem('beyond-skip-intro');sessionStorage.removeItem('beyond-skip-intro');}catch(e){}var h=location.pathname==='/';d.dataset.intro=(r||k||!h)?'done':'pending';d.dataset.introMode=s?'short':'full';if(h&&!r&&!k&&'scrollRestoration' in history){history.scrollRestoration='manual';}setTimeout(function(){if(!window.__beyondReady&&d.dataset.intro!=='done'){d.dataset.intro='done';}},7000);})();`;
+/**
+ * Inline script executed in <head> before first paint (kept tiny on purpose).
+ * The intro is armed on every page and released at DOMContentLoaded on pages
+ * that have no intro overlay — so it never depends on the URL path.
+ */
+export const headScript = `(function(){var d=document.documentElement;d.classList.add('js');var r=false;try{var m=localStorage.getItem('${MOTION_STORAGE_KEY}');r=m==='reduced'||(m!=='full'&&matchMedia('(prefers-reduced-motion: reduce)').matches);}catch(e){r=matchMedia('(prefers-reduced-motion: reduce)').matches;}d.dataset.motion=r?'reduced':'full';var s=false,k=false;try{s=!!sessionStorage.getItem('${INTRO_STORAGE_KEY}');k=!!sessionStorage.getItem('beyond-skip-intro');sessionStorage.removeItem('beyond-skip-intro');}catch(e){}var p=!r&&!k;d.dataset.intro=p?'pending':'done';d.dataset.introMode=s?'short':'full';var h='scrollRestoration' in history;if(p&&h){history.scrollRestoration='manual';}document.addEventListener('DOMContentLoaded',function(){if(d.dataset.intro==='pending'&&!document.querySelector('[data-intro-root]')){d.dataset.intro='done';if(h){history.scrollRestoration='auto';}}});setTimeout(function(){if(!window.__beyondReady&&d.dataset.intro!=='done'){d.dataset.intro='done';}},7000);})();`;
