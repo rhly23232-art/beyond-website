@@ -74,7 +74,7 @@ export function Experience() {
         <div className={styles.main}>
           <SectionHeading
             id="experience-title"
-            index="07"
+           
             kicker={experience.kicker}
             titleLines={experience.titleLines}
             lead={experience.lead}

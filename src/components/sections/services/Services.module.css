@@ -28,8 +28,29 @@
 }
 
 .col:not([data-active='true']):hover {
+  flex-grow: 1.3;
   background: var(--c-cobalt-mist);
   box-shadow: inset 0 0 0 1px rgb(53 92 255 / 0.3);
+}
+
+/* Collapsed columns preview the service's own headline */
+.peek {
+  position: absolute;
+  inset-inline: 1.5rem;
+  top: 9.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--fg-dim);
+  transition: opacity 0.35s var(--ease-out);
+}
+
+.col[data-active='true'] .peek {
+  opacity: 0;
 }
 
 .col[data-active='true'] {
@@ -45,7 +66,7 @@
 
 .toggle {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;
   gap: 1rem;
   width: 100%;
@@ -63,16 +84,7 @@
   border-radius: inherit;
 }
 
-.num {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  color: var(--fg-faint);
-}
 
-.col[data-active='true'] .num {
-  color: var(--c-lime);
-}
 
 .category {
   font-size: 0.9375rem;
@@ -142,7 +154,7 @@
 .glyphWrap {
   position: absolute;
   inset-inline-start: 1.5rem;
-  top: 42%;
+  top: 5.25rem;
   color: var(--c-cobalt);
   transition:
     opacity 0.35s var(--ease-out),
@@ -187,7 +199,7 @@
 }
 
 .hint {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   color: rgb(245 246 248 / 0.45);
 }
 
@@ -230,9 +242,9 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 700;
-  color: var(--c-lime);
+  color: #a9bbff;
 }
 
 .talk {
@@ -244,7 +256,7 @@
   font-size: 0.875rem;
   font-weight: 700;
   color: var(--c-soft-white);
-  background: linear-gradient(var(--c-lime), var(--c-lime)) no-repeat 100% 100% / 100% 1px;
+  background: linear-gradient(var(--c-soft-white), var(--c-soft-white)) no-repeat 100% 100% / 100% 1px;
   padding-bottom: 3px;
   transition: background-size 0.5s var(--ease-expo);
 }
@@ -278,7 +290,7 @@
   }
 
   .toggle {
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     padding: 1.25rem;
   }
@@ -295,7 +307,8 @@
   }
 
   .short,
-  .glyphWrap {
+  .glyphWrap,
+  .peek {
     display: none;
   }
 

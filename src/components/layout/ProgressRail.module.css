@@ -21,7 +21,7 @@
 }
 
 .current {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: 0.06em;
   line-height: 1;
@@ -44,7 +44,7 @@
 .fill {
   position: absolute;
   inset: 0;
-  background: var(--accent);
+  background: var(--fg-dim);
   transform-origin: 50% 0;
   transform: scaleY(0);
 }
@@ -93,7 +93,7 @@
   border-radius: 6px;
   background: var(--fg);
   color: var(--bg);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   white-space: nowrap;
   opacity: 0;

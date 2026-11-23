@@ -5,6 +5,7 @@ import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { MQ_DESKTOP, MQ_MOBILE, isMotionReduced } from '@/lib/motion';
 import { process } from '@/content/about';
 import { SectionHeading } from '@/components/ui/SectionHeading';
+import { CtaStrip } from '@/components/ui/CtaStrip';
 import { useScrollTo } from '@/components/motion/SmoothScroll';
 import styles from './Process.module.css';
 
@@ -57,13 +58,11 @@ export function Process() {
           const idx = stops.filter((f) => pos >= f - 0.004).length - 1;
           setReached(progress < 0.015 ? -1 : Math.max(0, idx));
         };
+        // No pinning: the line fills as the steps pass through the viewport.
         const st = ScrollTrigger.create({
-          trigger: q(`.${styles.pin}`)[0],
-          start: 'top top',
-          end: '+=150%',
-          pin: true,
-          scrub: true,
-          anticipatePin: 1,
+          trigger: q(`.${styles.steps}`)[0],
+          start: 'top 72%',
+          end: 'bottom 62%',
           onRefresh: (self) => {
             measure();
             render(self.progress);
@@ -115,7 +114,7 @@ export function Process() {
       <div className="container">
         <SectionHeading
           id="process-title"
-          index="06"
+         
           kicker={process.kicker}
           titleLines={process.titleLines}
           lead={process.lead}
@@ -161,6 +160,8 @@ export function Process() {
               );
             })}
           </ol>
+
+          <CtaStrip text={process.cta.text} button={process.cta.button} note={process.cta.note} />
         </div>
       </div>
     </section>

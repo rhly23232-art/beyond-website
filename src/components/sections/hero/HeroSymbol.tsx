@@ -34,10 +34,10 @@ export function HeroSymbol() {
                 {front && (
                   <defs>
                     <linearGradient id="hero-metal" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0" stopColor="#FFFFFF" />
-                      <stop offset="0.38" stopColor="#AEB6C6" />
-                      <stop offset="0.62" stopColor="#F2F4F8" />
-                      <stop offset="1" stopColor="#7E889C" />
+                      <stop offset="0" stopColor="#E4E7EE" />
+                      <stop offset="0.38" stopColor="#8F98AB" />
+                      <stop offset="0.62" stopColor="#D2D7E1" />
+                      <stop offset="1" stopColor="#626C80" />
                     </linearGradient>
                   </defs>
                 )}
@@ -62,7 +62,7 @@ export function HeroSymbol() {
                 className={`${styles.slice} ${front ? styles.arrowFront : ''}`}
                 style={{ '--z': `${46 + i * 2.2}px` } as React.CSSProperties}
               >
-                <g fill="none" strokeWidth={s.stroke} strokeLinejoin="miter" stroke={front ? '#F5F6F8' : '#3a4356'}>
+                <g fill="none" strokeWidth={s.stroke} strokeLinejoin="miter" stroke={front ? '#DCE0E8' : '#3a4356'}>
                   <path d={s.shaft} strokeLinecap="butt" />
                   <path d={s.head} strokeLinecap="square" />
                 </g>

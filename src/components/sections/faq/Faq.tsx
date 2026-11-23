@@ -7,8 +7,6 @@ import { faq } from '@/content/about';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import styles from './Faq.module.css';
 
-const TOTAL = String(faq.items.length).padStart(2, '0');
-
 /**
  * I. FAQ — an accordion everywhere (accessible markup), presented on desktop
  * as a two-pane console: questions on one side, a large answer panel on the
@@ -40,7 +38,6 @@ export function Faq() {
         { y: 26, opacity: 0, clipPath: 'inset(0% 0% 100% 0%)' },
         { y: 0, opacity: 1, clipPath: 'inset(0% 0% 0% 0%)', stagger: 0.07, duration: 0.8, ease: 'expo.out' },
       );
-      gsap.fromTo(q('[data-panel-mark]'), { scale: 0, rotate: -90 }, { scale: 1, rotate: 0, duration: 0.6, ease: 'back.out(2)' });
     },
     { scope: panelRef, dependencies: [open] },
   );
@@ -69,7 +66,7 @@ export function Faq() {
       <div className="container">
         <SectionHeading
           id="faq-title"
-          index="08"
+         
           kicker={faq.kicker}
           titleLines={faq.titleLines}
           lead={faq.lead}
@@ -92,7 +89,6 @@ export function Faq() {
                       aria-controls={`faq-a-${i}`}
                       onClick={() => toggle(i)}
                     >
-                      <span className={`${styles.qNum} en`}>Q.{String(i + 1).padStart(2, '0')}</span>
                       <span className={styles.qText}>{item.q}</span>
                       <span className={styles.icon} aria-hidden="true" />
                     </button>
@@ -115,9 +111,6 @@ export function Faq() {
                   <span className={styles.topic} data-panel-anim>
                     {current.topic}
                   </span>
-                  <span className={`${styles.count} en`}>
-                    Q.{String(open + 1).padStart(2, '0')} / {TOTAL}
-                  </span>
                 </div>
                 <p className={styles.panelQ} data-panel-anim>
                   {current.q}
@@ -126,7 +119,6 @@ export function Faq() {
                   {current.a}
                 </p>
                 <span className={styles.panelFrame} />
-                <span className={styles.panelMark} data-panel-mark />
               </>
             )}
           </div>

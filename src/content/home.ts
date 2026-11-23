@@ -3,18 +3,21 @@
  */
 
 export const hero = {
-  kicker: 'Digital Experience Studio',
+  kicker: 'סטודיו לאפיון, עיצוב ופיתוח אתרים',
   titleLines: ['לא עוד אתר.', 'נוכחות דיגיטלית', 'שעובדת'],
+  audience: 'לעסקים שרוצים שהאתר יעבוד בשבילם: יביא פניות, יבנה אמון ויוביל לפעולה.',
   subtitle:
     'אני מחברת בין אסטרטגיה, אפיון, עיצוב וטכנולוגיה כדי ליצור מוצרים דיגיטליים מרשימים, חכמים ומדויקים.',
   primary: { label: 'בואו נבנה משהו אחר', href: '#contact' },
   secondary: { label: 'לצפייה בעבודות', href: '#work' },
-  disciplines: ['Strategy', 'UX', 'UI', 'Development'],
+  /** Used while the portfolio has no published projects yet. */
+  secondaryFallback: { label: 'איך אני עובדת', href: '#approach' },
+  disciplines: ['אסטרטגיה', 'UX', 'UI', 'פיתוח'],
   scrollCue: 'גללו — המסע מתחיל כאן',
 } as const;
 
 export const manifesto = {
-  kicker: 'Manifesto',
+  kicker: 'הגישה',
   statement: [
     { text: 'אתר' },
     { text: 'הוא' },
@@ -25,7 +28,7 @@ export const manifesto = {
     { text: 'כל' },
     { text: 'ההבדל.', tone: 'lime' },
   ],
-  body: 'כל פרויקט מתחיל בשאלות, לא בפיקסלים: מה העסק צריך להשיג, מי המשתמשים שלו, ואיפה נמצאת ההזדמנות שאחרים מפספסים. מהתשובות האלה נגזרים המבנה, העיצוב והקוד — ולכן התוצאה לא רק נראית טוב. היא עובדת.',
+  body: 'אצלי כל פרויקט מתחיל בשאלות, לא בפיקסלים: מה העסק צריך להשיג, מי המשתמשים שלו, ואיפה נמצאת ההזדמנות שאחרים מפספסים. מהתשובות האלה נגזרים המבנה, העיצוב והקוד — ולכן התוצאה לא רק נראית טוב. היא עובדת.',
   stepsIntro: 'Think. Design. Build.',
   steps: [
     {
@@ -56,8 +59,9 @@ export const manifesto = {
 } as const;
 
 export const finalCta = {
-  kicker: 'Next step',
-  en: ['YOUR NEXT DIGITAL STEP', 'STARTS BEYOND.'],
-  he: ['העסק שלך יכול להיראות אחרת.', 'בואו נחשוב איך.'],
+  kicker: 'הצעד הבא',
+  he: ['העסק שלך יכול', 'להיראות אחרת.', 'בואו נחשוב איך.'],
+  en: 'YOUR NEXT DIGITAL STEP STARTS BEYOND.',
   button: { label: 'בואו נדבר על הפרויקט', href: '#contact' },
+  note: 'שיחת היכרות קצרה, בלי התחייבות.',
 } as const;

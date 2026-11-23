@@ -54,15 +54,15 @@
   width: 1.75rem;
   height: 1.75rem;
   margin-top: -0.875rem;
-  background: var(--c-ink);
+  background: var(--c-cobalt);
 }
 
 .tick::after {
   content: '';
   position: absolute;
   inset: 0.45rem 0.5rem 0.55rem;
-  border-left: 2px solid var(--c-lime);
-  border-bottom: 2px solid var(--c-lime);
+  border-left: 2px solid var(--c-white);
+  border-bottom: 2px solid var(--c-white);
   rotate: -45deg;
   translate: 0 -2px;
 }
@@ -123,7 +123,7 @@
   border-radius: 6px;
   background: var(--c-cobalt-mist);
   color: var(--c-cobalt-deep);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 700;
 }
 
@@ -162,8 +162,8 @@
   content: '';
   position: absolute;
   inset: 0.28rem 0.24rem 0.36rem;
-  border-left: 2px solid var(--c-ink);
-  border-bottom: 2px solid var(--c-ink);
+  border-left: 2px solid var(--c-white);
+  border-bottom: 2px solid var(--c-white);
   rotate: -45deg;
   scale: 0;
   transition: scale 0.4s var(--ease-expo);
@@ -181,7 +181,7 @@
 .card[data-step='2'] .cardItem:is([data-i='0'], [data-i='1']) .check,
 .card[data-step='3'] .cardItem:is([data-i='0'], [data-i='1'], [data-i='2']) .check,
 .card[data-step='4'] .cardItem .check {
-  background: var(--c-lime);
+  background: var(--c-cobalt);
   box-shadow: none;
 }
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useId, useRef, useState } from 'react';
+import { track } from '@vercel/analytics';
 import { contact } from '@/content/about';
 import { site } from '@/content/site';
 import {
@@ -32,6 +33,8 @@ export function ContactForm() {
   const startedAt = useRef<number>(0);
   const [values, setValues] = useState({ name: '', email: '', phone: '', message: '' });
   const [services, setServices] = useState<ServiceValue[]>([]);
+  const [budget, setBudget] = useState('');
+  const [timeline, setTimeline] = useState('');
   const [company, setCompany] = useState('');
   const [errors, setErrors] = useState<ContactErrors>({});
   const [touched, setTouched] = useState<Partial<Record<ContactField, boolean>>>({});
@@ -56,7 +59,7 @@ export function ContactForm() {
     if (status === 'success') successRef.current?.focus();
   }, [status]);
 
-  const payload = () => normalise({ ...values, services, company });
+  const payload = () => normalise({ ...values, services, company, budget: budget as never, timeline: timeline as never });
 
   const check = (field: ContactField, next = payload()) => {
     const code = validateField(field, next);
@@ -121,6 +124,7 @@ export function ContactForm() {
       const body = (await res.json().catch(() => ({}))) as { ok?: boolean; errors?: ContactErrors; error?: string };
       if (res.ok && body.ok) {
         setStatus('success');
+        track('contact_submitted', { budget: data.budget ?? 'none', timeline: data.timeline ?? 'none' });
         return;
       }
       if (res.status === 422 && body.errors) setErrors(body.errors);
@@ -137,6 +141,8 @@ export function ContactForm() {
   const reset = () => {
     setValues({ name: '', email: '', phone: '', message: '' });
     setServices([]);
+    setBudget('');
+    setTimeline('');
     setErrors({});
     setTouched({});
     setServerError('');
@@ -301,6 +307,35 @@ export function ContactForm() {
           </p>
         )}
       </fieldset>
+
+      <div className={styles.row}>
+        <div className={styles.field}>
+          <label htmlFor={id('budget')}>
+            {contact.fields.budget} <span className={styles.optional}>({contact.fields.optional})</span>
+          </label>
+          <select id={id('budget')} name="budget" value={budget} onChange={(e) => setBudget(e.target.value)}>
+            <option value="">{contact.fields.selectPlaceholder}</option>
+            {contact.budgetOptions.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className={styles.field}>
+          <label htmlFor={id('timeline')}>
+            {contact.fields.timeline} <span className={styles.optional}>({contact.fields.optional})</span>
+          </label>
+          <select id={id('timeline')} name="timeline" value={timeline} onChange={(e) => setTimeline(e.target.value)}>
+            <option value="">{contact.fields.selectPlaceholder}</option>
+            {contact.timelineOptions.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
 
       <div className={styles.field} data-invalid={!!errors.message}>
         <label htmlFor={id('message')}>{contact.fields.message}</label>

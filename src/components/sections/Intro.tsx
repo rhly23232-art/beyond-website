@@ -103,35 +103,35 @@ export function Intro() {
         gsap.set(lime, { scale: 1, opacity: 1 });
         gsap.set(glyphs, { yPercent: 0, opacity: 1 });
         gsap.set(caption, { opacity: 1 });
-        tl.from(svg, { opacity: 0, scale: 0.94, duration: 0.5, ease: 'power3.out' }, 0);
-        tl.addLabel('expand', 0.55);
+        tl.from(svg, { opacity: 0, scale: 0.94, duration: 0.4, ease: 'power3.out' }, 0);
+        tl.addLabel('expand', 0.35);
       } else {
         tl.fromTo(
           lines,
           { scaleY: 0 },
-          { scaleY: 1, duration: 1.2, stagger: { each: 0.035, from: 'center' }, ease: 'power3.inOut' },
+          { scaleY: 1, duration: 0.8, stagger: { each: 0.025, from: 'center' }, ease: 'power3.inOut' },
           0,
         )
-          .fromTo(frame, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1, ease: 'power2.inOut' }, 0.2)
+          .fromTo(frame, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.6, ease: 'power2.inOut' }, 0.1)
           .fromTo(
             lime,
             { scale: 0, rotate: -90, opacity: 1 },
-            { scale: 1, rotate: 0, duration: 0.65, ease: 'back.out(2.4)' },
-            0.72,
+            { scale: 1, rotate: 0, duration: 0.45, ease: 'back.out(2.4)' },
+            0.42,
           )
           // the idea leads the motion: a small push toward the opening…
-          .to(lime, { x: 2.5, y: -2.5, duration: 0.22, ease: 'power2.out', yoyo: true, repeat: 1 }, 1.02)
+          .to(lime, { x: 2.5, y: -2.5, duration: 0.16, ease: 'power2.out', yoyo: true, repeat: 1 }, 0.62)
           // …and launches the arrow outward
-          .fromTo(shaft, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.42, ease: 'power3.in' }, 1.04)
-          .fromTo(head, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.4, ease: 'power3.out' }, 1.4)
-          .fromTo(glyphs, { yPercent: 118, opacity: 1 }, { yPercent: 0, duration: 1.05, stagger: 0.065 }, 0.98)
+          .fromTo(shaft, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.3, ease: 'power3.in' }, 0.62)
+          .fromTo(head, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.28, ease: 'power3.out' }, 0.86)
+          .fromTo(glyphs, { yPercent: 118, opacity: 1 }, { yPercent: 0, duration: 0.8, stagger: 0.045 }, 0.5)
           .fromTo(
             caption,
             { opacity: 0, letterSpacing: '0.55em' },
-            { opacity: 1, letterSpacing: '0.22em', duration: 1.3, ease: 'expo.out' },
-            1.25,
+            { opacity: 1, letterSpacing: '0.22em', duration: 0.9, ease: 'expo.out' },
+            0.7,
           )
-          .addLabel('expand', 2.15);
+          .addLabel('expand', 1.25);
       }
 
       // Signature: the frame opens and expands to the whole screen.
@@ -147,16 +147,16 @@ export function Intro() {
             width: () => window.innerWidth,
             height: () => window.innerHeight,
             '--bw': '1px',
-            duration: 1.3,
+            duration: 1.05,
             ease: 'expo.inOut',
           },
-          'expand+=0.2',
+          'expand+=0.12',
         )
-        .to(arrow, { x: 260, y: -260, duration: 1.1, ease: 'power3.in' }, 'expand+=0.15')
-        .to(arrow, { opacity: 0, duration: 0.4, ease: 'none' }, 'expand+=0.85')
-        .to(lime, { x: 120, y: -120, scale: 0.4, opacity: 0, duration: 1, ease: 'power3.in' }, 'expand+=0.3')
-        .to(lines, { opacity: 0, duration: 0.7, ease: 'none' }, 'expand+=0.35')
-        .to(win, { opacity: 0, duration: 0.45, ease: 'none' }, 'expand+=1.3');
+        .to(arrow, { x: 260, y: -260, duration: 0.9, ease: 'power3.in' }, 'expand+=0.1')
+        .to(arrow, { opacity: 0, duration: 0.3, ease: 'none' }, 'expand+=0.7')
+        .to(lime, { x: 120, y: -120, scale: 0.4, opacity: 0, duration: 0.8, ease: 'power3.in' }, 'expand+=0.2')
+        .to(lines, { opacity: 0, duration: 0.5, ease: 'none' }, 'expand+=0.25')
+        .to(win, { opacity: 0, duration: 0.35, ease: 'none' }, 'expand+=1.05');
 
       // Any intent to move on fast-forwards the sequence.
       let skipped = false;

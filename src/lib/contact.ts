@@ -18,12 +18,20 @@ export const SERVICE_VALUES = [
 
 export type ServiceValue = (typeof SERVICE_VALUES)[number];
 
+/** Optional qualification fields (labels live in content/about.ts). */
+export const BUDGET_VALUES = ['up-to-10k', '10-25k', '25-50k', '50k-plus', 'unknown'] as const;
+export const TIMELINE_VALUES = ['asap', '1-month', '1-3-months', 'flexible'] as const;
+export type BudgetValue = (typeof BUDGET_VALUES)[number];
+export type TimelineValue = (typeof TIMELINE_VALUES)[number];
+
 export type ContactPayload = {
   name: string;
   email: string;
   phone: string;
   services: ServiceValue[];
   message: string;
+  budget?: BudgetValue;
+  timeline?: TimelineValue;
   /** Honeypot — must stay empty. */
   company?: string;
   /** ms since the form was rendered — rejects instant bot submissions. */
@@ -46,12 +54,16 @@ export function normalise(input: Partial<ContactPayload>): ContactPayload {
         (SERVICE_VALUES as readonly string[]).includes(s as string),
       ) as ServiceValue[])
     : [];
+  const pick = <T extends string>(v: unknown, allowed: readonly T[]) =>
+    typeof v === 'string' && (allowed as readonly string[]).includes(v) ? (v as T) : undefined;
   return {
     name: str(input.name, LIMITS.name),
     email: str(input.email, LIMITS.email),
     phone: str(input.phone, LIMITS.phone),
     services: Array.from(new Set(services)),
     message: typeof input.message === 'string' ? input.message.trim() : '',
+    budget: pick(input.budget, BUDGET_VALUES),
+    timeline: pick(input.timeline, TIMELINE_VALUES),
     company: str(input.company, 200),
     elapsed: typeof input.elapsed === 'number' ? input.elapsed : undefined,
   };

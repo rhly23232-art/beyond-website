@@ -87,7 +87,7 @@ export function Manifesto() {
           scrollTrigger: {
             trigger: scene,
             start: 'top top',
-            end: '+=320%',
+            end: '+=200%',
             pin: true,
             scrub: 0.8,
             anticipatePin: 1,
@@ -174,10 +174,9 @@ export function Manifesto() {
       {/* ---- Statement ---- */}
       <div className={`container ${styles.statementWrap}`}>
         <div className={styles.statementMeta}>
-          <span className="en">(02)</span>
           <span className="kicker">
             <span className="mark" aria-hidden="true" />
-            <span className="en">{manifesto.kicker}</span>
+            <span>{manifesto.kicker}</span>
           </span>
         </div>
         <h2 id="approach-title" className={styles.statement}>

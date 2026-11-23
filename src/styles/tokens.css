@@ -34,7 +34,7 @@
   --fs-lead: clamp(1.125rem, 1.02rem + 0.42vw, 1.375rem);
   --fs-body: 1.0625rem;
   --fs-small: 0.9375rem;
-  --fs-micro: 0.75rem;
+  --fs-micro: 0.8125rem; /* 13px — the smallest text on the site */
 
   --lh-tight: 0.9;
   --lh-head: 1.02;
@@ -58,7 +58,7 @@
   --s-12: 6rem; /* 96 */
   --s-16: 8rem; /* 128 */
   --s-20: 10rem; /* 160 */
-  --section-pad: clamp(5rem, 2.6rem + 9vw, 11rem);
+  --section-pad: clamp(4.5rem, 2.5rem + 6vw, 8.5rem);
 
   /* ---- Layout ----------------------------------------------------------- */
   --container: 1280px;
@@ -123,7 +123,7 @@
   --fg: var(--c-soft-white);
   --fg-strong: var(--c-white);
   --fg-dim: rgb(245 246 248 / 0.68);
-  --fg-faint: rgb(245 246 248 / 0.42);
+  --fg-faint: rgb(245 246 248 / 0.52);
   --line: rgb(245 246 248 / 0.1);
   --line-strong: rgb(245 246 248 / 0.22);
   --surface: rgb(245 246 248 / 0.04);
@@ -141,7 +141,7 @@
   --fg: var(--c-soft-white);
   --fg-strong: var(--c-white);
   --fg-dim: rgb(245 246 248 / 0.7);
-  --fg-faint: rgb(245 246 248 / 0.44);
+  --fg-faint: rgb(245 246 248 / 0.54);
   --line: rgb(245 246 248 / 0.11);
   --line-strong: rgb(245 246 248 / 0.24);
   --surface: rgb(245 246 248 / 0.045);
@@ -159,7 +159,7 @@
   --fg: var(--c-ink);
   --fg-strong: var(--c-ink);
   --fg-dim: rgb(16 19 26 / 0.7);
-  --fg-faint: rgb(16 19 26 / 0.46);
+  --fg-faint: rgb(16 19 26 / 0.62);
   --line: rgb(16 19 26 / 0.1);
   --line-strong: rgb(16 19 26 / 0.2);
   --surface: rgb(16 19 26 / 0.03);
@@ -177,7 +177,7 @@
   --fg: var(--c-ink);
   --fg-strong: var(--c-ink);
   --fg-dim: rgb(16 19 26 / 0.72);
-  --fg-faint: rgb(16 19 26 / 0.48);
+  --fg-faint: rgb(16 19 26 / 0.62);
   --line: rgb(33 69 232 / 0.14);
   --line-strong: rgb(33 69 232 / 0.26);
   --surface: rgb(255 255 255 / 0.6);
@@ -195,7 +195,7 @@
   --fg: var(--c-ink);
   --fg-strong: var(--c-ink);
   --fg-dim: rgb(16 19 26 / 0.72);
-  --fg-faint: rgb(16 19 26 / 0.48);
+  --fg-faint: rgb(16 19 26 / 0.62);
   --line: rgb(16 19 26 / 0.12);
   --line-strong: rgb(16 19 26 / 0.22);
   --surface: rgb(255 255 255 / 0.55);

@@ -6,6 +6,9 @@ import { SmoothScroll } from '@/components/motion/SmoothScroll';
 import { Header } from '@/components/layout/Header';
 import { ProgressRail } from '@/components/layout/ProgressRail';
 import { CursorFrame } from '@/components/ui/CursorFrame';
+import { WhatsAppButton } from '@/components/ui/WhatsAppButton';
+import { Analytics } from '@vercel/analytics/next';
+import { services } from '@/content/services';
 import './globals.css';
 
 /* Fonts are self-hosted: Heebo is split into Hebrew + Latin subsets with
@@ -103,6 +106,15 @@ const jsonLd = {
   ...(site.phone ? { telephone: site.phone } : {}),
   knowsAbout: ['Digital strategy', 'UX design', 'UI design', 'Web design', 'Web development', 'Design systems'],
   inLanguage: 'he',
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'שירותים',
+    itemListElement: services.map((s) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name: s.category, description: s.description },
+    })),
+  },
+  ...(site.social.length ? { sameAs: site.social.map((s) => s.url) } : {}),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -126,7 +138,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ProgressRail />
           {children}
           <CursorFrame />
+          <WhatsAppButton />
         </SmoothScroll>
+        {/* Vercel Web Analytics exists only on Vercel deployments */}
+        {process.env.VERCEL === '1' && process.env.NEXT_PUBLIC_STATIC_PREVIEW !== '1' && <Analytics />}
         <div className="grain" aria-hidden="true" />
       </body>
     </html>

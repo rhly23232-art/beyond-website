@@ -14,7 +14,7 @@
   inset-inline-start: 0;
   bottom: 0;
   font-family: var(--font-en);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   letter-spacing: 0.06em;
   color: rgb(245 246 248 / 0.55);
 }
@@ -51,7 +51,7 @@
   justify-content: flex-start;
   padding: 0.6rem 0.75rem;
   font-family: var(--font-he);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: rgb(245 246 248 / 0.4);
   direction: rtl;
@@ -82,8 +82,8 @@
 }
 
 .matrix[data-q='tr'] [data-quad='tr'] {
-  background: rgb(199 243 74 / 0.14);
-  color: var(--c-lime);
+  background: rgb(53 92 255 / 0.26);
+  color: var(--c-white);
 }
 
 .crossX,
@@ -121,7 +121,7 @@
 .axisY {
   position: absolute;
   font-family: var(--font-he);
-  font-size: 0.6875rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: rgb(245 246 248 / 0.55);
   direction: rtl;
@@ -239,7 +239,7 @@
   position: absolute;
   inset-inline-start: 0.5rem;
   bottom: 0.4rem;
-  font-size: 0.625rem;
+  font-size: 0.8125rem;
   font-style: normal;
   letter-spacing: 0.04em;
   color: rgb(245 246 248 / 0.7);
@@ -319,7 +319,7 @@
   width: 1.8rem;
   height: 1.8rem;
   border-radius: calc(var(--r) * 0.7);
-  background: var(--c-lime);
+  background: var(--c-white);
 }
 
 .sToggle {
@@ -362,9 +362,9 @@
   justify-self: start;
   padding: 0.3rem 0.7rem;
   border-radius: var(--r);
-  background: rgb(199 243 74 / 0.16);
-  color: var(--c-lime);
-  font-size: 0.75rem;
+  background: rgb(53 92 255 / 0.24);
+  color: #d3dcff;
+  font-size: 0.8125rem;
   font-weight: 600;
 }
 
@@ -499,7 +499,7 @@
 
 .lBlock[data-b='img'] {
   background:
-    radial-gradient(60% 80% at 20% 90%, rgb(199 243 74 / 0.35), transparent 60%),
+    radial-gradient(60% 80% at 20% 90%, rgb(232 237 255 / 0.28), transparent 60%),
     linear-gradient(135deg, var(--c-cobalt), var(--c-cobalt-deep));
 }
 
@@ -511,7 +511,7 @@
 .layoutTabs span {
   padding: 0.3rem 0.65rem;
   border-radius: 6px;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: rgb(245 246 248 / 0.5);
   box-shadow: inset 0 0 0 1px rgb(245 246 248 / 0.14);
@@ -521,7 +521,7 @@
 }
 
 .layoutTabs span[data-on='true'] {
-  background: var(--c-lime);
+  background: var(--c-white);
   color: var(--c-ink);
   box-shadow: none;
 }
@@ -555,14 +555,14 @@
   margin-bottom: 0.3rem;
   border-bottom: 1px solid rgb(245 246 248 / 0.08);
   font-family: var(--font-en);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   color: rgb(245 246 248 / 0.5);
 }
 
 .editorBar i {
   width: 6px;
   height: 6px;
-  background: var(--c-lime);
+  background: #a9bbff;
 }
 
 .editor p {
@@ -572,7 +572,7 @@
 
 .editor p[data-on='true'] {
   background: rgb(53 92 255 / 0.22);
-  box-shadow: inset 2px 0 0 var(--c-lime);
+  box-shadow: inset 2px 0 0 #a9bbff;
 }
 
 .ln {
@@ -593,7 +593,7 @@
 }
 
 .attr {
-  color: var(--c-lime);
+  color: #cfd8ff;
 }
 
 .preview {
@@ -636,8 +636,8 @@
 
 .region[data-on='true'] {
   box-shadow:
-    0 0 0 2px var(--c-lime),
-    0 0 0 5px rgb(199 243 74 / 0.25);
+    0 0 0 2px #a9bbff,
+    0 0 0 5px rgb(169 187 255 / 0.25);
 }
 
 /* 06 · Network ----------------------------------------------------------- */
@@ -664,7 +664,7 @@
 }
 
 .pulse {
-  fill: var(--c-lime);
+  fill: #a9bbff;
 }
 
 .netNode rect {

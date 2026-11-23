@@ -78,51 +78,48 @@
 .title {
   display: grid;
   justify-items: center;
-  font-size: clamp(2.4rem, 0.6rem + 6.6vw, 8rem);
-  font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: -0.045em;
+  font-size: clamp(2.6rem, 0.9rem + 6.4vw, 7.75rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
   color: var(--c-white);
+  text-wrap: initial;
 }
 
 .line {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.charMask {
-  display: inline-block;
+  display: block;
   overflow: clip;
-  padding-block: 0.06em 0.1em;
-  margin-block: -0.06em -0.1em;
+  padding-block: 0.06em 0.12em;
+  margin-block: -0.06em -0.12em;
 }
 
-.char {
+.lineInner {
   display: inline-block;
+}
+
+.line:last-child .lineInner {
+  color: rgb(245 246 248 / 0.6);
+}
+
+.signature {
+  font-size: clamp(0.8125rem, 0.7rem + 0.3vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: var(--fg-dim);
 }
 
 .accent {
   color: var(--c-lime);
 }
 
-.he {
-  display: grid;
-  gap: 0.2rem;
-  font-size: var(--fs-h4);
-  font-weight: 600;
-  line-height: 1.4;
-  color: var(--fg-dim);
-}
-
-.he > span {
-  display: block;
-}
-
-.he > span:last-child {
-  color: var(--fg-strong);
-}
-
 .action {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
   margin-top: 0.75rem;
+}
+
+.note {
+  font-size: 0.9375rem;
+  color: var(--fg-dim);
 }

@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { MQ_DESKTOP, MQ_MOBILE, isMotionReduced } from '@/lib/motion';
-import { getWorkItems, workIntro } from '@/content/projects';
+import { getPublishedProjects, workIntro } from '@/content/projects';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Button } from '@/components/ui/Button';
 import { ProjectPanel } from './ProjectPanel';
@@ -22,7 +22,7 @@ const ACCENT_BG: Record<string, string> = {
  */
 export function Work() {
   const root = useRef<HTMLElement>(null);
-  const items = getWorkItems();
+  const items = getPublishedProjects();
 
   useGSAP(
     () => {
@@ -101,7 +101,6 @@ export function Work() {
           const media = panel.querySelector('[data-media]');
           const inner = panel.querySelector('[data-media-inner]');
           const name = panel.querySelector('[data-name]');
-          const big = panel.querySelector('[data-bigindex]');
           const accent = (panel as HTMLElement).dataset.accent ?? 'cobalt';
           // RTL travel: panels enter from the left edge and move right.
           const st = { trigger: panel, containerAnimation: move, scrub: true } as const;
@@ -127,11 +126,6 @@ export function Work() {
               { xPercent: 0, opacity: 1, ease: 'none', scrollTrigger: { ...st, start: 'right 25%', end: 'right 70%' } },
             );
           }
-          gsap.fromTo(
-            big,
-            { xPercent: 40 },
-            { xPercent: -40, ease: 'none', scrollTrigger: { ...st, start: 'right left', end: 'left right' } },
-          );
           gsap.to(el, {
             '--work-bg': ACCENT_BG[accent] ?? ACCENT_BG.cobalt,
             ease: 'none',
@@ -180,13 +174,13 @@ export function Work() {
       </div>
 
       <div className={styles.head}>
-        <p className={`${styles.band} en`} aria-hidden="true">
-          SELECTED WORK — SELECTED WORK — SELECTED WORK —
+        <p className={styles.band} aria-hidden="true">
+          עבודות נבחרות — עבודות נבחרות — עבודות נבחרות —
         </p>
         <div className="container">
           <SectionHeading
             id="work-title"
-            index="04"
+           
             kicker={workIntro.kicker}
             titleLines={[workIntro.title]}
             lead={workIntro.lead}
@@ -199,21 +193,18 @@ export function Work() {
 
       <div className={styles.pin}>
         <div className={styles.track}>
-          {items.map((p, i) => (
-            <ProjectPanel key={p.slug} project={p} index={i} />
+          {items.map((p) => (
+            <ProjectPanel key={p.slug} project={p} />
           ))}
 
           <aside className={`${styles.panel} ${styles.nextPanel}`} data-panel data-accent="cobalt" aria-labelledby="work-next">
-            <span className={`${styles.bigIndex} en`} aria-hidden="true" data-bigindex>
-              {String(items.length + 1).padStart(2, '0')}
-            </span>
             <div className={styles.nextInner} data-media>
               <div data-media-inner className={styles.nextFrame} aria-hidden="true">
                 <span className={styles.nextSquare} />
               </div>
               <p className="kicker">
                 <span className="mark" aria-hidden="true" />
-                <span className="en">{workIntro.next.kicker}</span>
+                <span>{workIntro.next.kicker}</span>
               </p>
               <h3 id="work-next" className={styles.nextTitle} data-name>
                 {workIntro.next.title}

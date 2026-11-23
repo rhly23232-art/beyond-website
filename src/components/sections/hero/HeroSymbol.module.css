@@ -24,7 +24,7 @@
 /* Focused cobalt light behind the object */
 .flare {
   inset: -30%;
-  background: radial-gradient(closest-side, rgb(53 92 255 / 0.55), rgb(53 92 255 / 0.12) 55%, transparent 75%);
+  background: radial-gradient(closest-side, rgb(53 92 255 / 0.4), rgb(53 92 255 / 0.08) 55%, transparent 75%);
   transform: translateZ(-260px);
   filter: blur(10px);
 }
@@ -90,15 +90,15 @@
   background: var(--c-lime);
   transform: translateZ(84px);
   box-shadow:
-    0 0 24px rgb(199 243 74 / 0.55),
-    0 0 80px rgb(199 243 74 / 0.25);
-  animation: lime-breathe 4s ease-in-out infinite;
+    0 0 18px rgb(199 243 74 / 0.4),
+    0 0 50px rgb(199 243 74 / 0.15);
+  animation: lime-breathe 5s ease-in-out infinite;
 }
 
 @keyframes lime-breathe {
   50% {
     box-shadow:
-      0 0 34px rgb(199 243 74 / 0.75),
-      0 0 120px rgb(199 243 74 / 0.32);
+      0 0 26px rgb(199 243 74 / 0.55),
+      0 0 80px rgb(199 243 74 / 0.22);
   }
 }

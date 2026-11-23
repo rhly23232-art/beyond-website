@@ -9,7 +9,6 @@ export type HeadingReveal = 'rise' | 'wipe' | 'sides' | 'skew';
 
 type Props = {
   id: string;
-  index: string;
   kicker: string;
   titleLines: readonly string[];
   lead?: ReactNode;
@@ -30,7 +29,6 @@ type Props = {
  */
 export function SectionHeading({
   id,
-  index,
   kicker,
   titleLines,
   lead,
@@ -91,10 +89,9 @@ export function SectionHeading({
       className={[styles.heading, styles[align], styles[size], className].filter(Boolean).join(' ')}
     >
       <div className={styles.meta}>
-        <span className={`${styles.index} en`}>({index})</span>
         <span className="kicker">
           <span className="mark" aria-hidden="true" />
-          <span className="en">{kicker}</span>
+          <span>{kicker}</span>
         </span>
       </div>
       <Tag id={id} className={styles.title}>

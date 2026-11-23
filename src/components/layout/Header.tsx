@@ -8,6 +8,7 @@ import { mainNav, site } from '@/content/site';
 import { Logo } from '@/components/brand/Logo';
 import { Button } from '@/components/ui/Button';
 import { useLenis, useScrollTo } from '@/components/motion/SmoothScroll';
+import { MotionToggle } from './MotionToggle';
 import styles from './Header.module.css';
 
 export function Header() {
@@ -35,6 +36,20 @@ export function Header() {
         if (y > window.innerHeight * 0.8 && self.direction === 1) header.dataset.hidden = 'true';
         else if (self.direction === -1 || y < 80) header.dataset.hidden = 'false';
       },
+    });
+
+    // Tone: a light header over light sections, a dark one over dark sections.
+    document.querySelectorAll<HTMLElement>('main section[data-theme], footer[data-theme]').forEach((section) => {
+      const light = ['light', 'mist', 'wash'].includes(section.dataset.theme ?? '');
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top 40px',
+        end: 'bottom 40px',
+        refreshPriority: -10,
+        onToggle: (self) => {
+          if (self.isActive) header.dataset.tone = light ? 'light' : 'dark';
+        },
+      });
     });
 
     // Scroll-spy for the main navigation.
@@ -153,7 +168,14 @@ export function Header() {
   };
 
   return (
-    <header ref={headerRef} className={styles.header} data-scrolled="false" data-hidden="false" data-menu="closed">
+    <header
+      ref={headerRef}
+      className={styles.header}
+      data-scrolled="false"
+      data-hidden="false"
+      data-menu="closed"
+      data-tone="dark"
+    >
       <div className={styles.bar}>
         <Link
           href="/#top"
@@ -184,6 +206,7 @@ export function Header() {
         </nav>
 
         <div className={styles.actions}>
+          <MotionToggle variant="icon" className={styles.motion} />
           <Button href="/#contact" size="md" className={styles.cta} arrow="out" onClick={(e) => go(e, 'contact')}>
             בואו נדבר
           </Button>
@@ -216,15 +239,13 @@ export function Header() {
       >
         <nav aria-label="ניווט במובייל">
           <ol role="list" className={styles.menuList}>
-            {mainNav.map((item, i) => (
+            {mainNav.map((item) => (
               <li key={item.id} className={styles.menuItem}>
                 <span className={styles.menuLine} data-menu-line aria-hidden="true" />
                 <Link href={`/#${item.id}`} className={styles.menuLink} onClick={(e) => go(e, item.id)}>
                   <span className={styles.menuMask}>
                     <span data-menu-item className={styles.menuText}>
-                      <span className={`${styles.menuIndex} en`}>0{i + 1}</span>
                       {item.label}
-                      <span className={`${styles.menuEn} en`}>{item.en}</span>
                     </span>
                   </span>
                 </Link>
@@ -236,6 +257,7 @@ export function Header() {
           <Button href="/#contact" size="lg" onClick={(e) => go(e, 'contact')}>
             בואו נדבר על הפרויקט
           </Button>
+          <MotionToggle className={styles.menuMotion} />
           <p className={`${styles.menuSlogan} en`}>{site.slogan}</p>
         </div>
       </div>

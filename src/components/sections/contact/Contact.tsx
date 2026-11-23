@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { isMotionReduced } from '@/lib/motion';
 import { contact } from '@/content/about';
-import { site } from '@/content/site';
+import { site, whatsappLink } from '@/content/site';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { ContactForm } from './ContactForm';
 import styles from './Contact.module.css';
@@ -34,7 +34,7 @@ export function Contact() {
         <div className={styles.intro}>
           <SectionHeading
             id="contact-title"
-            index="09"
+           
             kicker={contact.kicker}
             titleLines={contact.titleLines}
             lead={contact.lead}
@@ -42,9 +42,20 @@ export function Contact() {
             size="xl"
             mark
           />
-          {(site.email || site.phone) && (
+          <p className={styles.note}>{contact.note}</p>
+          {(site.email || site.phone || site.whatsapp) && (
             <div className={styles.direct}>
               <p className={styles.directLabel}>{contact.directLabel}</p>
+              {site.whatsapp && (
+                <a
+                  className={styles.directLink}
+                  href={whatsappLink(contact.whatsappMessage)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {contact.whatsappLabel}
+                </a>
+              )}
               {site.email && (
                 <a className={`${styles.directLink} ltr`} href={`mailto:${site.email}`}>
                   {site.email}

@@ -25,12 +25,6 @@
   background: radial-gradient(closest-side, rgb(53 92 255 / 0.34), rgb(53 92 255 / 0.08) 55%, transparent 72%);
 }
 
-.particles {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
 
 /* ---- Stage ------------------------------------------------------------- */
 
@@ -45,8 +39,9 @@
   position: absolute;
   z-index: 0;
   inset-inline-end: max(2vw, calc((100vw - var(--container)) / 2 - 2vw));
-  top: clamp(5rem, 9vh, 7rem);
-  width: min(33vw, 32rem);
+  top: clamp(5.5rem, 11vh, 8rem);
+  width: min(27vw, 26rem);
+  opacity: 0.9;
 }
 
 .inner {
@@ -77,8 +72,8 @@
 
 .disciplines {
   margin-inline-start: auto;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
 }
 
 /* ---- Title ------------------------------------------------------------- */
@@ -114,10 +109,9 @@
   transform-origin: 100% 100%;
 }
 
-/* Line 1 — outlined: the thing we are NOT building */
+/* Line 1 — quieter: the thing we are NOT building (solid, readable) */
 .l1 .lineInner {
-  color: transparent;
-  -webkit-text-stroke: 1.5px rgb(245 246 248 / 0.6);
+  color: rgb(245 246 248 / 0.56);
   font-weight: 700;
 }
 
@@ -144,9 +138,17 @@
   grid-column: 8 / -1;
   grid-row: 3;
   display: grid;
-  gap: 1.75rem;
+  gap: 1.25rem;
   margin-top: clamp(-9rem, -8vw, -3rem);
   align-self: end;
+}
+
+.audience {
+  max-width: 30ch;
+  font-size: var(--fs-h4);
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--fg-strong);
 }
 
 .subtitle {
@@ -226,16 +228,16 @@
 
 @media (max-width: 767.98px) {
   .visual {
-    width: 74vw;
-    inset-inline-end: -10vw;
-    top: 10svh;
-    opacity: 0.9;
+    width: 44vw;
+    inset-inline-end: var(--gutter);
+    top: calc(var(--header-h) + 5rem);
+    opacity: 0.85;
   }
 
   .title {
     font-size: clamp(3rem, 0.4rem + 13.6vw, 4.6rem);
     line-height: 0.98;
-    margin-top: 38vw;
+    margin-top: calc(44vw + 2.75rem);
   }
 
   .l2 {

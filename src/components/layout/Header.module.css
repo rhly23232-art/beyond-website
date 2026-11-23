@@ -58,6 +58,38 @@
   width: 7.5rem;
 }
 
+/* Light tone — over light sections the capsule turns light */
+.header[data-tone='light'][data-scrolled='true']:not([data-menu='open']) .bar {
+  background: rgb(255 255 255 / 0.82);
+  color: var(--c-ink);
+  box-shadow:
+    inset 0 0 0 1px rgb(16 19 26 / 0.08),
+    0 20px 40px -24px rgb(16 19 26 / 0.25);
+}
+
+.header[data-tone='light'][data-scrolled='true']:not([data-menu='open']) .link {
+  color: rgb(16 19 26 / 0.72);
+}
+
+.header[data-tone='light'][data-scrolled='true']:not([data-menu='open']) .link:hover,
+.header[data-tone='light'][data-scrolled='true']:not([data-menu='open']) .link[aria-current='true'] {
+  color: var(--c-ink);
+}
+
+.header[data-tone='light'][data-scrolled='true']:not([data-menu='open']) .linkRoll::after {
+  color: var(--c-cobalt);
+}
+
+.header[data-tone='light'][data-scrolled='true']:not([data-menu='open']) .link::before {
+  background: var(--c-cobalt);
+}
+
+.header[data-tone='light'][data-scrolled='true']:not([data-menu='open']) .toggle,
+.header[data-tone='light'][data-scrolled='true']:not([data-menu='open']) .motion {
+  color: var(--c-ink);
+  box-shadow: inset 0 0 0 1px rgb(16 19 26 / 0.18);
+}
+
 /* ---- Desktop navigation ---------------------------------------------- */
 
 .nav ul {
@@ -109,7 +141,7 @@
   position: absolute;
   inset-inline-start: 0;
   top: 100%;
-  color: var(--c-lime);
+  color: var(--c-white);
 }
 
 .linkRoll,
@@ -129,6 +161,31 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.motion {
+  display: inline-grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--r-m);
+  color: var(--c-soft-white);
+  box-shadow: inset 0 0 0 1px rgb(245 246 248 / 0.18);
+  transition:
+    box-shadow var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out);
+}
+
+.motion:hover {
+  box-shadow: inset 0 0 0 1px currentColor;
+}
+
+.menuMotion {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: rgb(245 246 248 / 0.75);
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 .cta {
@@ -177,7 +234,7 @@
 .toggleIcon i:last-child {
   bottom: 0;
   width: 60%;
-  background: var(--c-lime);
+  background: var(--c-cobalt);
 }
 
 .toggle[aria-expanded='true'] .toggleIcon i:first-child {
@@ -245,22 +302,7 @@
   letter-spacing: -0.02em;
 }
 
-.menuIndex {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  color: var(--c-lime);
-  translate: 0 -0.9em;
-}
 
-.menuEn {
-  margin-inline-start: auto;
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgb(245 246 248 / 0.45);
-}
 
 .menuFoot {
   display: grid;
@@ -269,14 +311,15 @@
 }
 
 .menuSlogan {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   letter-spacing: 0.18em;
   color: rgb(245 246 248 / 0.5);
 }
 
 @media (max-width: 1023.98px) {
   .nav,
-  .cta {
+  .cta,
+  .motion {
     display: none;
   }
 

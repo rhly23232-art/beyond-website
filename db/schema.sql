@@ -11,6 +11,8 @@ create table if not exists contact_submissions (
   services    text[]      not null default '{}',
   message     text        not null,
   status      text        not null default 'new',   -- 'new' | 'handled'
+  budget      text,                                  -- optional range chosen in the form
+  timeline    text,                                  -- optional start time chosen in the form
   ip_hash     text,                                  -- salted SHA-256, never the raw IP
   user_agent  text
 );

@@ -1,6 +1,10 @@
 import 'server-only';
 import { createHmac } from 'node:crypto';
 import type { ContactPayload } from '@/lib/contact';
+import { contact } from '@/content/about';
+
+const labelOf = (options: readonly { value: string; label: string }[], value?: string) =>
+  options.find((o) => o.value === value)?.label ?? '—';
 
 /**
  * Optional notification channels for new inquiries:
@@ -36,6 +40,8 @@ export async function sendEmail(data: ContactPayload, id?: number) {
     ['אימייל', data.email],
     ['טלפון', data.phone || '—'],
     ['שירותים', services],
+    ['תקציב', labelOf(contact.budgetOptions, data.budget)],
+    ['מתי להתחיל', labelOf(contact.timelineOptions, data.timeline)],
   ];
   const html = `<div dir="rtl" style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#10131A">
   <h2 style="margin:0 0 12px">פנייה חדשה מהאתר${id ? ` · #${id}` : ''}</h2>
@@ -78,6 +84,8 @@ export async function sendWebhook(data: ContactPayload, id?: number) {
     email: data.email,
     phone: data.phone || null,
     services: data.services,
+    budget: data.budget ?? null,
+    timeline: data.timeline ?? null,
     message: data.message,
   });
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };

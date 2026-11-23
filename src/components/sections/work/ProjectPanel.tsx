@@ -39,12 +39,9 @@ function Composition({ project, view }: { project: Project; view: 'desktop' | 'm
  * One case study: media composition + the thinking behind it.
  * Details open on hover (desktop) or via the toggle (keyboard / touch).
  */
-export function ProjectPanel({ project, index }: { project: Project; index: number }) {
+export function ProjectPanel({ project }: { project: Project }) {
   const [view, setView] = useState<'desktop' | 'mobile'>('desktop');
-  const [pinned, setPinned] = useState(false);
-  const [hovered, setHovered] = useState(false);
-  const open = pinned || hovered;
-  const n = String(index + 1).padStart(2, '0');
+  const [open, setOpen] = useState(false);
   const detailsId = `work-details-${project.slug}`;
   const titleId = `work-title-${project.slug}`;
 
@@ -56,50 +53,16 @@ export function ProjectPanel({ project, index }: { project: Project; index: numb
       data-panel
       aria-labelledby={titleId}
     >
-      <span className={`${styles.bigIndex} en`} aria-hidden="true" data-bigindex>
-        {n}
-      </span>
-
-      <div
-        className={styles.stage}
-        data-cursor={open ? '' : 'החשיבה'}
-        onPointerEnter={(e) => e.pointerType === 'mouse' && setHovered(true)}
-        onPointerLeave={() => setHovered(false)}
-      >
+      <div className={styles.stage}>
         <div className={styles.media} data-media>
           <div className={styles.mediaInner} data-media-inner>
             <Composition project={project} view={view} />
           </div>
         </div>
-
-        <div id={detailsId} className={styles.details} data-open={open} role="region" aria-label={`${L.open}: ${project.name}`}>
-          <dl className={styles.dl}>
-            <div>
-              <dt>{L.challenge}</dt>
-              <dd>{project.challenge}</dd>
-            </div>
-            <div>
-              <dt>{L.solution}</dt>
-              <dd>{project.solution}</dd>
-            </div>
-            <div>
-              <dt>{L.thinking}</dt>
-              <dd>{project.thinking}</dd>
-            </div>
-            {project.result && (
-              <div className={styles.result}>
-                <dt>{L.result}</dt>
-                <dd>{project.result}</dd>
-              </div>
-            )}
-          </dl>
-        </div>
       </div>
 
       <div className={styles.info}>
         <p className={styles.meta}>
-          <span className="en">Case {n}</span>
-          <span aria-hidden="true">·</span>
           <span>{project.sector}</span>
           {project.year && <span className="en">· {project.year}</span>}
         </p>
@@ -118,24 +81,18 @@ export function ProjectPanel({ project, index }: { project: Project; index: numb
           <button
             type="button"
             className={styles.thinkingBtn}
-            aria-expanded={pinned}
+            aria-expanded={open}
             aria-controls={detailsId}
-            onClick={() => setPinned((v) => !v)}
+            onClick={() => setOpen((v) => !v)}
           >
             <span className={styles.thinkingIcon} aria-hidden="true" />
-            {pinned ? L.close : L.open}
+            {open ? L.close : L.open}
           </button>
 
           {project.layout === 'wide' && (
             <div className={styles.viewToggle} role="group" aria-label="תצוגת מכשיר">
               {(['desktop', 'mobile'] as const).map((v) => (
-                <button
-                  key={v}
-                  type="button"
-                  className="en"
-                  aria-pressed={view === v}
-                  onClick={() => setView(v)}
-                >
+                <button key={v} type="button" aria-pressed={view === v} onClick={() => setView(v)}>
                   {v === 'desktop' ? L.desktop : L.mobile}
                 </button>
               ))}
@@ -143,12 +100,35 @@ export function ProjectPanel({ project, index }: { project: Project; index: numb
           )}
         </div>
 
+        {/* The thinking opens beside the work — it never covers the mockup. */}
+        <div id={detailsId} className={styles.details} data-open={open} role="region" aria-label={`${L.open}: ${project.name}`}>
+          <dl className={styles.dl}>
+            <div>
+              <dt>{L.challenge}</dt>
+              <dd>{project.challenge}</dd>
+            </div>
+            <div>
+              <dt>{L.solution}</dt>
+              <dd>{project.solution}</dd>
+            </div>
+            <div>
+              <dt>{L.thinking}</dt>
+              <dd>{project.thinking}</dd>
+            </div>
+            {project.result && (
+              <div>
+                <dt>{L.result}</dt>
+                <dd>{project.result}</dd>
+              </div>
+            )}
+          </dl>
+        </div>
+
         {project.url && (
           <a className={styles.visit} href={project.url} target="_blank" rel="noopener noreferrer">
             {L.visit}
           </a>
         )}
-        {project.status === 'template' && <p className={styles.badge}>{L.template}</p>}
       </div>
     </article>
   );

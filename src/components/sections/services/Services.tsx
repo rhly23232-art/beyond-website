@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { CtaStrip } from '@/components/ui/CtaStrip';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { MQ_DESKTOP, isMotionReduced } from '@/lib/motion';
 import { services, servicesIntro } from '@/content/services';
@@ -18,7 +19,6 @@ import styles from './Services.module.css';
 export function Services() {
   const root = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
-  const hoverTimer = useRef<number | undefined>(undefined);
   const scrollTo = useScrollTo();
 
   useGSAP(
@@ -53,12 +53,6 @@ export function Services() {
     { scope: root },
   );
 
-  const schedule = (i: number) => {
-    window.clearTimeout(hoverTimer.current);
-    hoverTimer.current = window.setTimeout(() => setActive(i), 140);
-  };
-  const cancel = () => window.clearTimeout(hoverTimer.current);
-
   const talkAbout = (e: React.MouseEvent<HTMLAnchorElement>, value: string) => {
     e.preventDefault();
     window.dispatchEvent(new CustomEvent(SERVICE_EVENT, { detail: value }));
@@ -76,7 +70,7 @@ export function Services() {
       <div className="container">
         <SectionHeading
           id="services-title"
-          index="03"
+         
           kicker={servicesIntro.kicker}
           titleLines={servicesIntro.titleLines}
           lead={servicesIntro.lead}
@@ -88,13 +82,7 @@ export function Services() {
           {services.map((s, i) => {
             const isActive = active === i;
             return (
-              <article
-                key={s.id}
-                className={styles.col}
-                data-active={isActive}
-                onPointerEnter={(e) => e.pointerType === 'mouse' && schedule(i)}
-                onPointerLeave={cancel}
-              >
+              <article key={s.id} className={styles.col} data-active={isActive}>
                 <h3 className={styles.head}>
                   <button
                     type="button"
@@ -104,10 +92,12 @@ export function Services() {
                     aria-controls={`svc-${s.id}`}
                     onClick={() => setActive(i)}
                   >
-                    <span className={`${styles.num} en`}>{s.index}</span>
                     <span className={styles.category}>{s.category}</span>
                     <span className={styles.short} aria-hidden="true">
                       {s.short}
+                    </span>
+                    <span className={styles.peek} aria-hidden="true">
+                      {s.title}
                     </span>
                     <span className={styles.plus} aria-hidden="true" />
                   </button>
@@ -142,7 +132,7 @@ export function Services() {
                         {s.benefit}
                       </p>
                       <a href="#contact" className={styles.talk} onClick={(e) => talkAbout(e, s.formValue)}>
-                        <span>לדבר על {s.short}</span>
+                        <span>בואו נדבר על {s.short}</span>
                         <Arrow direction="out" />
                       </a>
                     </div>
@@ -152,6 +142,8 @@ export function Services() {
             );
           })}
         </div>
+
+        <CtaStrip text={servicesIntro.cta.text} button={servicesIntro.cta.button} note={servicesIntro.cta.note} />
       </div>
     </section>
   );

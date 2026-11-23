@@ -2,6 +2,7 @@ import { Intro } from '@/components/sections/Intro';
 import { Hero } from '@/components/sections/hero/Hero';
 import { Manifesto } from '@/components/sections/manifesto/Manifesto';
 import { Services } from '@/components/sections/services/Services';
+import { Studio } from '@/components/sections/studio/Studio';
 import { Work } from '@/components/sections/work/Work';
 import { Why } from '@/components/sections/why/Why';
 import { Process } from '@/components/sections/process/Process';
@@ -11,10 +12,12 @@ import { FinalCta } from '@/components/sections/cta/FinalCta';
 import { Contact } from '@/components/sections/contact/Contact';
 import { Footer } from '@/components/layout/Footer';
 import { ScrollRefresh } from '@/components/motion/ScrollRefresh';
+import { hasPublishedWork } from '@/content/projects';
 
 /**
- * The journey: opening → statement → manifesto → what we create → work →
- * why → process → client experience → FAQ → closing → contact.
+ * The journey: opening → statement → approach → what I create → who's behind
+ * BEYOND → work (once real projects exist) → why → process → client
+ * experience → FAQ → closing → contact.
  */
 export default function HomePage() {
   return (
@@ -24,7 +27,8 @@ export default function HomePage() {
         <Hero />
         <Manifesto />
         <Services />
-        <Work />
+        <Studio />
+        {hasPublishedWork && <Work />}
         <Why />
         <Process />
         <Experience />

@@ -166,13 +166,12 @@ html.lenis body {
 .kicker {
   display: inline-flex;
   align-items: center;
-  gap: 0.75em;
+  gap: 0.6em;
   font-family: var(--font-en);
-  font-size: var(--fs-micro);
-  font-weight: 500;
-  letter-spacing: var(--tracking-kicker);
-  text-transform: uppercase;
-  line-height: 1;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
   color: var(--fg-dim);
 }
 
@@ -180,7 +179,7 @@ html.lenis body {
   display: inline-block;
   width: 0.62em;
   height: 0.62em;
-  background: var(--c-lime);
+  background: var(--c-cobalt);
   flex: none;
 }
 

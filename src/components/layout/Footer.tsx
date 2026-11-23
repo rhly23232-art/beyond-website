@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { useRef } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { isMotionReduced } from '@/lib/motion';
-import { chapters, site } from '@/content/site';
+import { chapters, site, whatsappLink } from '@/content/site';
+import { contact } from '@/content/about';
 import { services } from '@/content/services';
 import { LOGOTYPE } from '@/components/brand/logo-data';
 import { useScrollTo } from '@/components/motion/SmoothScroll';
@@ -95,11 +96,25 @@ export function Footer() {
                   </a>
                 </li>
               )}
+              {site.whatsapp && (
+                <li>
+                  <a href={whatsappLink(contact.whatsappMessage)} className={styles.link} target="_blank" rel="noopener noreferrer">
+                    {contact.whatsappLabel}
+                  </a>
+                </li>
+              )}
               <li>
                 <Link href="/#contact" className={styles.link} onClick={(e) => jump(e, 'contact')}>
                   טופס פנייה
                 </Link>
               </li>
+              {site.social.map((s) => (
+                <li key={s.id}>
+                  <a href={s.url} className={`${styles.link} en`} target="_blank" rel="noopener noreferrer">
+                    {s.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
           <div className={styles.col}>

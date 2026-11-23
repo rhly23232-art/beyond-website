@@ -144,10 +144,6 @@
   display: inline-block;
 }
 
-.bigWord:last-child span:last-child {
-  color: var(--c-lime);
-}
-
 .steps {
   display: grid;
 }
@@ -227,13 +223,13 @@
 .segFill {
   position: absolute;
   inset: 0;
-  background: var(--c-lime);
+  background: var(--c-soft-white);
   transform-origin: 100% 50%;
   transform: scaleX(0);
 }
 
 .segLabel {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: 0.14em;
   color: var(--fg-faint);
@@ -276,7 +272,7 @@
   font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: 0.1em;
-  color: var(--c-lime);
+  color: var(--fg-dim);
 }
 
 .mobileCanvas {

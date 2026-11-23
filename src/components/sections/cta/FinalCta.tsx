@@ -58,8 +58,8 @@ export function FinalCta() {
       const q = gsap.utils.selector(el);
       const pieces = q('[data-piece]');
       const debris = q('[data-debris]');
-      const chars = q(`.${styles.char}`);
-      const he = q(`.${styles.he} > span`);
+      const lines = q(`.${styles.lineInner}`);
+      const signature = q(`.${styles.signature}`);
       const action = q(`.${styles.action}`);
 
       const build = (tl: gsap.core.Timeline) => {
@@ -76,9 +76,14 @@ export function FinalCta() {
         });
         tl.fromTo(debris, { scale: 1, opacity: 0.6 }, { scale: 0, opacity: 0, duration: 0.6, stagger: 0.04 }, 0.35)
           .fromTo(q(`.${styles.glow}`), { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.6 }, 0.8)
-          .fromTo(chars, { yPercent: 110, opacity: 0 }, { yPercent: 0, opacity: 1, stagger: 0.012, duration: 0.5, ease: 'expo.out' }, 0.95)
-          .fromTo(he, { y: 30, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.5, ease: 'expo.out' }, 1.25)
-          .fromTo(action, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'expo.out' }, 1.4);
+          .fromTo(lines, { yPercent: 110 }, { yPercent: 0, stagger: 0.1, duration: 0.55, ease: 'expo.out' }, 0.9)
+          .fromTo(
+            signature,
+            { opacity: 0, letterSpacing: '0.5em' },
+            { opacity: 1, letterSpacing: '0.22em', duration: 0.5, ease: 'expo.out' },
+            1.2,
+          )
+          .fromTo(action, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'expo.out' }, 1.3);
         return tl;
       };
 
@@ -89,7 +94,7 @@ export function FinalCta() {
             scrollTrigger: {
               trigger: q(`.${styles.pin}`)[0],
               start: 'top top',
-              end: '+=130%',
+              end: '+=80%',
               pin: true,
               scrub: 0.8,
               anticipatePin: 1,
@@ -142,35 +147,28 @@ export function FinalCta() {
           </div>
 
           <p className={`${styles.kicker} kicker`}>
-            <span className="en">(10)</span>
             <span className="mark" aria-hidden="true" />
-            <span className="en">{finalCta.kicker}</span>
+            <span>{finalCta.kicker}</span>
           </p>
 
-          <h2 id="cta-title" className={`${styles.title} en`} aria-label={finalCta.en.join(' ')}>
-            {finalCta.en.map((line, li) => (
-              <span key={li} className={styles.line} aria-hidden="true">
-                {line.split('').map((ch, ci) => (
-                  <span key={ci} className={styles.charMask}>
-                    <span className={`${styles.char} ${li === 1 && ch !== ' ' && ci >= line.length - 7 ? styles.accent : ''}`}>
-                      {ch === ' ' ? ' ' : ch}
-                    </span>
-                  </span>
-                ))}
+          <h2 id="cta-title" className={styles.title}>
+            {finalCta.he.map((line, i) => (
+              <span key={i} className={styles.line}>
+                <span className={styles.lineInner}>{line}</span>{' '}
               </span>
             ))}
           </h2>
 
-          <p className={styles.he}>
-            {finalCta.he.map((l) => (
-              <span key={l}>{l}</span>
-            ))}
+          <p className={`${styles.signature} en`}>
+            {finalCta.en.replace('BEYOND.', '')}
+            <span className={styles.accent}>BEYOND.</span>
           </p>
 
           <div className={styles.action}>
             <Button href={finalCta.button.href} size="xl" magnetic>
               {finalCta.button.label}
             </Button>
+            <p className={styles.note}>{finalCta.note}</p>
           </div>
         </div>
       </div>

@@ -11,8 +11,8 @@
  *   3. Add `result` ONLY when real, verifiable data exists — otherwise omit it
  *      and the "value" block is not rendered.
  *
- * Templates are hidden automatically once at least one published project
- * exists (see `getWorkItems`).
+ * Templates are never rendered. The Work section, its navigation link and the
+ * hero's "view work" button appear automatically once one project is published.
  */
 
 export type ProjectImage = {
@@ -50,12 +50,12 @@ export type Project = {
 };
 
 export const workIntro = {
-  kicker: 'Selected Work',
+  kicker: 'תיק עבודות',
   title: 'עבודות נבחרות',
   lead: 'כל פרויקט כאן מתחיל באתגר עסקי ומסתיים במוצר שעובד. מאחורי כל מסך יש החלטה — וכאן רואים גם אותה.',
   dragHint: 'גללו כדי לנוע בין הפרויקטים',
   next: {
-    kicker: 'Next case',
+    kicker: 'הפרויקט הבא',
     title: 'הפרויקט הבא יכול להיות שלכם.',
     body: 'יש לכם אתגר שמחכה לחשיבה רחבה וביצוע מדויק? בואו נתחיל לשרטט אותו יחד.',
     button: 'בואו נדבר',
@@ -67,8 +67,8 @@ export const workIntro = {
     result: 'הערך העסקי',
     open: 'החשיבה מאחורי הפרויקט',
     close: 'סגירה',
-    desktop: 'Desktop',
-    mobile: 'Mobile',
+    desktop: 'מחשב',
+    mobile: 'נייד',
     template: 'תבנית לפרויקט',
     visit: 'לאתר החי',
   },
@@ -116,8 +116,10 @@ export const projects: Project[] = [
   },
 ];
 
-/** Published projects win; templates are shown only while none exist. */
-export function getWorkItems(): Project[] {
-  const published = projects.filter((p) => p.status === 'published');
-  return published.length > 0 ? published : projects;
+/** Only real, published case studies are ever shown on the site. */
+export function getPublishedProjects(): Project[] {
+  return projects.filter((p) => p.status === 'published');
 }
+
+/** The Work section (and every link to it) exists only once a real project is published. */
+export const hasPublishedWork = projects.some((p) => p.status === 'published');

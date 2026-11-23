@@ -46,6 +46,8 @@ create table if not exists contact_submissions (
   ip_hash     text,
   user_agent  text
 );
+alter table contact_submissions add column if not exists budget text;
+alter table contact_submissions add column if not exists timeline text;
 create index if not exists contact_submissions_created_at_idx on contact_submissions (created_at desc);
 `;
 
@@ -67,13 +69,15 @@ export async function insertSubmission(
   await ensureSchema();
   const sql = getSql();
   const rows = await sql<{ id: string }[]>`
-    insert into contact_submissions (name, email, phone, services, message, ip_hash, user_agent)
+    insert into contact_submissions (name, email, phone, services, message, budget, timeline, ip_hash, user_agent)
     values (
       ${data.name},
       ${data.email},
       ${data.phone || null},
       ${data.services as string[]},
       ${data.message},
+      ${data.budget ?? null},
+      ${data.timeline ?? null},
       ${meta.ipHash ?? null},
       ${meta.userAgent?.slice(0, 300) ?? null}
     )
@@ -90,6 +94,8 @@ export type SubmissionRow = {
   phone: string | null;
   services: string[];
   message: string;
+  budget: string | null;
+  timeline: string | null;
   status: string;
 };
 
@@ -97,7 +103,7 @@ export async function listSubmissions(limit = 200): Promise<SubmissionRow[]> {
   await ensureSchema();
   const sql = getSql();
   return sql<SubmissionRow[]>`
-    select id, created_at, name, email, phone, services, message, status
+    select id, created_at, name, email, phone, services, message, budget, timeline, status
     from contact_submissions
     order by created_at desc
     limit ${limit}

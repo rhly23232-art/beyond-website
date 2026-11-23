@@ -50,10 +50,6 @@ export function ProgressRail() {
 
   return (
     <nav ref={railRef} className={styles.rail} aria-label="פרקי העמוד" data-visible="false" data-theme="dark">
-      <p className={`${styles.current} en`} aria-hidden="true">
-        <span>{String(active + 1).padStart(2, '0')}</span>
-        <span className={styles.total}>/{String(chapters.length).padStart(2, '0')}</span>
-      </p>
       <div className={styles.track} aria-hidden="true">
         <span ref={fillRef} className={styles.fill} />
       </div>

@@ -4,11 +4,11 @@ import { Fragment, useRef } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { isFinePointer, isMotionReduced, onIntroReveal } from '@/lib/motion';
 import { hero } from '@/content/home';
+import { hasPublishedWork } from '@/content/projects';
 import { Button } from '@/components/ui/Button';
 import { useScrollTo } from '@/components/motion/SmoothScroll';
 import { GridLines } from '@/components/ui/GridLines';
 import { HeroSymbol } from './HeroSymbol';
-import { Particles } from './Particles';
 import styles from './Hero.module.css';
 
 /**
@@ -18,6 +18,7 @@ import styles from './Hero.module.css';
 export function Hero() {
   const root = useRef<HTMLElement>(null);
   const scrollTo = useScrollTo();
+  const secondary = hasPublishedWork ? hero.secondary : hero.secondaryFallback;
 
   useGSAP(
     () => {
@@ -42,7 +43,7 @@ export function Hero() {
           0.05,
         )
         .from(q(`.${styles.meta} > *`), { opacity: 0, y: -10, stagger: 0.07, duration: 0.9 }, 0.45)
-        .from(q(`.${styles.subtitle}`), { opacity: 0, y: 28, duration: 1.2 }, 0.6)
+        .from(q(`.${styles.audience}, .${styles.subtitle}`), { opacity: 0, y: 28, stagger: 0.08, duration: 1.2 }, 0.6)
         .from(q(`.${styles.actions} > *`), { opacity: 0, y: 22, stagger: 0.1, duration: 1.1 }, 0.72)
         .from(q(`.${styles.cue}`), { opacity: 0, duration: 1 }, 1.2);
 
@@ -117,24 +118,20 @@ export function Hero() {
       <div className={styles.bg} aria-hidden="true">
         <GridLines hook="heroline" className={styles.grid} />
         <div className={styles.glow} />
-        <Particles className={styles.particles} />
       </div>
 
       <div className={styles.stage}>
-        <div className={styles.visual} data-cursor="">
+        <div className={styles.visual}>
           <HeroSymbol />
         </div>
 
         <div className={`container ${styles.inner}`}>
           <div className={styles.meta}>
-            <span className="en">(01)</span>
-            <span className="kicker">
+            <p className="kicker">
               <span className="mark" aria-hidden="true" />
-              <span className="en">{hero.kicker}</span>
-            </span>
-            <span className={styles.disciplines}>
-              <span className="en">{hero.disciplines.join(' · ')}</span>
-            </span>
+              <span>{hero.kicker}</span>
+            </p>
+            <span className={styles.disciplines}>{hero.disciplines.join(' · ')}</span>
           </div>
 
           <h1 id="hero-title" className={styles.title}>
@@ -165,13 +162,14 @@ export function Hero() {
           </h1>
 
           <div className={styles.bottom}>
+            <p className={styles.audience}>{hero.audience}</p>
             <p className={styles.subtitle}>{hero.subtitle}</p>
             <div className={styles.actions}>
               <Button href={hero.primary.href} size="lg" magnetic>
                 {hero.primary.label}
               </Button>
-              <Button href={hero.secondary.href} variant="secondary" size="lg" arrow="down">
-                {hero.secondary.label}
+              <Button href={secondary.href} variant="secondary" size="lg" arrow="down">
+                {secondary.label}
               </Button>
             </div>
           </div>

@@ -213,7 +213,7 @@
 
 .block[data-kind='hero'] .solid {
   background:
-    radial-gradient(70% 90% at 15% 85%, rgb(199 243 74 / 0.2), transparent 60%),
+    radial-gradient(70% 90% at 15% 85%, rgb(232 237 255 / 0.18), transparent 60%),
     linear-gradient(135deg, var(--c-cobalt) 0%, var(--c-cobalt-deep) 60%, #1a2fa8 100%);
 }
 
@@ -248,7 +248,7 @@
   top: 14%;
   width: 16%;
   aspect-ratio: 1;
-  border: 1.5px solid var(--c-lime);
+  border: 1.5px solid #a9bbff;
 }
 
 .lineA,
@@ -304,7 +304,7 @@
 .codeHead i {
   width: 6px;
   height: 6px;
-  background: var(--c-lime);
+  background: #a9bbff;
 }
 
 .code p {
@@ -320,7 +320,7 @@
 }
 
 .attr {
-  color: var(--c-lime);
+  color: #cfd8ff;
 }
 
 .live {
@@ -333,10 +333,10 @@
   gap: 0.4rem;
   padding: 0.35rem 0.6rem;
   border-radius: 6px;
-  background: var(--c-lime);
-  color: var(--c-ink);
+  background: var(--c-cobalt);
+  color: var(--c-white);
   font-family: var(--font-en);
-  font-size: 0.6875rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   letter-spacing: 0.12em;
 }
@@ -344,7 +344,7 @@
 .live i {
   width: 6px;
   height: 6px;
-  background: var(--c-ink);
+  background: var(--c-white);
   animation: blink 1.4s steps(2, start) infinite;
 }
 

@@ -1,7 +1,11 @@
 import type { Metadata } from 'next';
 import { revalidatePath } from 'next/cache';
 import { isDatabaseConfigured, listSubmissions, updateSubmissionStatus, type SubmissionRow } from '@/lib/server/db';
+import { contact } from '@/content/about';
 import styles from './admin.module.css';
+
+const labelOf = (options: readonly { value: string; label: string }[], value: string | null) =>
+  value ? (options.find((o) => o.value === value)?.label ?? value) : '—';
 
 export const dynamic = 'force-dynamic';
 
@@ -70,6 +74,7 @@ export default async function AdminPage() {
                 <th scope="col">שם</th>
                 <th scope="col">פרטי קשר</th>
                 <th scope="col">שירותים</th>
+                <th scope="col">תקציב · מועד</th>
                 <th scope="col">על הפרויקט</th>
                 <th scope="col">סטטוס</th>
               </tr>
@@ -96,6 +101,11 @@ export default async function AdminPage() {
                     )}
                   </td>
                   <td>{r.services.map((s) => SERVICE_LABELS[s] ?? s).join(', ')}</td>
+                  <td>
+                    {labelOf(contact.budgetOptions, r.budget)}
+                    <br />
+                    {labelOf(contact.timelineOptions, r.timeline)}
+                  </td>
                   <td className={styles.msg}>{r.message}</td>
                   <td>
                     <form action={toggleStatus}>
