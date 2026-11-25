@@ -2,7 +2,7 @@
 
 import { Fragment, useRef } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
-import { isFinePointer, isMotionReduced, onIntroReveal } from '@/lib/motion';
+import { MQ_DESKTOP, isFinePointer, isMotionReduced, onIntroReveal } from '@/lib/motion';
 import { hero } from '@/content/home';
 import { hasPublishedWork } from '@/content/projects';
 import { Button } from '@/components/ui/Button';
@@ -43,7 +43,7 @@ export function Hero() {
           0.05,
         )
         .from(q(`.${styles.meta} > *`), { opacity: 0, y: -10, stagger: 0.07, duration: 0.9 }, 0.45)
-        .from(q(`.${styles.audience}, .${styles.subtitle}`), { opacity: 0, y: 28, stagger: 0.08, duration: 1.2 }, 0.6)
+        .from(q(`.${styles.author}, .${styles.audience}, .${styles.subtitle}`), { opacity: 0, y: 28, stagger: 0.08, duration: 1.2 }, 0.55)
         .from(q(`.${styles.actions} > *`), { opacity: 0, y: 22, stagger: 0.1, duration: 1.1 }, 0.72)
         .from(q(`.${styles.cue}`), { opacity: 0, duration: 1 }, 1.2);
 
@@ -97,12 +97,16 @@ export function Hero() {
         });
       }
 
-      /* ---- Scroll: the composition breaks apart into depth ---------------- */
-      const st = { trigger: el, start: 'top top', end: 'bottom top', scrub: 0.6 } as const;
-      gsap.to(q(`.${styles.title}`), { yPercent: -22, ease: 'none', scrollTrigger: st });
-      gsap.to(q(`.${styles.visual}`), { yPercent: 18, scale: 1.12, ease: 'none', scrollTrigger: st });
-      gsap.to(q(`.${styles.bottom}`), { yPercent: -40, opacity: 0, ease: 'none', scrollTrigger: st });
-      gsap.to(q(`.${styles.bg}`), { opacity: 0.35, ease: 'none', scrollTrigger: st });
+      /* ---- Scroll: the composition breaks apart into depth (desktop only —
+         on phones the hero is taller than the screen and must stay readable) */
+      const mm = gsap.matchMedia();
+      mm.add(MQ_DESKTOP, () => {
+        const st = { trigger: el, start: 'top top', end: 'bottom top', scrub: 0.6 } as const;
+        gsap.to(q(`.${styles.title}`), { yPercent: -22, ease: 'none', scrollTrigger: st });
+        gsap.to(q(`.${styles.visual}`), { yPercent: 18, scale: 1.12, ease: 'none', scrollTrigger: st });
+        gsap.to(q(`.${styles.bottom}`), { yPercent: -40, opacity: 0, ease: 'none', scrollTrigger: st });
+        gsap.to(q(`.${styles.bg}`), { opacity: 0.35, ease: 'none', scrollTrigger: st });
+      });
 
       return () => {
         offReveal();
@@ -162,6 +166,10 @@ export function Hero() {
           </h1>
 
           <div className={styles.bottom}>
+            <p className={styles.author}>
+              <span className={styles.authorName}>{hero.author.name}</span>
+              <span className={styles.authorRole}>{hero.author.role}</span>
+            </p>
             <p className={styles.audience}>{hero.audience}</p>
             <p className={styles.subtitle}>{hero.subtitle}</p>
             <div className={styles.actions}>

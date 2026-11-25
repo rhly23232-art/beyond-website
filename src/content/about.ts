@@ -12,11 +12,8 @@ export const studio = {
     { title: 'ביצוע מדויק', text: 'אפיון, עיצוב ופיתוח באותן ידיים, עם אחריות עד הפרט האחרון.' },
     { title: 'שותפות', text: 'יוזמה, זמינות ותקשורת ברורה — כמו שותפה, לא כמו ספקית.' },
   ],
-  /**
-   * Fill in to introduce yourself by name (shown as "נעים מאוד, אני …").
-   * Left empty on purpose — nothing here is invented.
-   */
-  owner: { name: '', role: '' },
+  /** Shown as "נעים מאוד, אני …" — leave the name empty to hide the line. */
+  owner: { name: 'נעמי מן', role: 'מפתחת ומעצבת UX/UI · פיתוח אינטראקטיבי בשילוב AI' },
 } as const;
 
 export const why = {

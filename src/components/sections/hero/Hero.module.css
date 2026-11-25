@@ -39,8 +39,8 @@
   position: absolute;
   z-index: 0;
   inset-inline-end: max(2vw, calc((100vw - var(--container)) / 2 - 2vw));
-  top: clamp(5.5rem, 11vh, 8rem);
-  width: min(27vw, 26rem);
+  top: clamp(5.25rem, 10vh, 7.5rem);
+  width: min(23vw, 22rem);
   opacity: 0.9;
 }
 
@@ -139,8 +139,29 @@
   grid-row: 3;
   display: grid;
   gap: 1.25rem;
-  margin-top: clamp(-9rem, -8vw, -3rem);
+  margin-top: clamp(-7rem, -6vw, -2rem);
   align-self: end;
+}
+
+.author {
+  display: grid;
+  gap: 0.2rem;
+  padding-inline-start: 1rem;
+  border-inline-start: 3px solid var(--c-cobalt);
+}
+
+.authorName {
+  font-size: clamp(1.25rem, 1.05rem + 0.6vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--fg-strong);
+}
+
+.authorRole {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--fg-dim);
 }
 
 .audience {

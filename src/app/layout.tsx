@@ -53,6 +53,7 @@ export const metadata: Metadata = {
   },
   description: site.description,
   applicationName: site.name,
+  authors: [{ name: 'נעמי מן' }],
   keywords: [
     'סטודיו דיגיטלי',
     'אפיון אתרים',
@@ -106,6 +107,7 @@ const jsonLd = {
   ...(site.phone ? { telephone: site.phone } : {}),
   knowsAbout: ['Digital strategy', 'UX design', 'UI design', 'Web design', 'Web development', 'Design systems'],
   inLanguage: 'he',
+  founder: { '@type': 'Person', name: 'נעמי מן', jobTitle: 'מפתחת ומעצבת UX/UI · פיתוח אינטראקטיבי בשילוב AI' },
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
     name: 'שירותים',
