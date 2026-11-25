@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { Project } from '@/content/projects';
 import { workIntro } from '@/content/projects';
+import { Button } from '@/components/ui/Button';
 import { CoverFrame, DesktopFrame, PhoneFrame } from './Devices';
 import styles from './Work.module.css';
 
@@ -11,11 +12,12 @@ const L = workIntro.labels;
 function Composition({ project, view }: { project: Project; view: 'desktop' | 'mobile' }) {
   const { media, accent, layout } = project;
   if (layout === 'mobile') {
+    const [a, b, c] = media.phones ?? [media.mobile, media.mobile, media.mobile];
     return (
       <div className={`${styles.comp} ${styles.compMobile}`}>
-        <PhoneFrame image={media.mobile} accent={accent} className={styles.phoneA} />
-        <PhoneFrame image={media.mobile} accent={accent} className={styles.phoneB} />
-        <PhoneFrame image={media.mobile} accent={accent} className={styles.phoneC} />
+        <PhoneFrame image={a} accent={accent} className={styles.phoneA} />
+        <PhoneFrame image={b} accent={accent} className={styles.phoneB} />
+        <PhoneFrame image={c} accent={accent} className={styles.phoneC} />
       </div>
     );
   }
@@ -63,12 +65,20 @@ export function ProjectPanel({ project }: { project: Project }) {
 
       <div className={styles.info}>
         <p className={styles.meta}>
+          {project.concept && <span className={styles.conceptTag}>{L.concept}</span>}
           <span>{project.sector}</span>
           {project.year && <span className="en">· {project.year}</span>}
         </p>
         <h3 id={titleId} className={styles.name} data-name>
-          {project.name}
+          {project.href ? (
+            <a href={project.href} className={styles.nameLink}>
+              {project.name}
+            </a>
+          ) : (
+            project.name
+          )}
         </h3>
+        {project.summary && <p className={styles.summary}>{project.summary}</p>}
         <ul role="list" className={styles.tags}>
           {project.disciplines.map((d) => (
             <li key={d} className="en">
@@ -78,6 +88,11 @@ export function ProjectPanel({ project }: { project: Project }) {
         </ul>
 
         <div className={styles.controls}>
+          {project.href && (
+            <Button href={project.href} size="md" arrow="out" className={styles.viewBtn}>
+              {L.view}
+            </Button>
+          )}
           <button
             type="button"
             className={styles.thinkingBtn}

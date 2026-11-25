@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מוקד · מערכת AI לניהול מוקד עירוני — פרויקט קונספט</title>
+<meta name="description" content="אב טיפוס של מערכת לניהול מוקד עירוני מבוססת AI: מרכז שליטה, מיון פניות אוטומטי עם הסבר, שיבוץ צוותים, ניתוח נתונים ועוזר AI. פרויקט קונספט מאת BEYOND.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%234f46e5'/%3E%3Ccircle cx='16' cy='16' r='4' fill='white'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='white' stroke-opacity='.6' stroke-width='2'/%3E%3C/svg%3E">
+<style>
+@font-face{font-family:"Plex";src:url(../fonts/ibm-plex-sans-hebrew-hebrew-300-normal.woff2) format("woff2");font-weight:300;unicode-range:U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
+@font-face{font-family:"Plex";src:url(../fonts/ibm-plex-sans-hebrew-hebrew-400-normal.woff2) format("woff2");font-weight:400;unicode-range:U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
+@font-face{font-family:"Plex";src:url(../fonts/ibm-plex-sans-hebrew-hebrew-500-normal.woff2) format("woff2");font-weight:500;unicode-range:U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
+@font-face{font-family:"Plex";src:url(../fonts/ibm-plex-sans-hebrew-hebrew-600-normal.woff2) format("woff2");font-weight:600;unicode-range:U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
+@font-face{font-family:"Plex";src:url(../fonts/ibm-plex-sans-hebrew-hebrew-700-normal.woff2) format("woff2");font-weight:700;unicode-range:U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
+@font-face{font-family:"Plex";src:url(../fonts/ibm-plex-sans-hebrew-latin-400-normal.woff2) format("woff2");font-weight:400;unicode-range:U+0000-00FF,U+2000-206F,U+2212}
+@font-face{font-family:"Plex";src:url(../fonts/ibm-plex-sans-hebrew-latin-500-normal.woff2) format("woff2");font-weight:500;unicode-range:U+0000-00FF,U+2000-206F,U+2212}
+@font-face{font-family:"Plex";src:url(../fonts/ibm-plex-sans-hebrew-latin-600-normal.woff2) format("woff2");font-weight:600 700;unicode-range:U+0000-00FF,U+2000-206F,U+2212}
+@font-face{font-family:"Plex Mono";src:url(../fonts/ibm-plex-mono-latin-400-normal.woff2) format("woff2");font-weight:400}
+@font-face{font-family:"Plex Mono";src:url(../fonts/ibm-plex-mono-latin-500-normal.woff2) format("woff2");font-weight:500 700}
+
+:root{
+  --font:"Plex",Arial,sans-serif;--mono:"Plex Mono",ui-monospace,monospace;
+  --brand:#4f46e5;--brand-2:#4338ca;--brand-soft:#eef0ff;
+  --ai1:#7c3aed;--ai2:#06b6d4;--ai-grad:linear-gradient(120deg,#7c3aed,#4f46e5 45%,#06b6d4);
+  --crit:#e5484d;--high:#f76b15;--med:#e5a000;--low:#30a46c;--info:#0090ff;
+  --crit-s:#feebec;--high-s:#ffefe3;--med-s:#fff6d6;--low-s:#e6f6eb;--info-s:#e6f4fe;
+  --r:10px;--r-l:14px;--ease:cubic-bezier(.16,1,.3,1);
+  --side:248px;
+}
+[data-theme=light]{--bg:#f3f5f9;--surface:#fff;--surface-2:#f8f9fc;--ink:#0f172a;--ink-2:#334155;--muted:#64748b;--faint:#94a3b8;--line:#e5e8ef;--line-2:#d7dce5;--side-bg:#0e1729;--side-ink:#cbd5e1;--shadow:0 1px 2px rgba(15,23,42,.05),0 4px 16px rgba(15,23,42,.05);--map-land:#eef1f6;--map-sea:#dde7f6;--map-road:#fff;--map-line:#cfd6e2}
+[data-theme=dark]{--bg:#0a0f1c;--surface:#111827;--surface-2:#0f1626;--ink:#f1f5f9;--ink-2:#cbd5e1;--muted:#94a3b8;--faint:#64748b;--line:#1f2a3d;--line-2:#2b3850;--side-bg:#070b15;--side-ink:#94a3b8;--shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);--brand-soft:#1d1b4b;--map-land:#141d31;--map-sea:#0c1426;--map-road:#1e2a42;--map-line:#26344f;
+  --crit-s:#3b1219;--high-s:#3a1d0b;--med-s:#352800;--low-s:#0f2a1c;--info-s:#0b2540}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:var(--font);background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0;padding:0}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px}
+.mono{font-family:var(--mono);font-feature-settings:"zero"}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+svg{display:block}
+
+/* shell */
+.app{display:grid;grid-template-columns:var(--side) 1fr;height:100vh;overflow:hidden}
+.side{background:var(--side-bg);color:var(--side-ink);display:flex;flex-direction:column;padding:18px 14px;gap:6px;position:relative;z-index:5}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px 18px;color:#fff}
+.brand-mark{width:34px;height:34px;border-radius:10px;background:var(--ai-grad);display:grid;place-items:center;position:relative;overflow:hidden}
+.brand-mark::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.35),transparent 60%)}
+.brand b{display:block;font-size:17px;font-weight:700;letter-spacing:-.01em;line-height:1.1}
+.brand small{font-size:11px;color:#8b98b1}
+.side-label{font-size:11px;color:#64748b;padding:14px 10px 6px;letter-spacing:.04em}
+.nav-btn{display:flex;align-items:center;gap:12px;width:100%;padding:9px 10px;border-radius:9px;color:var(--side-ink);font-size:14px;transition:background .2s,color .2s;position:relative}
+.nav-btn svg{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.nav-btn:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav-btn[aria-current=page]{background:rgba(99,102,241,.18);color:#fff}
+.nav-btn[aria-current=page]::before{content:"";position:absolute;inset-inline-start:-14px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:#818cf8}
+.nav-btn .badge{margin-inline-start:auto;background:#ef4444;color:#fff;font-size:11px;font-weight:600;border-radius:99px;padding:1px 7px;font-family:var(--mono)}
+.nav-btn .badge.ai{background:var(--ai-grad)}
+.side-card{margin-top:auto;border-radius:12px;padding:14px;background:linear-gradient(160deg,rgba(124,58,237,.22),rgba(6,182,212,.08));border:1px solid rgba(129,140,248,.25);color:#e2e8f0}
+.side-card b{display:block;font-size:13px;margin-bottom:4px}
+.side-card p{margin:0 0 10px;font-size:12px;color:#a5b4cf;line-height:1.5}
+.meter{height:6px;border-radius:9px;background:rgba(255,255,255,.1);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--ai-grad);border-radius:9px}
+.user{display:flex;align-items:center;gap:10px;padding:12px 8px 2px;border-top:1px solid rgba(255,255,255,.07);margin-top:12px}
+.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:600;background:#1e293b;color:#c7d2fe;flex:none}
+.user b{display:block;color:#fff;font-size:13px;font-weight:500}
+.user small{font-size:11.5px;color:#7f8ca6}
+.main{display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.top{display:flex;align-items:center;gap:14px;padding:12px 24px;background:var(--surface);border-bottom:1px solid var(--line);height:64px;flex:none}
+.search{flex:1;max-width:460px;display:flex;align-items:center;gap:10px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:0 12px;height:38px;color:var(--muted)}
+.search input{flex:1;border:0;background:none;outline:none;color:var(--ink)}
+.kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--line-2);border-radius:5px;padding:1px 6px;color:var(--muted);background:var(--surface)}
+.shift{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);padding:6px 12px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line)}
+.live{width:8px;height:8px;border-radius:50%;background:var(--low);box-shadow:0 0 0 0 rgba(48,164,108,.6);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(48,164,108,0)}100%{box-shadow:0 0 0 0 rgba(48,164,108,0)}}
+.icon-btn{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;color:var(--ink-2);border:1px solid var(--line);background:var(--surface);position:relative;transition:background .2s}
+.icon-btn:hover{background:var(--surface-2)}
+.icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.icon-btn .dot{position:absolute;top:8px;inset-inline-end:9px;width:8px;height:8px;border-radius:50%;background:var(--crit);border:2px solid var(--surface)}
+.ai-btn{display:flex;align-items:center;gap:8px;height:38px;padding:0 14px 0 12px;border-radius:10px;color:#fff;font-weight:500;background:var(--ai-grad);background-size:200% 100%;transition:background-position .6s;box-shadow:0 4px 14px rgba(79,70,229,.3)}
+.ai-btn:hover{background-position:100% 0}
+.ai-btn svg{width:18px;height:18px}
+.top-spacer{flex:1}
+.view{flex:1;overflow:auto;padding:24px;scroll-behavior:smooth}
+.view[hidden]{display:none}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:20px}
+.page-head h1{margin:0;font-size:22px;font-weight:600;letter-spacing:-.01em}
+.page-head p{margin:2px 0 0;color:var(--muted);font-size:13.5px}
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px}
+.seg button{padding:6px 12px;border-radius:7px;font-size:13px;color:var(--muted);transition:all .2s}
+.seg button[aria-pressed=true]{background:var(--brand-soft);color:var(--brand);font-weight:500}
+[data-theme=dark] .seg button[aria-pressed=true]{color:#a5b4fc}
+.btn{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:9px;font-size:13.5px;font-weight:500;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);transition:all .2s;white-space:nowrap}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.primary:hover{background:var(--brand-2)}
+.btn.ghost{border-color:transparent;background:none;color:var(--muted)}
+.btn.ghost:hover{background:var(--surface-2);color:var(--ink)}
+.btn.sm{height:30px;padding:0 10px;font-size:12.5px}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);box-shadow:var(--shadow)}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.card-h h2,.card-h h3{margin:0;font-size:14.5px;font-weight:600}
+.card-h small{color:var(--muted);font-size:12.5px}
+.card-b{padding:16px 18px}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px}
+.kpi{padding:16px 18px;display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:end}
+.kpi span{color:var(--muted);font-size:12.5px;grid-column:1/-1;display:flex;align-items:center;gap:6px}
+.kpi b{font-size:28px;font-weight:600;letter-spacing:-.02em;line-height:1.1;font-family:var(--mono)}
+.kpi b small{font-size:14px;color:var(--muted);font-weight:400;font-family:var(--font);margin-inline-start:3px}
+.kpi em{font-style:normal;font-size:12px;font-weight:500;padding:2px 7px;border-radius:99px;font-family:var(--mono);justify-self:start}
+.up-good{background:var(--low-s);color:var(--low)}.up-bad{background:var(--crit-s);color:var(--crit)}
+.kpi svg{grid-row:2/4;grid-column:2;width:96px;height:38px}
+.kpi .aitag{background:var(--ai-grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:600}
+
+.grid-ov{display:grid;grid-template-columns:1fr 360px;gap:16px}
+.map-wrap{position:relative;flex:1;min-height:400px;overflow:hidden;border-radius:0 0 var(--r-l) var(--r-l)}
+.map-wrap svg{position:absolute;inset:0;width:100%;height:100%}
+.map-legend{position:absolute;bottom:12px;inset-inline-start:12px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:flex;gap:12px;font-size:12px;color:var(--ink-2);box-shadow:var(--shadow)}
+.map-legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-inline-end:5px}
+.map-zoom{position:absolute;top:12px;inset-inline-start:12px;display:grid;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
+.map-zoom button{width:32px;height:32px;font-size:18px;color:var(--ink-2)}.map-zoom button+button{border-top:1px solid var(--line)}
+.pin{cursor:pointer}
+.pin .ring{animation:ping 2.2s var(--ease) infinite;transform-box:fill-box;transform-origin:center}
+@keyframes ping{0%{transform:scale(.6);opacity:.7}100%{transform:scale(2.6);opacity:0}}
+.pin:hover .core,.pin:focus .core{r:8}
+.hood{transition:fill .3s}
+.hood:hover{fill:var(--brand-soft)}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12px;padding:8px 10px;border-radius:8px;max-width:220px;opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s;z-index:3;line-height:1.45}
+.tip.on{opacity:1;transform:none}
+.tip b{display:block;font-weight:600}
+
+.insights{display:flex;flex-direction:column}
+.insight{padding:14px 18px;border-bottom:1px solid var(--line);display:grid;gap:8px}
+.insight:last-child{border:0}
+.insight-top{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:500;padding:2px 8px;border-radius:99px;white-space:nowrap}
+.chip.ai{background:linear-gradient(120deg,rgba(124,58,237,.12),rgba(6,182,212,.12));color:var(--ai1)}
+[data-theme=dark] .chip.ai{color:#c4b5fd}
+.insight p{margin:0;font-size:13.5px;color:var(--ink-2);line-height:1.55}
+.insight p b{color:var(--ink);font-weight:600}
+.insight .acts{display:flex;gap:6px}
+.sev{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:2px 8px;border-radius:6px}
+.sev::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.sev.c{background:var(--crit-s);color:var(--crit)}.sev.h{background:var(--high-s);color:var(--high)}.sev.m{background:var(--med-s);color:var(--med)}.sev.l{background:var(--low-s);color:var(--low)}
+.grid-ov2{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-top:16px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-weight:500;color:var(--muted);text-align:start;padding:10px 18px;font-size:12px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+td{padding:11px 18px;border-bottom:1px solid var(--line);color:var(--ink-2)}
+tr:last-child td{border:0}
+tbody tr{transition:background .2s}
+tbody tr:hover{background:var(--surface-2)}
+td .id{font-family:var(--mono);color:var(--muted);font-size:12px}
+.feed-new{animation:flash 1.6s var(--ease)}
+@keyframes flash{0%{background:var(--brand-soft)}100%{background:transparent}}
+.teams{display:grid;gap:14px}
+.team{display:grid;grid-template-columns:1fr auto;gap:6px}
+.team b{font-weight:500;font-size:13px}
+.team small{color:var(--muted);font-size:12px}
+.bar{grid-column:1/-1;height:8px;border-radius:9px;background:var(--surface-2);overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+
+/* Inbox */
+.inbox{display:grid;grid-template-columns:420px 1fr;gap:16px;height:calc(100vh - 64px - 48px - 70px)}
+.list{display:flex;flex-direction:column;overflow:hidden}
+.filters{display:flex;gap:6px;padding:12px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.fchip{font-size:12.5px;padding:5px 10px;border-radius:99px;border:1px solid var(--line);color:var(--ink-2);transition:all .2s}
+.fchip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.fchip span{font-family:var(--mono);opacity:.7;margin-inline-start:4px}
+.rows{overflow:auto;flex:1}
+.row{display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;padding:13px 16px;border-bottom:1px solid var(--line);text-align:start;width:100%;transition:background .15s;position:relative}
+.row:hover{background:var(--surface-2)}
+.row[aria-selected=true]{background:var(--brand-soft)}
+.row[aria-selected=true]::before{content:"";position:absolute;inset-inline-start:0;top:0;bottom:0;width:3px;background:var(--brand)}
+.row .dotsev{width:9px;height:9px;border-radius:50%;margin-top:6px}
+.row b{font-weight:500;font-size:13.5px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row time{font-size:12px;color:var(--muted);font-family:var(--mono)}
+.row .meta{grid-column:2/4;display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.row .conf{display:inline-flex;align-items:center;gap:5px}
+.row .conf i{width:36px;height:4px;border-radius:4px;background:var(--line);overflow:hidden;display:inline-block}
+.row .conf i::after{content:"";display:block;height:100%;width:var(--v);background:var(--ai-grad)}
+.row.done{opacity:.55}
+.row .stat{font-size:11px;padding:1px 7px;border-radius:5px;background:var(--low-s);color:var(--low)}
+.row .dup{font-size:11px;padding:1px 7px;border-radius:5px;background:var(--info-s);color:var(--info)}
+.detail{overflow:auto;display:flex;flex-direction:column}
+.d-head{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;gap:16px;align-items:flex-start;justify-content:space-between}
+.d-head h2{margin:4px 0 6px;font-size:19px;font-weight:600;letter-spacing:-.01em}
+.d-sub{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:12.5px;align-items:center}
+.d-body{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:18px 22px}
+.msg{grid-column:1/-1;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;position:relative}
+.msg-h{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
+.msg p{margin:0;font-size:14px;color:var(--ink);line-height:1.65}
+.msg mark{background:linear-gradient(transparent 55%,rgba(124,58,237,.22) 55%);color:inherit;padding:0 1px}
+.ai-card{border-radius:12px;padding:1px;background:var(--ai-grad)}
+.ai-card>div{background:var(--surface);border-radius:11px;padding:14px 16px;height:100%}
+.ai-card h4,.box h4{margin:0 0 10px;font-size:12.5px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px}
+.ai-spark{width:14px;height:14px}
+.kv{display:grid;grid-template-columns:auto 1fr auto;gap:10px 12px;align-items:center;font-size:13px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-weight:500;color:var(--ink)}
+.kv .pct{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.box{border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.why{display:grid;gap:9px}
+.why-row{display:grid;grid-template-columns:1fr 110px 44px;gap:10px;align-items:center;font-size:12.5px;color:var(--ink-2)}
+.why-row .wb{height:6px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.why-row .wb i{display:block;height:100%;border-radius:6px;background:var(--brand);transform-origin:right;animation:grow .9s var(--ease) both}
+.why-row .wb i.neg{background:var(--faint)}
+@keyframes grow{from{transform:scaleX(0)}}
+.why-row span:last-child{font-family:var(--mono);font-size:12px;text-align:end;color:var(--muted)}
+.dups{display:grid;gap:8px}
+.dup-item{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:8px 10px;border-radius:8px;background:var(--surface-2)}
+.dup-item span{color:var(--muted);font-family:var(--mono);font-size:11.5px}
+.team-sug{display:flex;align-items:center;gap:12px}
+.team-sug .ic{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:var(--brand-soft);color:var(--brand)}
+.team-sug b{display:block;font-weight:600}
+.team-sug small{color:var(--muted)}
+.reply{grid-column:1/-1}
+.reply textarea{width:100%;min-height:92px;border:1px solid var(--line-2);border-radius:10px;padding:12px;background:var(--surface);resize:vertical;line-height:1.6;font-size:13.5px}
+.reply textarea:focus{outline:2px solid var(--brand);outline-color:color-mix(in srgb,var(--brand) 50%,transparent);border-color:var(--brand)}
+.tones{display:flex;gap:6px;margin-bottom:8px;align-items:center;font-size:12px;color:var(--muted)}
+.d-foot{margin-top:auto;padding:14px 22px;border-top:1px solid var(--line);display:flex;gap:8px;align-items:center;background:var(--surface);position:sticky;bottom:0}
+.d-foot .hint{margin-inline-start:auto;color:var(--muted);font-size:12px;display:flex;gap:6px;align-items:center}
+.typing::after{content:"▍";animation:blink 1s steps(2) infinite;color:var(--ai1)}
+@keyframes blink{50%{opacity:0}}
+.shimmer{background:linear-gradient(90deg,var(--surface-2) 25%,var(--line) 50%,var(--surface-2) 75%);background-size:200% 100%;animation:sh 1.2s infinite;border-radius:6px;height:12px;margin:6px 0}
+@keyframes sh{to{background-position:-200% 0}}
+
+/* Dispatch */
+.ai-banner{display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:12px;margin-bottom:16px;background:linear-gradient(120deg,rgba(124,58,237,.1),rgba(6,182,212,.08));border:1px solid rgba(124,58,237,.25)}
+.ai-banner p{margin:0;flex:1;font-size:13.5px;color:var(--ink-2)}
+.ai-banner p b{color:var(--ink)}
+.ai-banner .ic{width:36px;height:36px;border-radius:10px;background:var(--ai-grad);display:grid;place-items:center;flex:none}
+.board{display:grid;grid-template-columns:repeat(5,minmax(220px,1fr));gap:14px;overflow-x:auto;padding-bottom:8px}
+.col{background:var(--surface-2);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;min-height:520px;transition:background .2s,border-color .2s}
+.col.over{background:var(--brand-soft);border-color:var(--brand);border-style:dashed}
+.col-h{display:flex;align-items:center;gap:8px;padding:12px 14px;font-weight:600;font-size:13px}
+.col-h i{width:8px;height:8px;border-radius:50%}
+.col-h span{margin-inline-start:auto;font-family:var(--mono);font-size:12px;color:var(--muted);font-weight:400;background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:0 8px}
+.col-b{padding:0 10px 10px;display:grid;gap:8px;align-content:start;flex:1}
+.kcard{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 12px;cursor:grab;box-shadow:0 1px 2px rgba(15,23,42,.04);transition:transform .2s var(--ease),box-shadow .2s;display:grid;gap:7px}
+.kcard:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
+.kcard.drag{opacity:.4}
+.kcard.moved{animation:flash 1.4s var(--ease)}
+.kcard-top{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--muted)}
+.kcard b{font-weight:500;font-size:13px;line-height:1.4}
+.kcard-foot{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted)}
+.mini-av{width:22px;height:22px;border-radius:50%;font-size:10px;display:grid;place-items:center;background:var(--brand-soft);color:var(--brand);font-weight:600}
+.sla{font-family:var(--mono);font-size:11.5px}
+.sla.warn{color:var(--high)}
+
+/* Analytics */
+.an-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+.an-grid2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:16px}
+.chart svg{width:100%;height:auto;overflow:visible}
+.legend{display:flex;gap:16px;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:3px;vertical-align:middle;margin-inline-end:6px}
+.hbar{display:grid;gap:10px}
+.hbar-row{display:grid;grid-template-columns:110px 1fr 42px;gap:10px;align-items:center;font-size:12.5px}
+.hbar-row .t{height:10px;border-radius:5px;background:var(--surface-2);overflow:hidden}
+.hbar-row .t i{display:block;height:100%;border-radius:5px;background:var(--brand);animation:grow 1s var(--ease) both;transform-origin:right}
+.hbar-row span:last-child{font-family:var(--mono);color:var(--muted);text-align:end}
+.heat{display:grid;grid-template-columns:28px repeat(12,1fr);gap:3px;font-size:10.5px;color:var(--muted)}
+.heat i{aspect-ratio:1;border-radius:3px}
+.heat span{display:grid;place-items:center}
+
+/* AI settings */
+.set-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:16px}
+.set-row{display:grid;grid-template-columns:1fr auto;gap:4px 24px;padding:16px 18px;border-bottom:1px solid var(--line);align-items:center}
+.set-row:last-child{border:0}
+.set-row b{font-weight:500}
+.set-row p{margin:0;color:var(--muted);font-size:12.5px;grid-column:1}
+.switch{position:relative;width:40px;height:22px;border-radius:99px;background:var(--line-2);transition:background .2s;grid-row:1/3;grid-column:2}
+.switch::after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .25s var(--ease)}
+.switch[aria-checked=true]{background:var(--brand)}
+.switch[aria-checked=true]::after{transform:translateX(-18px)}
+.switch:disabled{opacity:.6;cursor:not-allowed}
+.range{grid-column:1/-1;display:flex;align-items:center;gap:12px;margin-top:8px}
+.range input{flex:1;accent-color:var(--brand)}
+.range output{font-family:var(--mono);font-weight:600;min-width:44px}
+.audit li{display:grid;grid-template-columns:auto 1fr auto;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:12.5px;align-items:start}
+.audit li:last-child{border:0}
+.audit time{font-family:var(--mono);color:var(--muted);font-size:11.5px}
+.audit ul{list-style:none;margin:0;padding:0}
+
+/* Copilot drawer */
+.scrim{position:fixed;inset:0;background:rgba(10,15,28,.3);opacity:0;pointer-events:none;transition:opacity .3s;z-index:20}
+.scrim.on{opacity:1;pointer-events:auto}
+.copilot{position:fixed;top:0;bottom:0;left:0;width:440px;max-width:100vw;background:var(--surface);border-inline-start:1px solid var(--line);z-index:21;transform:translateX(-102%);transition:transform .5s var(--ease),box-shadow .5s;display:flex;flex-direction:column}
+.copilot.on{transform:none;box-shadow:20px 0 60px rgba(15,23,42,.18)}
+.cp-h{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.cp-h .ic{width:34px;height:34px;border-radius:10px;background:var(--ai-grad);display:grid;place-items:center}
+.cp-h b{display:block;font-size:14.5px}
+.cp-h small{color:var(--muted);font-size:12px}
+.cp-h .icon-btn{margin-inline-start:auto}
+.cp-body{flex:1;overflow:auto;padding:18px 16px;display:flex;flex-direction:column;gap:14px}
+.bubble{max-width:92%;font-size:13.5px;line-height:1.65}
+.bubble.me{align-self:flex-start;background:var(--brand);color:#fff;padding:10px 14px;border-radius:14px 14px 4px 14px}
+.bubble.ai{align-self:stretch;color:var(--ink-2)}
+.bubble.ai p{margin:0 0 8px}
+.bubble.ai b{color:var(--ink)}
+.bubble.ai ul{margin:0 0 8px;padding-inline-start:18px}
+.bubble .src{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.bubble .src span{font-size:11px;padding:2px 8px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted)}
+.bubble .mini{border:1px solid var(--line);border-radius:10px;padding:10px;margin:8px 0;background:var(--surface-2)}
+.sugs{display:grid;gap:8px}
+.sug{text-align:start;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:13px;color:var(--ink-2);transition:all .2s;display:flex;gap:8px;align-items:center}
+.sug:hover{border-color:var(--brand);color:var(--ink);background:var(--brand-soft)}
+.cp-in{border-top:1px solid var(--line);padding:12px}
+.cp-in form{display:flex;gap:8px;align-items:flex-end;border:1px solid var(--line-2);border-radius:12px;padding:8px 8px 8px 8px;background:var(--surface-2)}
+.cp-in textarea{flex:1;border:0;background:none;resize:none;outline:none;max-height:120px;line-height:1.5;padding:4px 6px}
+.cp-in button{width:34px;height:34px;border-radius:9px;background:var(--brand);color:#fff;display:grid;place-items:center;flex:none}
+.cp-in small{display:block;color:var(--faint);font-size:11px;margin-top:8px;text-align:center}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,120px);background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:10px;font-size:13.5px;z-index:40;transition:transform .45s var(--ease);display:flex;align-items:center;gap:10px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
+.toast.on{transform:translate(-50%,0)}
+.toast button{color:#a5b4fc;font-weight:500}
+.concept{position:fixed;bottom:14px;left:14px;font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--line);padding:4px 10px;border-radius:99px;z-index:15}
+.fade-in{animation:fi .5s var(--ease) both}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}}
+
+@media (max-width:1180px){
+  .grid-ov,.grid-ov2,.an-grid,.set-grid{grid-template-columns:1fr}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .inbox{grid-template-columns:340px 1fr}
+  .d-body{grid-template-columns:1fr}
+}
+@media (max-width:860px){
+  :root{--side:0px}
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;inset-block:0;right:0;width:260px;transform:translateX(100%);transition:transform .4s var(--ease)}
+  .side.on{transform:none}
+  .menu-btn{display:grid!important}
+  .search{display:none}.shift{display:none}
+  .inbox{grid-template-columns:1fr;height:auto}.list{max-height:420px}
+  .an-grid2{grid-template-columns:1fr}
+  .board{grid-template-columns:repeat(5,240px)}
+  .view{padding:16px}
+  .ai-btn span{display:none}
+  .kpis{grid-template-columns:1fr 1fr;gap:10px}.kpi{grid-template-columns:1fr;min-width:0;padding:14px}.kpi svg{display:none}.kpi b{font-size:22px}
+  .page-head{flex-wrap:wrap}.card,.grid-ov>*{min-width:0}
+}
+.menu-btn{display:none}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important}}
+.embed .concept{display:none}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs><linearGradient id="aig" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c3aed"/><stop offset=".5" stop-color="#4f46e5"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4z" fill="currentColor"/><path d="M19 2l.8 2.2L22 5l-2.2.8L19 8l-.8-2.2L16 5l2.2-.8z" fill="currentColor" opacity=".7"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></symbol>
+  <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.1L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.5-6.9A2 2 0 0016.7 4H7.3a2 2 0 00-1.8 1.1z"/></symbol>
+  <symbol id="i-board" viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="10" rx="1.5"/><rect x="17" y="4" width="4" height="13" rx="1.5"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-7"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 01-4 0v-.1A1.7 1.7 0 009 19.4a1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 010-4h.1A1.7 1.7 0 004.6 9a1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 014 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 010 4h-.1a1.7 1.7 0 00-1.5 1z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
+  <symbol id="i-merge" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M6 8.5v7M8.3 7l7.4 4M8.3 17l7.4-4"/></symbol>
+  <symbol id="i-truck" viewBox="0 0 24 24"><path d="M1 4h14v11H1zM15 8h4l3 3v4h-7"/><circle cx="5.5" cy="18" r="2"/><circle cx="18.5" cy="18" r="2"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L8 9.9a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.4c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.4 8.4 0 01-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.4 8.4 0 013.8-.9h.5a8.5 8.5 0 018 8v.5z"/></symbol>
+  <symbol id="i-app" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+</svg>
+
+<div class="app">
+  <aside class="side" id="side" aria-label="ניווט ראשי">
+    <div class="brand"><div class="brand-mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="3" fill="#fff"/><path d="M5 12a7 7 0 0114 0M2 12a10 10 0 0120 0" opacity=".7"/></svg></div><div><b>מוקד</b><small>עיריית אור־ים · עיר בדיונית</small></div></div>
+    <nav>
+      <button class="nav-btn" data-view="overview" aria-current="page"><svg><use href="#i-home"/></svg>מרכז שליטה</button>
+      <button class="nav-btn" data-view="inbox"><svg><use href="#i-inbox"/></svg>פניות<span class="badge" id="navInboxBadge">9</span></button>
+      <button class="nav-btn" data-view="dispatch"><svg><use href="#i-board"/></svg>שיבוץ צוותים</button>
+      <button class="nav-btn" data-view="analytics"><svg><use href="#i-chart"/></svg>ניתוח נתונים</button>
+      <div class="side-label">בינה מלאכותית</div>
+      <button class="nav-btn" data-open-copilot><svg><use href="#i-spark"/></svg>עוזר AI<span class="badge ai">⌘J</span></button>
+      <button class="nav-btn" data-view="settings"><svg><use href="#i-gear"/></svg>מדיניות AI ובקרה</button>
+    </nav>
+    <div class="side-card"><b>מיון אוטומטי היום</b><p>412 מתוך 476 פניות מוינו בביטחון גבוה. 64 הועברו לבדיקה אנושית.</p><div class="meter"><i style="width:87%"></i></div></div>
+    <div class="user"><div class="avatar">ד״כ</div><div><b>דניאל כהן</b><small>מנהל משמרת</small></div></div>
+  </aside>
+
+  <div class="main">
+    <header class="top">
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="תפריט"><svg><use href="#i-menu"/></svg></button>
+      <label class="search"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#i-search"/></svg><span class="sr">חיפוש</span><input id="gsearch" placeholder="חיפוש פנייה, רחוב או צוות…"><span class="kbd">/</span></label>
+      <div class="shift"><span class="live" aria-hidden="true"></span>משמרת בוקר · <span class="mono" id="clock">--:--</span></div>
+      <div class="top-spacer"></div>
+      <button class="icon-btn" id="themeBtn" aria-label="מצב כהה"><svg><use href="#i-moon"/></svg></button>
+      <button class="icon-btn" aria-label="התראות"><svg><use href="#i-bell"/></svg><span class="dot"></span></button>
+      <button class="ai-btn" data-open-copilot><svg><use href="#i-spark"/></svg><span>שאלו את מוקד AI</span></button>
+    </header>
+
+    <!-- OVERVIEW -->
+    <section class="view" id="v-overview" aria-label="מרכז שליטה">
+      <div class="page-head"><div><h1>בוקר טוב, דניאל</h1><p id="ovSub">יום רביעי · 128 פניות פתוחות · 3 תובנות AI ממתינות להחלטה שלך</p></div>
+        <div class="seg" role="group" aria-label="טווח זמן"><button aria-pressed="false">שעה</button><button aria-pressed="true">היום</button><button aria-pressed="false">שבוע</button></div></div>
+      <div class="kpis" id="kpis"></div>
+      <div class="grid-ov">
+        <div class="card" style="display:flex;flex-direction:column"><div class="card-h"><div><h2>מפת אירועים חיה</h2><small>אור־ים · 7 שכונות · 38 פניות פעילות על המפה</small></div>
+          <div class="seg" role="group" aria-label="שכבות מפה" id="mapLayers"><button aria-pressed="true" data-l="pins">פניות</button><button aria-pressed="false" data-l="teams">צוותים</button><button aria-pressed="false" data-l="heat">מפת חום</button></div></div>
+          <div class="map-wrap" id="mapWrap"><svg id="map" viewBox="0 0 800 430" preserveAspectRatio="xMidYMid slice" role="img" aria-label="מפת העיר אור־ים עם הפניות הפעילות"></svg>
+            <div class="map-zoom"><button aria-label="התקרבות">+</button><button aria-label="התרחקות">−</button></div>
+            <div class="map-legend"><span><i style="background:var(--crit)"></i>קריטי</span><span><i style="background:var(--high)"></i>גבוה</span><span><i style="background:var(--med)"></i>בינוני</span><span><i style="background:var(--low)"></i>נמוך</span></div>
+            <div class="tip" id="tip"></div></div></div>
+        <div class="card insights"><div class="card-h"><div><h2 style="display:flex;gap:8px;align-items:center"><svg class="ai-spark" style="color:var(--ai1)"><use href="#i-spark"/></svg>תובנות AI</h2><small>הוצגו לפי השפעה על התושבים</small></div></div><div id="insights"></div></div>
+      </div>
+      <div class="grid-ov2">
+        <div class="card"><div class="card-h"><h3>פניות אחרונות</h3><button class="btn sm ghost" data-goto="inbox">לכל הפניות ←</button></div>
+          <table><thead><tr><th>מס׳</th><th>תיאור</th><th>שכונה</th><th>דחיפות</th><th>התקבלה</th></tr></thead><tbody id="feed"></tbody></table></div>
+        <div class="card"><div class="card-h"><h3>זמינות צוותי שטח</h3><small>מעודכן לפני דקה</small></div><div class="card-b teams" id="teams"></div></div>
+      </div>
+    </section>
+
+    <!-- INBOX -->
+    <section class="view" id="v-inbox" hidden aria-label="פניות">
+      <div class="page-head"><div><h1>פניות לטיפול</h1><p>ה-AI מסווג, מתעדף ומציע. ההחלטה נשארת אצלך.</p></div>
+        <div style="display:flex;gap:8px"><button class="btn" id="bulkBtn"><svg><use href="#i-check"/></svg>אישור כל ההמלצות מעל 95%</button></div></div>
+      <div class="inbox">
+        <div class="card list"><div class="filters" id="filters" role="group" aria-label="סינון"></div><div class="rows" id="rows" role="listbox" aria-label="רשימת פניות"></div></div>
+        <div class="card detail" id="detail" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- DISPATCH -->
+    <section class="view" id="v-dispatch" hidden aria-label="שיבוץ צוותים">
+      <div class="page-head"><div><h1>שיבוץ צוותים</h1><p>גררו כרטיס בין העמודות, או השתמשו במקלדת: בחירה ואז חצים.</p></div>
+        <div class="seg" role="group" aria-label="סינון צוות" id="teamFilter"><button aria-pressed="true" data-t="all">כל הצוותים</button><button aria-pressed="false" data-t="מים">מים</button><button aria-pressed="false" data-t="תאורה">תאורה</button><button aria-pressed="false" data-t="תברואה">תברואה</button></div></div>
+      <div class="ai-banner" id="dispBanner"><div class="ic"><svg width="18" height="18" style="color:#fff"><use href="#i-spark"/></svg></div><p><b>אפשר לחסוך 25 דקות נסיעה.</b> צוות תאורה 1 נמצא 400 מ׳ מפנייה <span class="mono">#4821</span> (עמוד תאורה כבוי, רחוב הדקל). מומלץ לשבץ אותו במקום צוות תאורה 3.</p><button class="btn sm primary" id="applySug">החלת ההמלצה</button><button class="btn sm ghost" onclick="this.closest('.ai-banner').remove()">לא עכשיו</button></div>
+      <div class="board" id="board"></div>
+    </section>
+
+    <!-- ANALYTICS -->
+    <section class="view" id="v-analytics" hidden aria-label="ניתוח נתונים">
+      <div class="page-head"><div><h1>ניתוח נתונים</h1><p>14 הימים האחרונים, עם תחזית AI לשבוע הקרוב</p></div>
+        <div class="seg" role="group" aria-label="טווח"><button aria-pressed="false">7 ימים</button><button aria-pressed="true">14 ימים</button><button aria-pressed="false">רבעון</button></div></div>
+      <div class="an-grid">
+        <div class="card chart"><div class="card-h"><h3>נפח פניות יומי</h3><div class="legend"><span><i style="background:var(--brand)"></i>בפועל</span><span><i style="background:repeating-linear-gradient(90deg,var(--ai1) 0 4px,transparent 4px 7px)"></i>תחזית AI</span></div></div><div class="card-b" id="lineChart"></div></div>
+        <div class="card"><div class="card-h"><h3>לפי קטגוריה</h3><small>מוינו ע״י AI</small></div><div class="card-b hbar" id="catBars"></div></div>
+      </div>
+      <div class="an-grid2">
+        <div class="card"><div class="card-h"><h3>עמידה ב-SLA</h3></div><div class="card-b" id="donut" style="display:grid;place-items:center"></div></div>
+        <div class="card"><div class="card-h"><h3>עומס לפי שעה ויום</h3></div><div class="card-b"><div class="heat" id="heat"></div></div></div>
+        <div class="card"><div class="card-h"><h3>רחובות חוזרים</h3><small>3 פניות ומעלה</small></div><table><tbody id="streets"></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="view" id="v-settings" hidden aria-label="מדיניות AI ובקרה">
+      <div class="page-head"><div><h1>מדיניות AI ובקרה</h1><p>כאן מחליטים מה ה-AI רשאי לעשות לבד, ומה דורש תמיד אדם.</p></div></div>
+      <div class="set-grid">
+        <div class="card">
+          <div class="set-row"><b>מיון אוטומטי של פניות</b><button class="switch" role="switch" aria-checked="true" aria-label="מיון אוטומטי"></button><p>סיווג קטגוריה, דחיפות וכתובת לכל פנייה נכנסת.</p></div>
+          <div class="set-row"><b>אישור אוטומטי של שיבוץ</b><button class="switch" role="switch" aria-checked="true" aria-label="אישור אוטומטי"></button><p>מעל רמת הביטחון שנבחרה, השיבוץ יוצא לצוות בלי אישור ידני.</p>
+            <div class="range"><label for="thr" style="font-size:12.5px;color:var(--muted)">סף ביטחון</label><input type="range" id="thr" min="80" max="99" value="95"><output id="thrOut" class="mono">95%</output></div></div>
+          <div class="set-row"><b>דחיפות קריטית תמיד באישור אנושי</b><button class="switch" role="switch" aria-checked="true" disabled aria-label="אישור אנושי לקריטי"></button><p>נעול לפי מדיניות העירייה. מפגעי בטיחות לא נשלחים בלי אדם.</p></div>
+          <div class="set-row"><b>ניסוח תשובות לתושבים</b><button class="switch" role="switch" aria-checked="true" aria-label="ניסוח תשובות"></button><p>ה-AI מנסח טיוטה בלבד. נציג חייב לאשר לפני שליחה.</p></div>
+          <div class="set-row"><b>זיהוי כפילויות ואיחוד אירועים</b><button class="switch" role="switch" aria-checked="false" aria-label="זיהוי כפילויות"></button><p>הצעה לאחד פניות על אותו מפגע. כרגע במצב הצעה בלבד.</p></div>
+        </div>
+        <div class="card"><div class="card-h"><h3>יומן החלטות AI</h3><small>שקיפות מלאה · נשמר 7 שנים</small></div><div class="card-b audit"><ul id="audit"></ul></div></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="copilot" id="copilot" aria-label="עוזר AI" aria-hidden="true">
+  <div class="cp-h"><div class="ic"><svg width="18" height="18" style="color:#fff"><use href="#i-spark"/></svg></div><div><b>מוקד AI</b><small>מחובר לנתוני המשמרת · עונה רק ממה שקיים במערכת</small></div><button class="icon-btn" id="cpClose" aria-label="סגירה"><svg><use href="#i-x"/></svg></button></div>
+  <div class="cp-body" id="cpBody">
+    <div class="bubble ai"><p>שלום דניאל. אני מכיר את כל הפניות, הצוותים וההיסטוריה של המוקד. על מה נדבר?</p></div>
+    <div class="sugs" id="sugs"></div>
+  </div>
+  <div class="cp-in"><form id="cpForm"><label class="sr" for="cpText">שאלה</label><textarea id="cpText" rows="1" placeholder="שאלו כל דבר על המשמרת…"></textarea><button aria-label="שליחה"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><use href="#i-send"/></svg></button></form><small>תשובות ה-AI מבוססות על נתוני המערכת בלבד ומציינות את המקור.</small></div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastT"></span><button id="toastUndo" hidden>ביטול</button></div>
+<span class="concept">פרויקט קונספט · נתונים בדיוניים · BEYOND</span>
+
+<script>
+(() => {
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const P = new URLSearchParams(location.search);
+const EMBED = P.has('embed');
+if (EMBED) document.documentElement.classList.add('embed');
+if (P.get('theme') === 'dark') document.documentElement.dataset.theme = 'dark';
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ================= DATA ================= */
+const HOODS = [
+  { n: 'הנמל', pts: '86,40 230,30 250,150 170,210 70,190 60,110', c: [150, 110] },
+  { n: 'מרכז העיר', pts: '250,150 400,120 470,190 430,290 300,300 230,240', c: [345, 210] },
+  { n: 'נווה אורן', pts: '230,30 420,20 470,90 400,120 250,150', c: [335, 75] },
+  { n: 'גבעת הזית', pts: '420,20 640,30 660,140 560,170 470,190 400,120 470,90', c: [540, 95] },
+  { n: 'שכונת הפרחים', pts: '470,190 560,170 660,140 740,220 700,330 560,330 430,290', c: [590, 250] },
+  { n: 'רמת הדקל', pts: '70,190 170,210 230,240 300,300 260,400 90,410 50,300', c: [165, 315] },
+  { n: 'קריית האומנים', pts: '300,300 430,290 560,330 700,330 690,410 260,400', c: [480, 365] },
+];
+const CATS = { water: 'מים וביוב', light: 'תאורה', waste: 'פסולת וניקיון', road: 'כבישים ומדרכות', trees: 'גינון ועצים', safety: 'בטיחות', parking: 'חניה', noise: 'רעש' };
+const STREETS = ['הרימון', 'הדקל', 'הנמל', 'הזית', 'האלון', 'הגפן', 'הכלנית', 'הרצל', 'ויצמן', 'החרש', 'האומנים', 'הים', 'התאנה', 'הנרקיס'];
+const SEV = { c: 'קריטי', h: 'גבוה', m: 'בינוני', l: 'נמוך' };
+const SEVC = { c: 'var(--crit)', h: 'var(--high)', m: 'var(--med)', l: 'var(--low)' };
+let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const pick = a => a[Math.floor(rnd() * a.length)];
+
+const INC = [
+  { id: 4831, t: 'נזילת מים חזקה מהמדרכה', cat: 'water', sev: 'c', hood: 1, st: 'הרימון 14', ch: 'chat', min: 3, conf: 97, urg: 91, dup: 6, team: 'צוות מים 2', eta: 6,
+    msg: 'שלום, יש <mark>מים שזורמים בכמות גדולה</mark> מתוך המדרכה ברחוב הרימון מול מספר 14. המים כבר <mark>מציפים את הכביש</mark> וליד יש <mark>גן ילדים</mark>, הילדים יוצאים עוד מעט. בבקשה לשלוח מישהו מהר.',
+    why: [['״מים זורמים בכמות גדולה״ · ״מציפים״', 34], ['מוסד חינוך במרחק 40 מ׳', 22], ['6 דיווחים דומים ב-40 דק׳', 21], ['שעת יציאה מהגן (12:30)', 14], ['היסטוריה: 2 פיצוצים בקטע ב-2025', 9]] },
+  { id: 4830, t: 'עמוד תאורה כבוי בצומת', cat: 'light', sev: 'h', hood: 5, st: 'הדקל 3', ch: 'app', min: 7, conf: 94, urg: 74, dup: 1, team: 'צוות תאורה 3', eta: 18,
+    msg: 'כבר שלושה לילות <mark>העמוד בצומת הדקל-הגפן כבוי</mark>. זה צומת עם <mark>מעבר חצייה</mark> והנהגים לא רואים את מי שעובר. מסוכן.',
+    why: [['מעבר חצייה בצומת', 31], ['״שלושה לילות״: תקלה ממושכת', 22], ['״מסוכן״', 18], ['שעת דיווח: יום', -8]] },
+  { id: 4829, t: 'פסולת גושית חוסמת מעבר', cat: 'waste', sev: 'm', hood: 4, st: 'הכלנית 22', ch: 'phone', min: 12, conf: 92, urg: 55, dup: 0, team: 'צוות תברואה 1', eta: 35,
+    msg: 'מישהו השאיר <mark>ספה וארון ישן</mark> על המדרכה ליד הכניסה לבניין. אי אפשר לעבור עם עגלה.',
+    why: [['חסימת מעבר הולכי רגל', 28], ['פסולת גושית', 15], ['אין סכנה מיידית', -12]] },
+  { id: 4828, t: 'בור עמוק בכביש', cat: 'road', sev: 'h', hood: 6, st: 'האומנים 8', ch: 'chat', min: 18, conf: 89, urg: 70, dup: 2, team: 'צוות כבישים 1', eta: 24,
+    msg: 'נפתח <mark>בור עמוק</mark> בנתיב הימני, כבר ראיתי <mark>רכב שנפגע</mark> ממנו הבוקר.',
+    why: [['״רכב שנפגע״', 30], ['נתיב נסיעה ראשי', 22], ['2 דיווחים דומים', 12]] },
+  { id: 4827, t: 'ענף שבור תלוי מעל מדרכה', cat: 'trees', sev: 'h', hood: 3, st: 'הזית 41', ch: 'app', min: 25, conf: 81, urg: 68, dup: 0, team: 'צוות גינון 2', eta: 30,
+    msg: 'אחרי הרוח אתמול יש <mark>ענף גדול שבור שתלוי</mark> מעל המדרכה. נראה שהוא עלול ליפול.',
+    why: [['״עלול ליפול״', 29], ['מעל מעבר הולכי רגל', 24], ['רוחות חזקות אתמול', 10]] },
+  { id: 4826, t: 'רכב חונה על מעבר חצייה', cat: 'parking', sev: 'l', hood: 1, st: 'הרצל 60', ch: 'phone', min: 31, conf: 96, urg: 32, dup: 0, team: 'פיקוח עירוני', eta: 15,
+    msg: 'רכב לבן חונה <mark>על מעבר החצייה</mark> כבר שעה.', why: [['עבירת חניה', 20], ['אין סכנה מיידית', -15]] },
+  { id: 4825, t: 'מכסה ביוב רופף', cat: 'water', sev: 'h', hood: 0, st: 'הנמל 5', ch: 'chat', min: 40, conf: 88, urg: 72, dup: 0, team: 'צוות מים 1', eta: 12,
+    msg: 'המכסה של הביוב <mark>זז כשרכב עובר עליו</mark>, ויש רעש חזק.', why: [['״זז כשרכב עובר״', 30], ['נתיב נסיעה', 18]] },
+  { id: 4824, t: 'פח אשפה עולה על גדותיו', cat: 'waste', sev: 'l', hood: 2, st: 'הגפן 12', ch: 'app', min: 46, conf: 98, urg: 25, dup: 3, team: 'צוות תברואה 2', eta: 50,
+    msg: 'הפח הציבורי מלא ויש <mark>שקיות על הרצפה</mark>.', why: [['מפגע תברואה', 18], ['3 דיווחים דומים', 10]] },
+  { id: 4823, t: 'רעש עבודות בשעות אסורות', cat: 'noise', sev: 'm', hood: 4, st: 'הנרקיס 3', ch: 'phone', min: 58, conf: 74, urg: 44, dup: 0, team: 'פיקוח עירוני', eta: 20,
+    msg: 'יש <mark>עבודות עם פטישון</mark> באתר הבנייה כבר משש בבוקר.', why: [['שעת התחלה: 06:00', 26], ['סיווג לא חד-משמעי: בנייה/רעש', -9]] },
+];
+// extra generated incidents for map / feed
+for (let i = 0; i < 30; i++) {
+  const cat = pick(Object.keys(CATS)), sev = pick(['h', 'm', 'm', 'l', 'l', 'l', 'c']), hood = Math.floor(rnd() * 7);
+  INC.push({ id: 4822 - i, t: { water: 'נזילה במערכת', light: 'תאורת רחוב תקולה', waste: 'פינוי אשפה', road: 'מדרכה שבורה', trees: 'גיזום עץ', safety: 'גדר פרוצה', parking: 'חניה אסורה', noise: 'מטרד רעש' }[cat], cat, sev, hood, st: pick(STREETS) + ' ' + Math.ceil(rnd() * 60), ch: pick(['chat', 'app', 'phone']), min: 60 + i * 9, conf: 80 + Math.floor(rnd() * 19), urg: 20 + Math.floor(rnd() * 60), dup: 0, team: '', eta: 0, gen: true });
+}
+// assign map coordinates inside the hood (jitter around centroid)
+INC.forEach(x => { const c = HOODS[x.hood].c; x.x = c[0] + (rnd() - .5) * 110; x.y = c[1] + (rnd() - .5) * 70; });
+INC[0].x = 318; INC[0].y = 196;
+
+/* ================= HELPERS ================= */
+const ago = m => m < 60 ? `לפני ${m} דק׳` : `לפני ${Math.floor(m / 60)} ש׳`;
+const chIcon = c => `<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-label="${{ chat: 'צ׳אט', app: 'אפליקציה', phone: 'טלפון' }[c]}"><use href="#i-${c}"/></svg>`;
+function spark(vals, color, w = 96, h = 38) {
+  const mx = Math.max(...vals), mn = Math.min(...vals);
+  const pts = vals.map((v, i) => [i / (vals.length - 1) * w, h - 4 - (v - mn) / (mx - mn || 1) * (h - 8)]);
+  const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join('');
+  const id = 'sg' + Math.random().toString(36).slice(2, 7);
+  return `<svg viewBox="0 0 ${w} ${h}" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${color}" stop-opacity=".25"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></linearGradient></defs><path d="${d}L${w} ${h}L0 ${h}Z" fill="url(#${id})"/><path d="${d}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+}
+let toastT;
+function toast(msg, undo) {
+  $('#toastT').textContent = msg; const u = $('#toastUndo'); u.hidden = !undo; u.onclick = () => { undo?.(); $('#toast').classList.remove('on'); };
+  $('#toast').classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => $('#toast').classList.remove('on'), 3800);
+}
+const audit = [];
+function log(t, who = 'AI') { audit.unshift({ t, who, time: new Date().toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' }) }); renderAudit(); }
+
+/* ================= ROUTER ================= */
+function go(v) {
+  $$('.view').forEach(s => s.hidden = s.id !== 'v-' + v);
+  $$('.nav-btn[data-view]').forEach(b => b.setAttribute('aria-current', b.dataset.view === v ? 'page' : 'false'));
+  if (v === 'analytics') renderAnalytics();
+  $('#side').classList.remove('on');
+  history.replaceState(null, '', '#' + v);
+  $('#v-' + v).scrollTop = 0;
+}
+$$('.nav-btn[data-view]').forEach(b => b.addEventListener('click', () => go(b.dataset.view)));
+document.addEventListener('click', e => { const g = e.target.closest('[data-goto]'); if (g) go(g.dataset.goto); });
+
+/* ================= OVERVIEW ================= */
+function renderKpis() {
+  const k = [
+    ['פניות פתוחות', '128', '', '+12%', 'up-bad', [92, 98, 104, 101, 110, 118, 128], 'var(--brand)'],
+    ['זמן תגובה ממוצע', '18', 'דק׳', '−22%', 'up-good', [31, 29, 26, 24, 22, 19, 18], 'var(--low)'],
+    ['עמידה ב-SLA', '94.2', '%', '+3.1', 'up-good', [88, 89, 91, 90, 92, 93, 94.2], 'var(--low)'],
+    ['מוינו אוטומטית', '87', '%', 'AI', 'ai', [62, 70, 74, 79, 82, 85, 87], '#7c3aed'],
+  ];
+  $('#kpis').innerHTML = k.map(([l, v, u, d, cls, s, c]) => `<div class="card kpi"><span>${l}</span><b>${v}${u ? `<small>${u}</small>` : ''}</b>${spark(s, c)}<em class="${cls === 'ai' ? 'chip ai' : cls}">${cls === 'ai' ? '<svg width="11" height="11"><use href="#i-spark"/></svg> מבוסס AI' : d + ' מאתמול'}</em></div>`).join('');
+}
+function renderMap(layer = 'pins') {
+  const m = $('#map');
+  let s = `<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="var(--map-line)" stroke-width="1"/></pattern>
+    <radialGradient id="heatg"><stop offset="0" stop-color="#e5484d" stop-opacity=".55"/><stop offset=".5" stop-color="#f76b15" stop-opacity=".25"/><stop offset="1" stop-color="#ffb224" stop-opacity="0"/></radialGradient></defs>
+    <rect width="800" height="430" fill="var(--map-sea)"/>
+    <path d="M60 0H800V430H40C30 380 70 340 46 290S20 200 52 150 40 60 60 0Z" fill="var(--map-land)"/>`;
+  for (let i = 0; i < 6; i++) s += `<path d="M${10 + i * 6} ${40 + i * 70}q8 -6 16 0t16 0" stroke="var(--map-line)" fill="none"/>`;
+  s += HOODS.map((h, i) => `<polygon class="hood" points="${h.pts}" fill="var(--map-land)" stroke="var(--map-line)" stroke-width="1.5"/>`).join('');
+  s += `<path d="M60 200C200 190 330 170 470 190S700 160 790 180" stroke="var(--map-road)" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M60 200C200 190 330 170 470 190S700 160 790 180" stroke="var(--map-line)" stroke-width="1" fill="none" stroke-dasharray="6 6"/>
+    <path d="M330 0C340 120 320 260 360 430" stroke="var(--map-road)" stroke-width="8" fill="none"/><path d="M600 0C590 140 640 300 600 430" stroke="var(--map-road)" stroke-width="6" fill="none"/>
+    <path d="M150 400C230 340 380 330 520 300S720 270 800 300" stroke="var(--map-road)" stroke-width="5" fill="none"/>
+    <rect x="500" y="215" width="70" height="44" rx="10" fill="url(#hatch)" opacity=".9"/><text x="535" y="275" font-size="10" fill="var(--faint)" text-anchor="middle">פארק העיר</text>
+    <text x="28" y="250" font-size="11" fill="var(--faint)" transform="rotate(-80 28 250)">הים התיכון</text>`;
+  const labels = HOODS.map(h => `<text x="${h.c[0]}" y="${h.c[1] - 30}" font-size="12" font-weight="600" fill="var(--muted)" stroke="var(--map-land)" stroke-width="4" paint-order="stroke" stroke-linejoin="round" text-anchor="middle" pointer-events="none">${h.n}</text>`).join('');
+  const open = INC.filter(x => !x.done);
+  if (layer === 'heat') s += open.map(x => `<circle cx="${x.x}" cy="${x.y}" r="${x.sev === 'c' ? 70 : x.sev === 'h' ? 52 : 36}" fill="url(#heatg)"/>`).join('');
+  if (layer === 'teams') {
+    const T = [[300, 220, 'מים 2'], [180, 120, 'מים 1'], [600, 230, 'תאורה 1'], [540, 120, 'תברואה 1'], [430, 360, 'כבישים 1'], [200, 330, 'גינון 2']];
+    s += T.map(([x, y, n]) => `<g><rect x="${x - 34}" y="${y - 13}" width="68" height="26" rx="13" fill="var(--surface)" stroke="var(--brand)" stroke-width="1.5"/><text x="${x}" y="${y + 4}" font-size="11.5" font-weight="600" fill="var(--brand)" text-anchor="middle">${n}</text></g>`).join('');
+  }
+  if (layer !== 'heat') s += open.slice().sort((a, b) => 'lmhc'.indexOf(a.sev) - 'lmhc'.indexOf(b.sev)).map(x => `<g class="pin" tabindex="0" data-id="${x.id}" role="button" aria-label="${x.t}, ${HOODS[x.hood].n}, דחיפות ${SEV[x.sev]}">${x.sev === 'c' || x.sev === 'h' ? `<circle class="ring" cx="${x.x}" cy="${x.y}" r="7" fill="${SEVC[x.sev]}"/>` : ''}<circle class="core" cx="${x.x}" cy="${x.y}" r="${layer === 'teams' ? 4 : 6}" fill="${SEVC[x.sev]}" stroke="var(--surface)" stroke-width="2"/></g>`).join('');
+  if (layer !== 'heat') {
+    const dupes = INC.slice(0, 1);
+    s += dupes.map(x => `<circle cx="${x.x}" cy="${x.y}" r="34" fill="none" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="4 4"><animateTransform attributeName="transform" type="rotate" from="0 ${x.x} ${x.y}" to="360 ${x.x} ${x.y}" dur="20s" repeatCount="indefinite"/></circle><text x="${x.x}" y="${x.y - 40}" font-size="10.5" font-weight="600" fill="#7c3aed" text-anchor="middle">אשכול · 7 פניות</text>`).join('');
+  }
+  m.innerHTML = s + labels;
+  const tip = $('#tip'), wrap = $('#mapWrap');
+  $$('.pin', m).forEach(p => {
+    const show = () => { const x = INC.find(i => i.id == p.dataset.id); const r = p.getBoundingClientRect(), w = wrap.getBoundingClientRect(); tip.innerHTML = `<b>${x.t}</b>${x.st} · ${HOODS[x.hood].n}<br>דחיפות ${SEV[x.sev]} · ${ago(x.min)}`; tip.style.left = (r.left - w.left + 12) + 'px'; tip.style.top = (r.top - w.top - 64) + 'px'; tip.classList.add('on'); };
+    p.addEventListener('mouseenter', show); p.addEventListener('focus', show);
+    p.addEventListener('mouseleave', () => tip.classList.remove('on')); p.addEventListener('blur', () => tip.classList.remove('on'));
+    p.addEventListener('click', () => { const i = INC.find(i => i.id == p.dataset.id); if (!i.gen) { selected = i.id; go('inbox'); renderInbox(); } else toast(`פנייה #${i.id} כבר שובצה ל${pick(['צוות מים 1', 'צוות תברואה 2', 'צוות תאורה 1'])}`); });
+  });
+}
+$('#mapLayers').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('button', e.currentTarget).forEach(x => x.setAttribute('aria-pressed', x === b)); renderMap(b.dataset.l); });
+$$('.seg').forEach(seg => { if (seg.id) return; seg.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('button', seg).forEach(x => x.setAttribute('aria-pressed', x === b)); }); });
+
+const INSIGHTS = [
+  { k: 'cluster', tag: 'זיהוי אשכול', sev: 'c', text: '<b>7 דיווחים על נזילת מים ברחוב הרימון</b> ב-40 הדקות האחרונות. ככל הנראה מדובר בפיצוץ צנרת אחד. מומלץ לאחד לאירוע אחד ולשלוח צוות אחד בלבד.', acts: [['איחוד לאירוע אחד', 'primary'], ['צפייה בפניות', '']] },
+  { k: 'sla', tag: 'סיכון SLA', sev: 'h', text: '<b>4 פניות בדחיפות גבוהה</b> יחרגו מזמן הטיפול שנקבע בתוך 20 דקות. לצוות תאורה 1 יש קיבולת פנויה.', acts: [['שיבוץ מהיר', 'primary'], ['פרטים', '']] },
+  { k: 'forecast', tag: 'תחזית', sev: 'm', text: 'צפויה <b>עלייה של 35% בפניות על פסולת גושית</b> ביום ראשון, לפי הדפוס של 12 השבועות האחרונים. כדאי לתגבר את צוות תברואה 1.', acts: [['תגבור משמרת', 'primary'], ['למה?', '']] },
+];
+function renderInsights() {
+  $('#insights').innerHTML = INSIGHTS.map((x, i) => `<div class="insight fade-in" style="animation-delay:${i * .08}s" data-k="${x.k}"><div class="insight-top"><span class="chip ai"><svg width="11" height="11"><use href="#i-spark"/></svg>${x.tag}</span><span class="sev ${x.sev}">${SEV[x.sev]}</span><span style="margin-inline-start:auto" class="mono">${['לפני 2 דק׳', 'לפני 6 דק׳', 'לפני 14 דק׳'][i]}</span></div><p>${x.text}</p><div class="acts">${x.acts.map(([l, c], j) => `<button class="btn sm ${c}" data-a="${j}">${l}</button>`).join('')}</div></div>`).join('');
+}
+$('#insights').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; const card = b.closest('.insight'), k = card.dataset.k, a = +b.dataset.a;
+  if (k === 'cluster' && a === 0) { card.style.opacity = .5; INC[0].dup = 0; log('איחוד 7 פניות לאירוע #4831 (אושר ע״י דניאל כהן)', 'אדם'); toast('7 פניות אוחדו לאירוע #4831. התושבים יקבלו עדכון משותף.', () => { card.style.opacity = 1; }); card.querySelector('.acts').innerHTML = '<span class="chip" style="background:var(--low-s);color:var(--low)">✓ אוחד</span>'; }
+  else if (k === 'cluster') { selected = 4831; go('inbox'); renderInbox(); }
+  else if (k === 'sla' && a === 0) { go('dispatch'); }
+  else if (k === 'forecast' && a === 1) { openCopilot(); ask('למה אתה צופה עלייה בפסולת גושית?'); }
+  else if (k === 'forecast') { card.querySelector('.acts').innerHTML = '<span class="chip" style="background:var(--low-s);color:var(--low)">✓ נשלחה בקשת תגבור לרכז התברואה</span>'; log('בקשת תגבור לצוות תברואה 1 ליום א׳', 'אדם'); }
+  else { openCopilot(); ask('אילו פניות בסיכון לחרוג מ-SLA?'); }
+});
+function renderFeed() {
+  $('#feed').innerHTML = INC.slice(0, 6).map(x => `<tr><td><span class="id">#${x.id}</span></td><td>${x.t}</td><td>${HOODS[x.hood].n}</td><td><span class="sev ${x.sev}">${SEV[x.sev]}</span></td><td class="mono" style="font-size:12px;color:var(--muted)">${ago(x.min)}</td></tr>`).join('');
+}
+function renderTeams() {
+  const T = [['מים וביוב', 6, 4, 1], ['תאורה', 5, 2, 3], ['תברואה', 9, 7, 0], ['כבישים', 4, 3, 1], ['גינון', 3, 1, 2]];
+  $('#teams').innerHTML = T.map(([n, tot, busy, free]) => `<div class="team"><b>${n}</b><small><span class="mono">${free}</span> פנויים · <span class="mono">${busy}</span> בשטח</small><div class="bar" role="img" aria-label="${busy} מתוך ${tot} בשטח"><i style="width:${busy / tot * 100}%;background:var(--brand)"></i><i style="width:${free / tot * 100}%;background:var(--low)"></i></div></div>`).join('') +
+    `<p style="margin:4px 0 0;font-size:12px;color:var(--muted)"><i style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--brand);margin-inline-end:4px"></i>בשטח <i style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--low);margin:0 12px 0 4px"></i>פנויים</p>`;
+}
+// live feed simulation
+function liveTick() {
+  if (EMBED) return;
+  const tpl = pick([['נזילה במערכת', 'water'], ['תאורת רחוב תקולה', 'light'], ['פינוי אשפה', 'waste'], ['מדרכה שבורה', 'road']]);
+  const hood = Math.floor(rnd() * 7), c = HOODS[hood].c;
+  const x = { id: INC[0].id + 1 + Math.floor(rnd() * 3), t: tpl[0], cat: tpl[1], sev: pick(['m', 'l', 'h']), hood, st: pick(STREETS) + ' ' + Math.ceil(rnd() * 40), ch: 'app', min: 0, conf: 90 + Math.floor(rnd() * 9), urg: 40, dup: 0, gen: true, x: c[0] + (rnd() - .5) * 100, y: c[1] + (rnd() - .5) * 60 };
+  INC.splice(0, 0, x); INC.forEach(i => i.min += 1);
+  renderFeed(); $('#feed').firstElementChild?.classList.add('feed-new');
+  if (!$('#v-overview').hidden) renderMap($('#mapLayers [aria-pressed=true]').dataset.l);
+}
+
+/* ================= INBOX ================= */
+let selected = 4831, filter = 'all';
+const queue = () => INC.filter(x => !x.gen);
+function renderFilters() {
+  const q = queue();
+  const F = [['all', 'הכול', q.length], ['pending', 'ממתינות לאישור', q.filter(x => !x.done).length], ['urgent', 'דחוף', q.filter(x => 'ch'.includes(x.sev)).length], ['lowconf', 'ביטחון נמוך', q.filter(x => x.conf < 85).length]];
+  $('#filters').innerHTML = F.map(([k, l, n]) => `<button class="fchip" data-f="${k}" aria-pressed="${filter === k}">${l}<span>${n}</span></button>`).join('');
+  $('#navInboxBadge').textContent = q.filter(x => !x.done).length;
+}
+$('#filters').addEventListener('click', e => { const b = e.target.closest('[data-f]'); if (!b) return; filter = b.dataset.f; renderInbox(); });
+function filtered() { return queue().filter(x => filter === 'all' || (filter === 'pending' && !x.done) || (filter === 'urgent' && 'ch'.includes(x.sev)) || (filter === 'lowconf' && x.conf < 85)); }
+function renderInbox() {
+  renderFilters();
+  const list = filtered();
+  if (!list.find(x => x.id === selected) && list.length) selected = list[0].id;
+  $('#rows').innerHTML = list.map(x => `<button class="row${x.done ? ' done' : ''}" role="option" aria-selected="${x.id === selected}" data-id="${x.id}"><span class="dotsev" style="background:${SEVC[x.sev]}"></span><b>${x.t}</b><time>${ago(x.min)}</time>
+    <span class="meta"><span>${CATS[x.cat]}</span>·<span>${HOODS[x.hood].n}</span>·${chIcon(x.ch)}<span class="conf" title="ביטחון ה-AI"><i style="--v:${x.conf}%"></i><span class="mono">${x.conf}%</span></span>${x.dup ? `<span class="dup">+${x.dup} דומות</span>` : ''}${x.done ? `<span class="stat">${x.done}</span>` : ''}</span></button>`).join('');
+  renderDetail();
+}
+$('#rows').addEventListener('click', e => { const r = e.target.closest('.row'); if (!r) return; selected = +r.dataset.id; renderInbox(); });
+function renderDetail() {
+  const x = INC.find(i => i.id === selected), d = $('#detail');
+  if (!x) { d.innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted)">אין פניות בסינון הזה</div>'; return; }
+  const sevScore = x.urg;
+  const why = x.why || [];
+  const maxW = Math.max(...why.map(w => Math.abs(w[1])), 1);
+  const dups = x.dup ? Array.from({ length: Math.min(3, x.dup) }, (_, i) => [`״${['יש מים ברחוב', 'צינור התפוצץ כנראה', 'הכביש מוצף'][i]}…״`, `#${x.id - 3 - i} · ${ago(x.min + 4 + i * 7)}`]) : [];
+  d.innerHTML = `<div class="d-head fade-in"><div><div class="d-sub"><span class="mono">#${x.id}</span><span>${chIcon(x.ch)}</span><span>התקבלה ${ago(x.min)}</span><span>· ${x.st}, ${HOODS[x.hood].n}</span></div><h2>${x.t}</h2>
+    <div class="d-sub"><span class="sev ${x.sev}">דחיפות ${SEV[x.sev]}</span><span class="chip ai"><svg width="11" height="11"><use href="#i-spark"/></svg>סווג אוטומטית · ביטחון ${x.conf}%</span>${x.conf < 85 ? '<span class="chip" style="background:var(--med-s);color:var(--med)">נדרשת בדיקה אנושית</span>' : ''}</div></div>
+    <button class="btn sm" data-ask="סכם לי את פנייה #${x.id}"><svg width="14" height="14"><use href="#i-spark"/></svg>שאלה על הפנייה</button></div>
+  <div class="d-body">
+    <div class="msg fade-in"><div class="msg-h"><span>ההודעה המקורית של התושב</span><span>ה-AI סימן את הביטויים שהשפיעו על הסיווג</span></div><p>${x.msg}</p></div>
+    <div class="ai-card fade-in"><div><h4><svg class="ai-spark" style="color:var(--ai1)"><use href="#i-spark"/></svg>ניתוח AI</h4>
+      <dl class="kv"><dt>קטגוריה</dt><dd>${CATS[x.cat]}</dd><span class="pct">${x.conf}%</span><dt>דחיפות</dt><dd>${SEV[x.sev]}</dd><span class="pct">${sevScore}/100</span><dt>כתובת</dt><dd>${x.st}, אור־ים</dd><span class="pct">✓ אומת</span><dt>זמן יעד (SLA)</dt><dd>${{ c: '30 דק׳', h: 'שעתיים', m: '8 שעות', l: '48 שעות' }[x.sev]}</dd><span class="pct">נותרו ${{ c: '27', h: '113', m: '468', l: '2,834' }[x.sev]} דק׳</span></dl></div></div>
+    <div class="box fade-in"><h4>למה הדחיפות ${SEV[x.sev]}?</h4><div class="why">${why.map(([l, v]) => `<div class="why-row"><span>${l}</span><span class="wb"><i class="${v < 0 ? 'neg' : ''}" style="width:${Math.abs(v) / maxW * 100}%"></i></span><span>${v > 0 ? '+' : '−'}${Math.abs(v)}</span></div>`).join('')}</div></div>
+    <div class="box fade-in"><h4>שיבוץ מומלץ</h4><div class="team-sug"><span class="ic"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-truck"/></svg></span><div><b>${x.team}</b><small>${x.eta} דק׳ מהמקום · סיים משימה קודמת</small></div></div>
+      ${dups.length ? `<h4 style="margin-top:16px">פניות דומות (${x.dup})</h4><div class="dups">${dups.map(([a, b]) => `<div class="dup-item">${a}<span>${b}</span></div>`).join('')}</div>` : '<p style="margin:14px 0 0;font-size:12.5px;color:var(--muted)">לא נמצאו פניות כפולות.</p>'}</div>
+    <div class="reply box fade-in"><h4><svg class="ai-spark" style="color:var(--ai1)"><use href="#i-spark"/></svg>טיוטת תשובה לתושב</h4>
+      <div class="tones" role="group" aria-label="סגנון"><span>סגנון:</span><button class="fchip" data-tone="warm" aria-pressed="true">חם</button><button class="fchip" data-tone="formal" aria-pressed="false">רשמי</button><button class="fchip" data-tone="short" aria-pressed="false">קצר</button></div>
+      <label class="sr" for="replyTxt">טיוטת תשובה</label><textarea id="replyTxt"></textarea></div>
+  </div>
+  <div class="d-foot"><button class="btn primary" id="approve"><svg><use href="#i-check"/></svg>אישור ושיבוץ ל${x.team}</button><button class="btn" id="changeTeam">שינוי צוות</button>${x.dup ? `<button class="btn" id="mergeBtn"><svg><use href="#i-merge"/></svg>איחוד ${x.dup} דומות</button>` : ''}<span class="hint"><span class="kbd">J</span><span class="kbd">K</span> ניווט · <span class="kbd">A</span> אישור</span></div>`;
+  writeReply('warm', x);
+  $$('[data-tone]', d).forEach(b => b.addEventListener('click', () => { $$('[data-tone]', d).forEach(t => t.setAttribute('aria-pressed', t === b)); writeReply(b.dataset.tone, x); }));
+  $('#approve').addEventListener('click', () => approve(x));
+  $('#changeTeam').addEventListener('click', () => toast('בחירת צוות ידנית תיפתח כאן (מחוץ להיקף אב הטיפוס)'));
+  $('#mergeBtn')?.addEventListener('click', () => { const n = x.dup; x.dup = 0; log(`איחוד ${n} פניות כפולות לפנייה #${x.id}`, 'אדם'); toast(`${n} פניות אוחדו לפנייה #${x.id}`); renderInbox(); });
+  d.querySelector('[data-ask]').addEventListener('click', e => { openCopilot(); ask(e.currentTarget.dataset.ask); });
+}
+const REPLIES = {
+  warm: x => `שלום, תודה רבה שדיווחת לנו על ${x.t.replace(/^./, c => c)} ב${x.st}. ${'ch'.includes(x.sev) ? `סימנו את הפנייה כדחופה, ו${x.team} כבר בדרך. הוא צפוי להגיע תוך כ-${x.eta} דקות.` : `הפנייה הועברה ל${x.team} ותטופל בהקדם.`} נעדכן אותך ברגע שהטיפול יסתיים.`,
+  formal: x => `פנייתך מס׳ ${x.id} בנושא ${CATS[x.cat]} התקבלה ונרשמה במוקד העירוני. הטיפול הועבר ל${x.team}${'ch'.includes(x.sev) ? ` וזמן ההגעה המשוער הוא ${x.eta} דקות` : ''}. עדכון יישלח עם סיום הטיפול.`,
+  short: x => `קיבלנו. ${x.team} ${'ch'.includes(x.sev) ? `בדרך (≈${x.eta} דק׳)` : 'יטפל בהקדם'}. נעדכן בסיום. פנייה #${x.id}`,
+};
+let typer;
+function writeReply(tone, x) {
+  const ta = $('#replyTxt'), full = REPLIES[tone](x); clearInterval(typer);
+  if (RM || EMBED) { ta.value = full; return; }
+  ta.value = ''; let i = 0; ta.classList.add('typing');
+  typer = setInterval(() => { i += 3; ta.value = full.slice(0, i); if (i >= full.length) { clearInterval(typer); ta.classList.remove('typing'); } }, 16);
+}
+function approve(x) {
+  if (x.done) return toast('הפנייה כבר שובצה');
+  x.done = 'שובץ'; log(`שיבוץ #${x.id} ל${x.team} (אושר ע״י דניאל כהן)`, 'אדם');
+  const kc = BOARD.find(b => b.id === x.id); if (kc) kc.col = 1; else BOARD.unshift({ id: x.id, t: x.t, team: x.team, sev: x.sev, col: 1, sla: x.sev === 'c' ? '00:27' : '01:53' });
+  toast(`פנייה #${x.id} שובצה ל${x.team}. התשובה נשלחה לתושב.`, () => { x.done = null; renderInbox(); });
+  const list = filtered().filter(i => !i.done); if (list.length) selected = list[0].id;
+  renderInbox(); renderBoard();
+}
+$('#bulkBtn').addEventListener('click', () => { const hi = queue().filter(x => !x.done && x.conf >= 95 && x.sev !== 'c'); hi.forEach(x => { x.done = 'שובץ'; log(`שיבוץ אוטומטי #${x.id} (ביטחון ${x.conf}%)`); }); toast(`${hi.length} פניות שובצו לפי המלצת ה-AI. פניות קריטיות נשארו לאישור ידני.`); renderInbox(); });
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input,textarea')) return;
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'j') { e.preventDefault(); openCopilot(); return; }
+  if (e.key === '/') { e.preventDefault(); $('#gsearch').focus(); return; }
+  if (e.key === 'Escape') closeCopilot();
+  if ($('#v-inbox').hidden) return;
+  const list = filtered(), i = list.findIndex(x => x.id === selected);
+  if (e.key === 'j' || e.key === 'ArrowDown') { selected = list[Math.min(list.length - 1, i + 1)].id; renderInbox(); e.preventDefault(); }
+  if (e.key === 'k' || e.key === 'ArrowUp') { selected = list[Math.max(0, i - 1)].id; renderInbox(); e.preventDefault(); }
+  if (e.key === 'a') approve(list[i]);
+});
+
+/* ================= DISPATCH ================= */
+const COLS = [['ממתין לשיבוץ', 'var(--faint)'], ['שובץ', 'var(--info)'], ['בדרך', 'var(--high)'], ['בטיפול', '#7c3aed'], ['טופל', 'var(--low)']];
+const BOARD = [
+  { id: 4821, t: 'עמוד תאורה כבוי', team: 'צוות תאורה 3', sev: 'h', col: 0, sla: '00:41', warn: 1 },
+  { id: 4819, t: 'גדר פרוצה בגן ציבורי', team: 'צוות בטיחות', sev: 'h', col: 0, sla: '01:12' },
+  { id: 4817, t: 'פינוי גזם', team: 'צוות תברואה 1', sev: 'l', col: 0, sla: '22:30' },
+  { id: 4816, t: 'נזילה בשעון מים', team: 'צוות מים 1', sev: 'm', col: 1, sla: '05:10' },
+  { id: 4815, t: 'מדרכה שקועה', team: 'צוות כבישים 1', sev: 'm', col: 1, sla: '06:44' },
+  { id: 4812, t: 'פח שבור', team: 'צוות תברואה 2', sev: 'l', col: 2, sla: '30:02' },
+  { id: 4811, t: 'רמזור מהבהב', team: 'צוות תאורה 1', sev: 'h', col: 2, sla: '00:18', warn: 1 },
+  { id: 4808, t: 'סתימת ביוב', team: 'צוות מים 2', sev: 'h', col: 3, sla: '00:55' },
+  { id: 4806, t: 'עץ נטוי', team: 'צוות גינון 2', sev: 'm', col: 3, sla: '03:30' },
+  { id: 4801, t: 'שלט רחוב נפל', team: 'צוות כבישים 1', sev: 'l', col: 4, sla: '✓' },
+  { id: 4799, t: 'פינוי פסולת גושית', team: 'צוות תברואה 1', sev: 'm', col: 4, sla: '✓' },
+];
+let teamF = 'all', dragId = null, kbdSel = null;
+function renderBoard() {
+  const b = $('#board');
+  b.innerHTML = COLS.map(([n, c], ci) => {
+    const items = BOARD.filter(x => x.col === ci && (teamF === 'all' || x.team.includes(teamF)));
+    return `<div class="col" data-col="${ci}"><div class="col-h"><i style="background:${c}"></i>${n}<span>${items.length}</span></div><div class="col-b">${items.map(x => `<div class="kcard${kbdSel === x.id ? ' moved' : ''}" draggable="true" tabindex="0" data-id="${x.id}" aria-label="${x.t}, ${x.team}, ${n}. מקשי חצים להעברה"><div class="kcard-top"><span class="mono">#${x.id}</span><span class="sev ${x.sev}">${SEV[x.sev]}</span></div><b>${x.t}</b><div class="kcard-foot"><span style="display:flex;gap:6px;align-items:center"><span class="mini-av">${x.team.split(' ').pop().slice(0, 2)}</span>${x.team}</span><span class="sla${x.warn ? ' warn' : ''}" title="זמן שנותר ל-SLA">${x.sla}</span></div></div>`).join('')}</div></div>`;
+  }).join('');
+  $$('.kcard', b).forEach(k => {
+    k.addEventListener('dragstart', e => { dragId = +k.dataset.id; k.classList.add('drag'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', k.dataset.id); });
+    k.addEventListener('dragend', () => k.classList.remove('drag'));
+    k.addEventListener('keydown', e => {
+      const item = BOARD.find(x => x.id === +k.dataset.id);
+      if (e.key === 'ArrowLeft' && item.col < 4) moveCard(item, item.col + 1, true);
+      if (e.key === 'ArrowRight' && item.col > 0) moveCard(item, item.col - 1, true);
+    });
+  });
+  $$('.col', b).forEach(col => {
+    col.addEventListener('dragover', e => { e.preventDefault(); col.classList.add('over'); });
+    col.addEventListener('dragleave', () => col.classList.remove('over'));
+    col.addEventListener('drop', e => { e.preventDefault(); col.classList.remove('over'); const item = BOARD.find(x => x.id === dragId); if (item) moveCard(item, +col.dataset.col); });
+  });
+}
+function moveCard(item, col, focus) {
+  const from = item.col; item.col = col; kbdSel = item.id; if (col === 4) { item.sla = '✓'; item.warn = 0; }
+  renderBoard(); log(`#${item.id} הועבר מ"${COLS[from][0]}" ל"${COLS[col][0]}"`, 'אדם');
+  toast(`#${item.id} הועבר ל"${COLS[col][0]}"`, () => { item.col = from; renderBoard(); });
+  if (focus) $(`.kcard[data-id="${item.id}"]`)?.focus();
+  setTimeout(() => kbdSel = null, 50);
+}
+$('#teamFilter').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('button', e.currentTarget).forEach(x => x.setAttribute('aria-pressed', x === b)); teamF = b.dataset.t; renderBoard(); });
+$('#applySug').addEventListener('click', () => { const c = BOARD.find(x => x.id === 4821); c.team = 'צוות תאורה 1'; c.col = 1; c.warn = 0; c.sla = '00:41'; kbdSel = 4821; renderBoard(); $('#dispBanner').innerHTML = '<p style="color:var(--low);font-weight:500">✓ ההמלצה הוחלה: צוות תאורה 1 שובץ לפנייה #4821. נחסכו כ-25 דקות נסיעה.</p>'; log('שינוי שיבוץ #4821 לצוות תאורה 1 לפי המלצת AI (אושר ע״י דניאל כהן)', 'אדם'); });
+
+/* ================= ANALYTICS ================= */
+let anDone = false;
+function renderAnalytics() {
+  if (anDone) return; anDone = true;
+  const days = ['ה׳', 'ו׳', 'ש׳', 'א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳', 'א׳', 'ב׳', 'ג׳', 'ד׳'];
+  const act = [412, 380, 190, 520, 498, 470, 455, 430, 362, 176, 548, 506, 481, 476];
+  const fc = [476, 452, 371, 182, 610, 520, 498];
+  const W = 760, H = 260, pad = 34, all = act.length + fc.length - 1, mx = 650;
+  const X = i => pad + i / (all) * (W - pad * 2), Y = v => H - pad - v / mx * (H - pad * 2);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="נפח פניות יומי, 14 ימים ותחזית ל-7 ימים">`;
+  for (let g = 0; g <= 600; g += 150) s += `<line x1="${pad}" x2="${W - pad}" y1="${Y(g)}" y2="${Y(g)}" stroke="var(--line)"/><text x="${W - pad + 6}" y="${Y(g) + 4}" font-size="10.5" fill="var(--faint)" font-family="Plex Mono">${g}</text>`;
+  const d = act.map((v, i) => (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1)).join('');
+  const df = fc.map((v, i) => (i ? 'L' : 'M') + X(i + act.length - 1).toFixed(1) + ' ' + Y(v).toFixed(1)).join('');
+  s += `<defs><linearGradient id="lg1" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#4f46e5" stop-opacity=".22"/><stop offset="1" stop-color="#4f46e5" stop-opacity="0"/></linearGradient></defs>
+    <rect x="${X(act.length - 1)}" y="${pad - 10}" width="${W - pad - X(act.length - 1)}" height="${H - pad * 2 + 10}" fill="rgba(124,58,237,.05)"/><text x="${X(act.length - 1) + 8}" y="${pad + 4}" font-size="11" fill="#7c3aed" font-weight="600">תחזית AI</text>
+    <path d="${d}L${X(act.length - 1)} ${H - pad}L${X(0)} ${H - pad}Z" fill="url(#lg1)"/><path d="${d}" fill="none" stroke="#4f46e5" stroke-width="2.2" stroke-linejoin="round" stroke-dasharray="2000" stroke-dashoffset="2000"><animate attributeName="stroke-dashoffset" to="0" dur="1.4s" fill="freeze"/></path>
+    <path d="${df}" fill="none" stroke="#7c3aed" stroke-width="2.2" stroke-dasharray="5 5"/>
+    <circle cx="${X(act.length + 3)}" cy="${Y(610)}" r="5" fill="#7c3aed"/><rect x="${X(act.length + 3) - 58}" y="${Y(610) - 36}" width="116" height="24" rx="6" fill="var(--ink)"/><text x="${X(act.length + 3)}" y="${Y(610) - 20}" font-size="11" fill="var(--bg)" text-anchor="middle">א׳ · צפי 610 (+28%)</text>`;
+  days.concat(['ה׳', 'ו׳', 'ש׳', 'א׳', 'ב׳', 'ג׳']).forEach((dd, i) => { if (i % 2 === 0) s += `<text x="${X(i)}" y="${H - 10}" font-size="10.5" fill="var(--faint)" text-anchor="middle">${dd}</text>`; });
+  $('#lineChart').innerHTML = s + '</svg>';
+  const cats = [['פסולת וניקיון', 1840], ['כבישים ומדרכות', 1210], ['מים וביוב', 980], ['תאורה', 760], ['גינון ועצים', 540], ['חניה', 420], ['רעש', 290]];
+  $('#catBars').innerHTML = cats.map(([n, v], i) => `<div class="hbar-row"><span>${n}</span><span class="t"><i style="width:${v / 1840 * 100}%;animation-delay:${i * .06}s;opacity:${1 - i * .1}"></i></span><span>${v.toLocaleString()}</span></div>`).join('');
+  const pct = 94.2, r = 62, C = 2 * Math.PI * r;
+  $('#donut').innerHTML = `<svg viewBox="0 0 180 180" width="180" role="img" aria-label="94.2% עמידה ב-SLA"><circle cx="90" cy="90" r="${r}" fill="none" stroke="var(--surface-2)" stroke-width="16"/><circle cx="90" cy="90" r="${r}" fill="none" stroke="var(--low)" stroke-width="16" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}" transform="rotate(-90 90 90)"><animate attributeName="stroke-dashoffset" to="${C * (1 - pct / 100)}" dur="1.2s" fill="freeze"/></circle><text x="90" y="88" text-anchor="middle" font-size="28" font-weight="600" fill="var(--ink)" font-family="Plex Mono">94.2%</text><text x="90" y="110" text-anchor="middle" font-size="11" fill="var(--muted)">יעד: 92%</text></svg>
+    <div class="legend" style="margin-top:8px"><span><i style="background:var(--low)"></i>בזמן · 6,151</span><span><i style="background:var(--surface-2)"></i>חריגה · 379</span></div>`;
+  const dd = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳'];
+  let h = '<span></span>' + Array.from({ length: 12 }, (_, i) => `<span>${String(7 + i).padStart(2, '0')}</span>`).join('');
+  dd.forEach((d0, di) => { h += `<span>${d0}</span>`; for (let i = 0; i < 12; i++) { const v = Math.max(0, Math.sin((i - 1) / 3.6) * .7 + (di === 0 ? .3 : 0) + (rnd() * .25) - (di === 5 ? .4 : 0)); h += `<i style="background:rgba(79,70,229,${(.08 + v * .85).toFixed(2)})" title="${d0} ${7 + i}:00"></i>`; } });
+  $('#heat').innerHTML = h;
+  $('#streets').innerHTML = [['הרימון', 'מים וביוב', 14], ['הדקל', 'תאורה', 9], ['האומנים', 'כבישים', 8], ['הכלנית', 'פסולת', 7], ['הנמל', 'מים וביוב', 6]].map(([s1, c, n]) => `<tr><td style="font-weight:500;color:var(--ink)">${s1}</td><td>${c}</td><td class="mono" style="text-align:end">${n}</td></tr>`).join('');
+}
+
+/* ================= SETTINGS ================= */
+$$('.switch').forEach(s => s.addEventListener('click', () => { if (s.disabled) return; const v = s.getAttribute('aria-checked') !== 'true'; s.setAttribute('aria-checked', v); log(`${s.getAttribute('aria-label')}: ${v ? 'הופעל' : 'כובה'}`, 'אדם'); }));
+$('#thr').addEventListener('input', e => $('#thrOut').textContent = e.target.value + '%');
+$('#thr').addEventListener('change', e => log(`סף אישור אוטומטי עודכן ל-${e.target.value}%`, 'אדם'));
+function renderAudit() {
+  const base = [['10:42', 'AI', 'סיווג #4831 כ״מים וביוב · קריטי״ (97%)'], ['10:41', 'AI', 'זיהוי אשכול: 7 פניות ברחוב הרימון'], ['10:35', 'אדם', 'דחיית המלצת שיבוץ #4815: צוות קרוב יותר ידוע'], ['10:30', 'AI', 'שיבוץ אוטומטי #4824 (98%)'], ['10:22', 'AI', 'העברה לבדיקה אנושית #4823 (74%)']];
+  $('#audit').innerHTML = audit.map(a => [a.time, a.who, a.t]).concat(base).map(([t, w, x]) => `<li><span class="chip ${w === 'AI' ? 'ai' : ''}" style="${w !== 'AI' ? 'background:var(--surface-2);color:var(--ink-2)' : ''}">${w}</span><span>${x}</span><time>${t}</time></li>`).join('');
+}
+
+/* ================= COPILOT ================= */
+const SUGS = ['סכם לי את המשמרת עד עכשיו', 'מה המצב בשכונת מרכז העיר?', 'אילו פניות בסיכון לחרוג מ-SLA?', 'למה אתה צופה עלייה בפסולת גושית?'];
+$('#sugs').innerHTML = SUGS.map(s => `<button class="sug"><svg width="14" height="14" style="color:var(--ai1);flex:none"><use href="#i-spark"/></svg>${s}</button>`).join('');
+$('#sugs').addEventListener('click', e => { const b = e.target.closest('.sug'); if (b) ask(b.textContent); });
+function openCopilot() { $('#copilot').classList.add('on'); $('#copilot').setAttribute('aria-hidden', 'false'); $('#scrim').classList.add('on'); setTimeout(() => $('#cpText').focus(), 300); }
+function closeCopilot() { $('#copilot').classList.remove('on'); $('#copilot').setAttribute('aria-hidden', 'true'); $('#scrim').classList.remove('on'); }
+$$('[data-open-copilot]').forEach(b => b.addEventListener('click', openCopilot));
+$('#cpClose').addEventListener('click', closeCopilot); $('#scrim').addEventListener('click', closeCopilot);
+const ANS = [
+  [/משמרת|סכם לי את המשמרת/, () => `<p>הנה סיכום המשמרת מאז 07:00:</p><ul><li><b>476 פניות</b> התקבלו, 87% מהן מוינו אוטומטית.</li><li><b>זמן תגובה ממוצע: 18 דק׳</b>, שיפור של 22% מאתמול.</li><li>אירוע מרכזי: <b>פיצוץ צנרת ברחוב הרימון</b> (7 דיווחים, צוות מים 2 בדרך).</li><li>4 פניות בסיכון לחריגה מ-SLA, כולן בקטגוריית תאורה.</li></ul><p>ההמלצה שלי: לטפל קודם באשכול הרימון, ואז לתגבר את צוות התאורה.</p>`, ['476 פניות', 'יומן שיבוצים', 'נתוני SLA']],
+  [/מרכז העיר/, () => `<p>במרכז העיר יש כרגע <b>11 פניות פתוחות</b>, 2 מהן קריטיות.</p><div class="mini"><table><tbody><tr><td>מים וביוב</td><td class="mono">5</td></tr><tr><td>חניה</td><td class="mono">3</td></tr><tr><td>פסולת</td><td class="mono">2</td></tr><tr><td>תאורה</td><td class="mono">1</td></tr></tbody></table></div><p>זה עומס גבוה ב-40% מהממוצע לשעה הזו, בעיקר בגלל הנזילה ברחוב הרימון.</p>`, ['11 פניות', 'מפת אירועים']],
+  [/SLA|חרוג/, () => `<p><b>4 פניות</b> צפויות לחרוג מזמן הטיפול בעשרים הדקות הקרובות:</p><div class="mini"><table><tbody><tr><td class="mono">#4811</td><td>רמזור מהבהב</td><td class="mono" style="color:var(--high)">18 דק׳</td></tr><tr><td class="mono">#4821</td><td>עמוד תאורה כבוי</td><td class="mono" style="color:var(--high)">41 דק׳</td></tr><tr><td class="mono">#4808</td><td>סתימת ביוב</td><td class="mono">55 דק׳</td></tr><tr><td class="mono">#4819</td><td>גדר פרוצה</td><td class="mono">72 דק׳</td></tr></tbody></table></div><p>אפשר לחסוך כ-25 דקות אם צוות תאורה 1 ייקח את <b>#4821</b>. ההמלצה מחכה במסך השיבוץ.</p>`, ['לוח שיבוץ', 'מיקומי צוותים']],
+  [/פסולת|גושית|תחזית/, () => `<p>התחזית מבוססת על שלושה דפוסים:</p><ul><li>ב-<b>10 מתוך 12</b> השבועות האחרונים, יום ראשון היה השיא השבועי בפסולת גושית.</li><li>בממוצע, <b>+31%</b> לעומת שאר ימי השבוע.</li><li>השבוע נרשמו כבר <b>18 פניות</b> על ריהוט ישן, יותר מהרגיל.</li></ul><p>רמת הביטחון בתחזית: <b>בינונית-גבוהה (78%)</b>. זו הערכה ולא ודאות, ולכן ההחלטה על תגבור נשארת אצלך.</p>`, ['12 שבועות היסטוריה', 'פניות פסולת']],
+  [/פנייה #?(\d+)/, m => { const x = INC.find(i => i.id == m[1]); return x ? `<p><b>#${x.id} · ${x.t}</b></p><p>${x.st}, ${HOODS[x.hood].n}. דחיפות ${SEV[x.sev]}, וסווגה בביטחון של ${x.conf}%.${x.dup ? ` יש עוד ${x.dup} פניות שנראות כמו אותו מפגע.` : ''} השיבוץ המומלץ: <b>${x.team}</b> (${x.eta} דק׳ מהמקום).</p>` : '<p>לא מצאתי פנייה במספר הזה.</p>'; }, ['פרטי הפנייה']],
+];
+async function ask(q) {
+  $('#sugs')?.remove();
+  const body = $('#cpBody');
+  body.insertAdjacentHTML('beforeend', `<div class="bubble me">${q.replace(/</g, '&lt;')}</div>`);
+  const a = document.createElement('div'); a.className = 'bubble ai'; a.innerHTML = '<div class="shimmer" style="width:70%"></div><div class="shimmer" style="width:90%"></div><div class="shimmer" style="width:50%"></div>'; body.append(a); body.scrollTop = body.scrollHeight;
+  await new Promise(r => setTimeout(r, RM ? 0 : 700));
+  let html = `<p>לא מצאתי תשובה מדויקת לשאלה הזו בנתוני המשמרת. נסו לשאול על שכונה, פנייה (למשל ״פנייה 4831״), SLA או תחזית.</p>`, src = [];
+  for (const [re, fn, s] of ANS) { const m = q.match(re); if (m) { html = fn(m); src = s; break; } }
+  // stream: reveal blocks progressively
+  a.innerHTML = html + (src.length ? `<div class="src">${src.map(x => `<span>מקור: ${x}</span>`).join('')}</div>` : '');
+  if (!RM) { const kids = [...a.children]; kids.forEach((k, i) => { k.style.opacity = 0; k.style.transform = 'translateY(6px)'; k.style.transition = 'opacity .4s, transform .4s'; setTimeout(() => { k.style.opacity = 1; k.style.transform = 'none'; }, 120 + i * 220); }); }
+  body.scrollTop = body.scrollHeight;
+}
+$('#cpForm').addEventListener('submit', e => { e.preventDefault(); const t = $('#cpText').value.trim(); if (!t) return; $('#cpText').value = ''; ask(t); });
+$('#cpText').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('#cpForm').requestSubmit(); } });
+
+/* ================= GLOBAL ================= */
+$('#themeBtn').addEventListener('click', () => { const r = document.documentElement; r.dataset.theme = r.dataset.theme === 'dark' ? 'light' : 'dark'; });
+$('#menuBtn').addEventListener('click', () => $('#side').classList.toggle('on'));
+$('#gsearch').addEventListener('keydown', e => { if (e.key === 'Enter') { const q = e.target.value.trim(); const hit = INC.find(x => !x.gen && (x.t.includes(q) || x.st.includes(q) || String(x.id).includes(q))); if (hit) { selected = hit.id; filter = 'all'; go('inbox'); renderInbox(); } else toast(`לא נמצאו תוצאות עבור ״${q}״`); } });
+function clock() { $('#clock').textContent = new Date().toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' }); }
+
+renderKpis(); renderMap(); renderInsights(); renderFeed(); renderTeams(); renderInbox(); renderBoard(); renderAudit(); clock();
+setInterval(clock, 10000); if (!RM) setInterval(liveTick, 9000);
+const start = (location.hash.slice(1) || P.get('view'));
+if (['overview', 'inbox', 'dispatch', 'analytics', 'settings'].includes(start)) go(start);
+})();
+</script>
+</body>
+</html>

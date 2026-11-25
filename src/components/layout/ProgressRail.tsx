@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { chapters } from '@/content/site';
 import { useScrollTo } from '@/components/motion/SmoothScroll';
@@ -15,6 +16,7 @@ export function ProgressRail() {
   const fillRef = useRef<HTMLSpanElement>(null);
   const [active, setActive] = useState(0);
   const scrollTo = useScrollTo();
+  const pathname = usePathname();
 
   useGSAP(() => {
     const rail = railRef.current;
@@ -46,7 +48,10 @@ export function ProgressRail() {
         },
       });
     });
-  });
+   }, { dependencies: [pathname], revertOnUpdate: true });
+
+  // The chapter rail describes the home-page journey only.
+  if (pathname !== '/') return null;
 
   return (
     <nav ref={railRef} className={styles.rail} aria-label="פרקי העמוד" data-visible="false" data-theme="dark">
