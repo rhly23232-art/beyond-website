@@ -1,5 +1,7 @@
 import Image from 'next/image';
-import type { ProjectAccent, ProjectImage } from '@/content/projects';
+import type { ProjectAccent, ProjectMedia } from '@/content/projects';
+import { isEmbed } from '@/content/projects';
+import { LiveFrame } from '@/components/case/LiveFrame';
 import styles from './Devices.module.css';
 
 /* ------------------------------------------------------------------ */
@@ -38,14 +40,17 @@ export function AbstractScreen({ kind, accent }: { kind: 'desktop' | 'mobile' | 
   );
 }
 
-function Screen({ image, kind, accent, sizes }: { image?: ProjectImage; kind: 'desktop' | 'mobile' | 'cover'; accent: ProjectAccent; sizes: string }) {
+function Screen({ image, kind, accent, sizes }: { image?: ProjectMedia; kind: 'desktop' | 'mobile' | 'cover'; accent: ProjectAccent; sizes: string }) {
+  if (isEmbed(image)) {
+    return <LiveFrame bare src={image.embed} kind={kind === 'mobile' ? 'mobile' : 'desktop'} title={image.title} className={styles.live} />;
+  }
   if (image) {
     return <Image src={image.src} alt={image.alt} fill sizes={sizes} className={styles.img} />;
   }
   return <AbstractScreen kind={kind} accent={accent} />;
 }
 
-export function DesktopFrame({ image, accent, className }: { image?: ProjectImage; accent: ProjectAccent; className?: string }) {
+export function DesktopFrame({ image, accent, className }: { image?: ProjectMedia; accent: ProjectAccent; className?: string }) {
   return (
     <div className={[styles.desktop, className].filter(Boolean).join(' ')}>
       <div className={styles.desktopBar} aria-hidden="true">
@@ -61,7 +66,7 @@ export function DesktopFrame({ image, accent, className }: { image?: ProjectImag
   );
 }
 
-export function PhoneFrame({ image, accent, className }: { image?: ProjectImage; accent: ProjectAccent; className?: string }) {
+export function PhoneFrame({ image, accent, className }: { image?: ProjectMedia; accent: ProjectAccent; className?: string }) {
   return (
     <div className={[styles.phone, className].filter(Boolean).join(' ')}>
       <div className={styles.phoneScreen}>
@@ -71,7 +76,7 @@ export function PhoneFrame({ image, accent, className }: { image?: ProjectImage;
   );
 }
 
-export function CoverFrame({ image, accent, className }: { image?: ProjectImage; accent: ProjectAccent; className?: string }) {
+export function CoverFrame({ image, accent, className }: { image?: ProjectMedia; accent: ProjectAccent; className?: string }) {
   return (
     <div className={[styles.cover, className].filter(Boolean).join(' ')}>
       <Screen image={image} kind="cover" accent={accent} sizes="(min-width: 1024px) 45vw, 90vw" />

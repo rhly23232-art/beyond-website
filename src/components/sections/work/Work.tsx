@@ -13,6 +13,9 @@ const ACCENT_BG: Record<string, string> = {
   cobalt: '#10131A',
   lime: '#141a17',
   mist: '#121726',
+  brass: '#15130f',
+  indigo: '#11132a',
+  tangerine: '#1a1311',
 };
 
 /**
@@ -175,7 +178,7 @@ export function Work() {
 
       <div className={styles.head}>
         <p className={styles.band} aria-hidden="true">
-          עבודות נבחרות — עבודות נבחרות — עבודות נבחרות —
+          תיק עבודות — תיק עבודות — תיק עבודות —
         </p>
         <div className="container">
           <SectionHeading

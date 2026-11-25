@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { isMotionReduced } from '@/lib/motion';
@@ -20,6 +21,7 @@ export function Header() {
   const [active, setActive] = useState<string | null>(null);
   const scrollTo = useScrollTo();
   const lenis = useLenis();
+  const pathname = usePathname();
 
   /* Hide on scroll down, reveal on scroll up; capsule state after leaving the top. */
   useGSAP(() => {
@@ -67,7 +69,7 @@ export function Header() {
         },
       });
     });
-  });
+   }, { dependencies: [pathname], revertOnUpdate: true });
 
   /* Mobile menu timeline */
   useGSAP(

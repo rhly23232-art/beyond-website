@@ -13,7 +13,7 @@ export const hero = {
   subtitle:
     'אני מחברת בין אסטרטגיה, אפיון, עיצוב וטכנולוגיה כדי ליצור מוצרים דיגיטליים מרשימים, חכמים ומדויקים.',
   primary: { label: 'בואו נבנה משהו אחר', href: '#contact' },
-  secondary: { label: 'לצפייה בעבודות', href: '#work' },
+  secondary: { label: 'לתיק העבודות', href: '#work' },
   /** Used while the portfolio has no published projects yet. */
   secondaryFallback: { label: 'איך אני עובדת', href: '#approach' },
   disciplines: ['אסטרטגיה', 'UX', 'UI', 'פיתוח'],

@@ -46,7 +46,7 @@ const withWork = <T extends { id: string }>(items: T[]) =>
 export const mainNav: NavItem[] = withWork([
   { id: 'approach', label: 'גישה' },
   { id: 'services', label: 'שירותים' },
-  { id: 'work', label: 'עבודות' },
+  { id: 'work', label: 'תיק עבודות' },
   { id: 'studio', label: 'מי אני' },
   { id: 'process', label: 'תהליך' },
   { id: 'faq', label: 'שאלות' },
@@ -58,7 +58,7 @@ export const chapters: NavItem[] = withWork([
   { id: 'approach', label: 'גישה' },
   { id: 'services', label: 'שירותים' },
   { id: 'studio', label: 'מי מאחורי BEYOND' },
-  { id: 'work', label: 'עבודות' },
+  { id: 'work', label: 'תיק עבודות' },
   { id: 'why', label: 'למה BEYOND' },
   { id: 'process', label: 'תהליך' },
   { id: 'experience', label: 'שירות' },

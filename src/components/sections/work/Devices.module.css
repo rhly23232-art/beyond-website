@@ -249,3 +249,14 @@
 .abstract[data-kind='cover'] .aVisual {
   width: 54%;
 }
+
+/* ---- Live prototypes (no screenshots) ---------------------------------- */
+.live {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.cover .live {
+  background: #0a0f1c;
+}
