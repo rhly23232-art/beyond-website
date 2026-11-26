@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>השכרת אביזרי צילום · קטלוג והזמנה</title>
+<meta name="description" content="קטלוג אביזרי צילום להשכרה – רמות ב׳, ירושלים. מסמנים את מה שרוצים, המחיר מתעדכן, ושולחים הזמנה.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm, practical, warm – a rental shop counter, not a brochure
+   IDEA: an order sheet – every prop is a tick-box line that adds up
+   PICTURE: the props' own photos, large, in tidy cards
+   COLOUR and TYPE: navy from the original catalog, warm paper, wood beige; Heebo
+   LAYOUT: header, sticky sections, card grid, always-visible total bar, order sheet */
+:root{--navy:#14275e;--navy2:#0d1b45;--paper:#faf7f2;--card:#fff;--ink:#1c2130;--mute:#6b6f7b;--line:#e7e1d7;--wood:#efe7db;--ok:#1f7a4d;--err:#b3261e}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:128px;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 Heebo,Arial,sans-serif;overflow-x:clip;padding-bottom:96px}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid #6f8dff;outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 max(4vw,16px)}
+
+/* header */
+.top{background:var(--navy);color:#fff}
+.top .wrap{display:flex;flex-wrap:wrap;gap:18px 40px;align-items:flex-end;justify-content:space-between;padding-block:34px 30px}
+.top h1{margin:0;font-size:clamp(30px,5vw,46px);line-height:1.05;font-weight:800;letter-spacing:-.5px}
+.top .lead{margin:10px 0 0;font-size:17px;color:#cfd6ec;max-width:34em}
+.contact{display:grid;gap:4px;font-size:15px;color:#dfe4f3}
+.contact a{color:#fff;text-decoration:none;border-bottom:1px solid #ffffff55}
+.contact b{font-weight:500;color:#fff}
+
+.how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:22px auto 6px}
+.how div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:center;font-size:15px}
+.how i{flex:none;width:32px;height:32px;border-radius:50%;background:var(--wood);color:var(--navy);display:grid;place-items:center;font-style:normal;font-weight:800}
+
+/* sticky nav */
+.nav{position:sticky;top:0;z-index:20;background:rgba(250,247,242,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;gap:10px;align-items:center;padding-block:10px;flex-wrap:wrap}
+.tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;flex:1 1 auto}
+.tabs::-webkit-scrollbar{display:none}
+.tabs a{flex:none;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-weight:500;font-size:15px;min-height:40px;display:inline-flex;align-items:center;gap:6px}
+.tabs a span{color:var(--mute);font-weight:400;font-size:13px}
+.tabs a.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.tabs a.on span{color:#c9d2ee}
+.search{flex:0 1 260px;position:relative}
+.search input{width:100%;height:42px;border:1px solid var(--line);border-radius:999px;background:var(--card);padding:0 40px 0 14px;font-size:16px}
+.search svg{position:absolute;right:13px;top:12px;width:18px;height:18px;color:var(--mute)}
+
+/* sections & cards */
+section{padding:28px 0 6px}
+section h2{font-size:clamp(24px,3.4vw,32px);line-height:1.1;margin:0 0 4px;font-weight:800;color:var(--navy)}
+section .sub{margin:0 0 18px;color:var(--mute);font-size:15px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s,box-shadow .15s}
+.card.sel{border-color:var(--navy);box-shadow:0 0 0 2px var(--navy) inset,0 6px 18px rgba(20,39,94,.12)}
+.media{position:relative;aspect-ratio:4/3;background:var(--wood);border:0;padding:0;display:block;width:100%;overflow:hidden}
+.media img{position:absolute;inset:0;width:100%;height:100%;display:block}
+.media .cnt{position:absolute;bottom:8px;left:8px;background:rgba(13,27,69,.78);color:#fff;font-size:13px;border-radius:999px;padding:2px 10px}
+.body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:2px;flex:1}
+.name{font-weight:700;font-size:17px;line-height:1.3}
+.note{font-size:14px;color:var(--mute)}
+.row{margin-top:auto;padding-top:10px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.price{font-weight:800;font-size:20px;color:var(--navy);white-space:nowrap}
+.price small{font-weight:400;font-size:13px;color:var(--mute)}
+.pick{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px 0 12px;border-radius:12px;border:1.5px solid var(--navy);background:#fff;color:var(--navy);font-weight:700;font-size:15px}
+.pick .box{width:22px;height:22px;border-radius:6px;border:2px solid var(--navy);display:grid;place-items:center;flex:none}
+.pick .box svg{width:14px;height:14px;opacity:0}
+.card.sel .pick{background:var(--navy);color:#fff}
+.card.sel .pick .box{background:#fff}
+.card.sel .pick .box svg{opacity:1;color:var(--navy)}
+.qty{display:none;align-items:center;gap:6px;margin-top:10px;font-size:14px;color:var(--mute)}
+.card.sel .qty{display:flex}
+.qty button{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--paper);font-size:20px;line-height:1}
+.qty output{min-width:28px;text-align:center;font-weight:700;color:var(--ink);font-size:16px}
+.empty{display:none;padding:30px 0;color:var(--mute)}
+
+/* bottom bar */
+.bar{position:fixed;inset:auto 0 0 0;z-index:30;background:var(--navy2);color:#fff;box-shadow:0 -6px 20px rgba(0,0,0,.18)}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:12px;padding-bottom:max(12px,env(safe-area-inset-bottom))}
+.bar .sum{display:flex;flex-direction:column;line-height:1.2}
+.bar .sum span{font-size:14px;color:#c9d2ee}
+.bar .sum b{font-size:26px;font-weight:800}
+.go{min-height:48px;border:0;border-radius:12px;background:#fff;color:var(--navy2);font-weight:800;font-size:17px;padding:0 22px}
+.go:disabled{opacity:.45;cursor:default}
+
+/* order sheet */
+.sheet{position:fixed;inset:0;z-index:50;display:none;background:rgba(13,27,69,.45)}
+.sheet.open{display:block}
+.panel{position:absolute;inset:0 auto 0 0;width:min(520px,100%);background:var(--paper);display:flex;flex-direction:column;box-shadow:8px 0 30px rgba(0,0,0,.2)}
+.phead{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line);background:#fff}
+.phead h3{margin:0;font-size:22px;color:var(--navy)}
+.x{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:22px}
+.pbody{overflow:auto;padding:16px 20px 24px;flex:1}
+.lines{list-style:none;margin:0 0 6px;padding:0}
+.lines li{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.lines img{width:52px;height:40px;object-fit:cover;border-radius:8px;flex:none}
+.lines .t{flex:1;line-height:1.3}
+.lines .t small{display:block;color:var(--mute);font-size:13px}
+.lines .v{font-weight:700;white-space:nowrap}
+.lines .rm{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--mute);font-size:18px}
+.total{display:flex;justify-content:space-between;align-items:baseline;padding:14px 0 18px;font-size:18px;font-weight:700}
+.total b{font-size:30px;color:var(--navy);font-weight:800}
+form{display:grid;gap:12px}
+label{display:grid;gap:6px;font-weight:500;font-size:15px}
+label em{font-style:normal;color:var(--err)}
+input,textarea{border:1px solid #d9d2c6;border-radius:12px;background:#fff;padding:11px 12px;font-size:16px;width:100%}
+textarea{min-height:84px;resize:vertical}
+.send{min-height:52px;border:0;border-radius:12px;background:var(--navy);color:#fff;font-weight:800;font-size:18px}
+.send:disabled{opacity:.6}
+.msg{border-radius:12px;padding:14px 16px;font-size:15px;display:none}
+.msg.ok{display:block;background:#e7f4ec;color:var(--ok)}
+.msg.bad{display:block;background:#fbeaea;color:var(--err)}
+.msg a{color:inherit;font-weight:700}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.fine{font-size:13px;color:var(--mute);margin:4px 0 0}
+
+/* gallery */
+.gal{position:fixed;inset:0;z-index:60;background:#0b1020;display:none;flex-direction:column}
+.gal.open{display:flex}
+.gtop{display:flex;justify-content:space-between;align-items:center;color:#fff;padding:12px 16px;gap:12px}
+.gtop b{font-size:18px}
+.gtop .x{background:transparent;color:#fff;border-color:#ffffff44}
+.track{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.track::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;scroll-snap-align:center;display:grid;place-items:center;padding:8px 12px 24px}
+.slide img{max-width:100%;max-height:calc(100vh - 110px);object-fit:contain;border-radius:6px}
+.gnav{position:absolute;top:50%;width:48px;height:48px;border-radius:50%;border:0;background:#ffffffd9;color:var(--navy2);font-size:24px}
+.gnav.prev{right:14px}.gnav.next{left:14px}
+
+footer{margin-top:36px;padding:26px 0;border-top:1px solid var(--line);color:var(--mute);font-size:14px}
+@media(max-width:700px){
+ .how{grid-template-columns:1fr}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .body{padding:10px 10px 12px}
+ .name{font-size:15px}
+ .price{font-size:17px}
+ .row{flex-direction:column;align-items:stretch}
+ .pick{justify-content:center}
+ .search{flex:1 1 100%}
+ .gnav{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="wrap">
+  <div>
+   <h1>השכרת אביזרי צילום</h1>
+   <p class="lead">מסמנים ✓ ליד כל אביזר שרוצים, המחיר מתעדכן לבד, ובסוף שולחים את ההזמנה.</p>
+  </div>
+  <div class="contact">
+   <div>רמות ב׳, ירושלים · ראובן מס 136, כניסה ד׳, קומה ראשונה – דירה 23</div>
+   <div>טלפון: <a href="tel:0583211623"><b>058-3211623</b></a></div>
+   <div>מייל: <a href="mailto:rhly23232@gmail.com"><b>RHLY23232@GMAIL.COM</b></a></div>
+  </div>
+ </div>
+</header>
+
+<div class="wrap">
+ <div class="how">
+  <div><i>1</i>מסמנים ✓ ליד האביזרים שרוצים</div>
+  <div><i>2</i>הסכום מתעדכן בפס שבתחתית</div>
+  <div><i>3</i>לוחצים "לסיכום ושליחה" ושולחים</div>
+ </div>
+</div>
+
+<nav class="nav" aria-label="קטגוריות">
+ <div class="wrap">
+  <div class="tabs" id="tabs"></div>
+  <div class="search">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+   <input id="q" type="search" placeholder="חיפוש אביזר…" aria-label="חיפוש אביזר" autocomplete="off">
+  </div>
+ </div>
+</nav>
+
+<main class="wrap" id="main"></main>
+<p class="wrap empty" id="empty">לא נמצאו אביזרים בשם הזה.</p>
+
+<footer>
+ <div class="wrap">השכרת אביזרי צילום · רמות ב׳, ירושלים · 058-3211623 · RHLY23232@GMAIL.COM</div>
+</footer>
+
+<div class="bar" role="region" aria-label="סיכום הזמנה">
+ <div class="wrap">
+  <div class="sum"><span id="cnt">לא נבחרו אביזרים</span><b id="tot">0 ₪</b></div>
+  <button class="go" id="go" disabled>לסיכום ושליחה</button>
+ </div>
+</div>
+
+<div class="sheet" id="sheet" aria-hidden="true">
+ <div class="panel" role="dialog" aria-modal="true" aria-labelledby="sh">
+  <div class="phead"><h3 id="sh">סיכום ההזמנה</h3><button class="x" data-close aria-label="סגירה">✕</button></div>
+  <div class="pbody">
+   <ul class="lines" id="lines"></ul>
+   <div class="total"><span>סה״כ לתשלום</span><b id="tot2">0 ₪</b></div>
+   <form id="f" novalidate>
+    <label><span>שם מלא <em>*</em></span><input name="name" id="fn" required autocomplete="name"></label>
+    <label><span>טלפון <em>*</em></span><input name="phone" id="fp" type="tel" inputmode="tel" required autocomplete="tel" dir="ltr" style="text-align:right"></label>
+    <label><span>תאריך הצילום (לא חובה)</span><input name="date" id="fd" type="date"></label>
+    <label><span>הערות (לא חובה)</span><textarea name="notes" id="fx" placeholder="צבעים, מידות, שעת איסוף…"></textarea></label>
+    <input class="hp" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <div class="msg" id="msg" role="status"></div>
+    <button class="send" id="send" type="submit">שליחת ההזמנה</button>
+    <p class="fine">ההזמנה תישלח ישירות אלינו. ניצור קשר לתיאום איסוף והחזרה.</p>
+   </form>
+  </div>
+ </div>
+</div>
+
+<div class="gal" id="gal" aria-hidden="true">
+ <div class="gtop"><b id="gt"></b><button class="x" data-gclose aria-label="סגירה">✕</button></div>
+ <div class="track" id="track"></div>
+ <button class="gnav prev" id="gp" aria-label="הקודמת">›</button>
+ <button class="gnav next" id="gx" aria-label="הבאה">‹</button>
+</div>
+
+<script>
+{
+const DATA=[{"s":"newborn","id":"overalls","n":"סרבלים","d":"","p":8,"k":"unit","im":[["p03-0",1120,746],["p03-1",1120,745],["p04-0",774,576],["p04-1",861,576],["p04-2",528,532],["p04-3",464,535],["p04-4",665,535]],"u":"יחידה"},{"s":"newborn","id":"bamboo-crib","n":"עריסת במבוק","d":"","p":20,"k":"one","im":[["p05-0",1128,1197]]},{"s":"newborn","id":"pvc-small","n":"פרקט PVC קטן","d":"לצילומי ניו בורן","p":20,"k":"one","im":[["p06-0",1196,795]]},{"s":"newborn","id":"white-bed","n":"מיטת עץ לבנה","d":"","p":30,"k":"one","im":[["p07-0",1197,797]]},{"s":"newborn","id":"wood-heart","n":"לב עץ","d":"","p":20,"k":"one","im":[["p08-1",1197,833],["p08-0",934,506]]},{"s":"newborn","id":"wraps","n":"עיטופים","d":"","p":6,"k":"unit","im":[["p09-0",1197,757]],"u":"עיטוף"},{"s":"newborn","id":"backdrops","n":"רקעים","d":"","p":10,"k":"unit","im":[["p10-0",1197,797]],"u":"רקע"},{"s":"newborn","id":"mini-pouf","n":"מיני פוף","d":"","p":15,"k":"one","im":[["p12-0",1197,797],["p12-1",931,617]]},{"s":"newborn","id":"fur-blue","n":"רקע פרווה ענק – תכלת","d":"","p":20,"k":"one","im":[["p13-0",1197,795]]},{"s":"newborn","id":"fur-white","n":"רקע פרווה ענק – לבן","d":"","p":20,"k":"one","im":[["p14-0",1197,844]]},{"s":"newborn","id":"rug-large","n":"שטיח גדול","d":"","p":20,"k":"one","im":[["p15-0",1017,765],["p15-1",1001,666]]},{"s":"newborn","id":"fur-rug-large","n":"שטיח פרווה גדול","d":"","p":30,"k":"one","im":[["p16-0",799,1197],["p16-1",714,477]]},{"s":"newborn","id":"pink-backdrop","n":"רקע ורוד","d":"","p":10,"k":"one","im":[["p17-0",1197,798]]},{"s":"newborn","id":"wood-bike-nb","n":"אופני עץ","d":"","p":20,"k":"one","im":[["p18-0",1197,794]]},{"s":"newborn","id":"grey-fur","n":"פרווה אפורה","d":"","p":10,"k":"one","im":[["p19-0",1197,797]]},{"s":"newborn","id":"moon","n":"ירח וכוכבים + כובע","d":"","p":20,"k":"one","im":[["p20-0",1197,795]]},{"s":"newborn","id":"pink-flowers","n":"פרחים ורודים","d":"","p":5,"k":"one","im":[["p21-0",1197,679]]},{"s":"newborn","id":"knit-bears","n":"דובונים סרוגים","d":"","p":5,"k":"unit","im":[["p22-0",598,627],["p22-1",439,490],["p22-2",704,477],["p22-3",438,377]],"u":"דובון"},{"s":"extras","id":"hearts","n":"לבבות סרוגים","d":"","p":10,"k":"one","im":[["p11-0",883,663]]},{"s":"extras","id":"felt-balloons","n":"בלונים מלבד","d":"","p":10,"k":"one","im":[["p11-1",550,666]]},{"s":"extras","id":"crescents","n":"כריות סהר צבעוניות","d":"","p":10,"k":"one","im":[["p11-2",550,342]]},{"s":"extras","id":"mini-balloons","n":"בלונים קטנים","d":"","p":10,"k":"one","im":[["p11-5",407,359]]},{"s":"extras","id":"knit-slippers","n":"כפכפים סרוגים","d":"","p":5,"k":"one","im":[["p11-3",505,455]]},{"s":"extras","id":"bunnies","n":"ארנבונים","d":"","p":5,"k":"one","im":[["p11-4",330,455]]},{"s":"outdoor","id":"bench","n":"ספסל עץ","d":"","p":20,"k":"one","im":[["p24-0",1197,869]]},{"s":"outdoor","id":"pier","n":"מזח","d":"","p":30,"k":"one","im":[["p25-0",1197,796]]},{"s":"outdoor","id":"rocking-chair","n":"כסא נדנדה","d":"","p":30,"k":"one","im":[["p26-0",1197,796]]},{"s":"outdoor","id":"skateboard","n":"סקייטבורד","d":"","p":10,"k":"one","im":[["p27-0",1197,797]]},{"s":"outdoor","id":"fitball","n":"כדור פיטבול","d":"","p":10,"k":"one","im":[["p27-0",1197,797]]},{"s":"outdoor","id":"straw-chair","n":"כסא קש גבוה","d":"","p":20,"k":"one","im":[["p28-0",1197,795],["p28-1",323,656]]},{"s":"outdoor","id":"swing","n":"נדנדה","d":"","p":10,"k":"one","im":[["p29-0",799,1197]]},{"s":"outdoor","id":"wood-bike","n":"אופני עץ","d":"","p":20,"k":"one","im":[["p30-0",1197,797]]},{"s":"outdoor","id":"white-table","n":"שולחן וכסאות לבנים","d":"","p":20,"k":"one","im":[["p31-1",1197,558],["p31-0",620,525]]},{"s":"outdoor","id":"wood-steps","n":"מדרגות עץ","d":"מתאים ל-2 ילדים","p":20,"k":"one","im":[["p32-0",798,1197]]},{"s":"outdoor","id":"first-bday-chair","n":"כסא גיל שנה","d":"","p":20,"k":"one","im":[["p33-0",1197,797]]},{"s":"outdoor","id":"tall-wood-chair","n":"כסא עץ גבוה","d":"","p":15,"k":"one","im":[["p34-0",1197,797]]},{"s":"outdoor","id":"guitar","n":"גיטרה","d":"","p":10,"k":"one","im":[["p35-0",1197,796]]},{"s":"outdoor","id":"pineapple","n":"אננס","d":"4 הפירות יחד – 20 ₪","p":7,"k":"fruit","im":[["p36-1",458,391],["p36-2",1197,796]]},{"s":"outdoor","id":"cherries","n":"דובדבנים","d":"4 הפירות יחד – 20 ₪","p":7,"k":"fruit","im":[["p36-0",663,391],["p36-2",1197,796]]},{"s":"outdoor","id":"green-grapes","n":"ענבים ירוקים","d":"4 הפירות יחד – 20 ₪","p":7,"k":"fruit","im":[["p36-0",663,391],["p36-2",1197,796]]},{"s":"outdoor","id":"purple-grapes","n":"ענבים סגולים","d":"4 הפירות יחד – 20 ₪","p":7,"k":"fruit","im":[["p36-0",663,391],["p36-2",1197,796]]},{"s":"outdoor","id":"china-set","n":"סט כלי חרסינה","d":"","p":10,"k":"one","im":[["p37-0",1197,400],["p37-1",1197,729]]},{"s":"outdoor","id":"white-umbrella","n":"מטריה לבנה","d":"","p":5,"k":"one","im":[["p38-1",410,618],["p38-0",615,1197]]},{"s":"outdoor","id":"red-umbrella","n":"מטריה אדומה","d":"","p":5,"k":"one","im":[["p39-0",336,508],["p39-1",1197,797]]},{"s":"outdoor","id":"frame","n":"מסגרת","d":"","p":5,"k":"one","im":[["p40-0",673,1197]]},{"s":"outdoor","id":"pencils","n":"עפרונות עץ","d":"סט 4 עפרונות","p":15,"k":"one","im":[["p41-0",755,476]]},{"s":"outdoor","id":"globe","n":"גלובוס","d":"","p":10,"k":"one","im":[["p41-1",531,480]]},{"s":"outdoor","id":"chicks","n":"3 אפרוחים","d":"","p":10,"k":"one","im":[["p42-0",1197,763]]},{"s":"outdoor","id":"rabbit","n":"ארנב","d":"","p":10,"k":"one","im":[["p43-0",1196,795]]},{"s":"outdoor","id":"brown-suitcase","n":"מזוודה חומה","d":"","p":10,"k":"one","im":[["p44-0",550,566],["p44-1",1197,798]]},{"s":"outdoor","id":"old-books","n":"ספרים עתיקים","d":"5 ₪ ליחידה · 4 ב-15 ₪","p":5,"k":"books","im":[["p45-0",1197,584],["p45-1",1197,570]],"u":"יחידה"},{"s":"outdoor","id":"bears","n":"דובים","d":"","p":5,"k":"one","im":[["p46-0",1197,739]]},{"s":"outdoor","id":"straw-hats","n":"כובעי קש","d":"","p":5,"k":"one","im":[["p47-0",1166,1197]]},{"s":"outdoor","id":"straw-placemat","n":"פלייסמנט קש","d":"","p":5,"k":"one","im":[["p48-0",806,534],["p48-1",806,538]]},{"s":"outdoor","id":"tzitzit","n":"ציציות + חבל, חוט ואטבים","d":"","p":15,"k":"one","im":[["p49-0",1075,716],["p49-1",992,662]]},{"s":"outdoor","id":"vintage-suitcase","n":"מזוודת וינטאז'","d":"","p":10,"k":"one","im":[["p50-0",1197,795]]},{"s":"outdoor","id":"vintage-tub","n":"גיגית וינטאז'","d":"","p":20,"k":"one","im":[["p51-0",777,515],["p51-1",1197,658]]},{"s":"outdoor","id":"wood-chest","n":"תיבת עץ","d":"","p":5,"k":"one","im":[["p52-0",1196,795]]},{"s":"outdoor","id":"pvc-large","n":"פרקט PVC גדול","d":"לצילומי סטודיו","p":40,"k":"one","im":[["p53-0",1196,795]]},{"s":"outdoor","id":"white-dresses","n":"סט שמלות לבן","d":"מידות 2, 3","p":10,"k":"one","im":[["p54-0",1059,708]]},{"s":"outdoor","id":"twins-set","n":"סט תאומים","d":"גיל שנה","p":10,"k":"one","im":[["p54-1",1059,708]]},{"s":"outdoor","id":"wheel","n":"גלגל","d":"","p":10,"k":"one","im":[["p55-0",798,1197]]},{"s":"outdoor","id":"straw-boat","n":"סירת קש","d":"","p":15,"k":"one","im":[["p55-0",798,1197]]},{"s":"outdoor","id":"wood-boat","n":"סירת עץ קטנה","d":"","p":30,"k":"one","im":[["p55-0",798,1197]]},{"s":"outdoor","id":"pennants","n":"דגלונים","d":"","p":5,"k":"one","im":[["p56-0",1197,768],["p56-1",800,531]]}];
+const TO='rhly23232@gmail.com';
+const WA='972583211623';
+const SECS=[['newborn','ניו בורן','אביזרים לצילומי תינוקות בסטודיו'],['extras','אבזור משלים','פריטים קטנים שמשלימים את הסט'],['outdoor','אביזרי חוץ','אביזרים לצילומי ילדים ומשפחה בחוץ']];
+const IMG='catalog/img/';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sh=n=>n.toLocaleString('he-IL')+' ₪';
+const byId=Object.fromEntries(DATA.map(d=>[d.id,d]));
+let sel={};
+try{sel=JSON.parse(localStorage.getItem('props-order')||'{}')||{}}catch(e){sel={}}
+for(const k in sel)if(!byId[k])delete sel[k];
+const save=()=>{try{localStorage.setItem('props-order',JSON.stringify(sel))}catch(e){}};
+
+const unitLabel=d=>d.u?`<small> / ${d.u}</small>`:'';
+const lineCost=d=>{const q=sel[d.id]||0;if(!q)return 0;if(d.k==='books')return Math.floor(q/4)*15+(q%4)*5;return d.p*q};
+function totals(){
+ let t=0,n=0;const fruits=DATA.filter(d=>d.k==='fruit'&&sel[d.id]);
+ for(const d of DATA){if(!sel[d.id])continue;n+=(d.k==='unit'||d.k==='books')?sel[d.id]:1;if(d.k!=='fruit')t+=lineCost(d)}
+ const fc=fruits.length===4?20:fruits.length*7;t+=fc;
+ return{t,n,fc,fruits:fruits.length};
+}
+
+const card=d=>{const [k,w,h]=d.im[0];const fit=w/h<1.15?'contain':'cover';const multi=d.k==='unit'||d.k==='books';
+ return `<article class="card" id="c-${d.id}" data-id="${d.id}" data-name="${esc(d.n+' '+d.d)}">
+ <button class="media" data-gal="${d.id}" aria-label="תמונות: ${esc(d.n)}"><img src="${IMG+k}.jpg" width="${w}" height="${h}" alt="${esc(d.n)}" loading="lazy" decoding="async" style="object-fit:${fit}">${d.im.length>1?`<span class="cnt">${d.im.length} תמונות</span>`:''}</button>
+ <div class="body"><div class="name">${esc(d.n)}</div>${d.d?`<div class="note">${esc(d.d)}</div>`:''}
+ <div class="row"><div class="price">${d.p} ₪${unitLabel(d)}</div>
+ <button class="pick" data-pick="${d.id}" aria-pressed="false"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="lbl">בחירה</span></button></div>
+ ${multi?`<div class="qty">כמות:<button data-dec="${d.id}" aria-label="פחות">−</button><output id="q-${d.id}">1</output><button data-inc="${d.id}" aria-label="יותר">+</button></div>`:''}
+ </div></article>`};
+
+$('#main').innerHTML=SECS.map(([s,t,sub])=>{const items=DATA.filter(d=>d.s===s);
+ return `<section id="${s}" aria-labelledby="h-${s}"><h2 id="h-${s}">${t}</h2><p class="sub">${sub} · ${items.length} פריטים</p><div class="grid">${items.map(card).join('')}</div></section>`}).join('');
+$('#tabs').innerHTML=SECS.map(([s,t])=>`<a href="#${s}" data-tab="${s}">${t} <span>${DATA.filter(d=>d.s===s).length}</span></a>`).join('');
+
+function paint(){
+ for(const d of DATA){const c=document.getElementById('c-'+d.id);const on=!!sel[d.id];c.classList.toggle('sel',on);
+  const b=c.querySelector('.pick');b.setAttribute('aria-pressed',on);b.querySelector('.lbl').textContent=on?'נבחר':'בחירה';
+  const o=document.getElementById('q-'+d.id);if(o)o.textContent=sel[d.id]||1}
+ const {t,n}=totals();
+ $('#tot').textContent=sh(t);$('#tot2').textContent=sh(t);
+ $('#cnt').textContent=n?`נבחרו ${n} פריטים`:'לא נבחרו אביזרים';
+ $('#go').disabled=!n;
+ renderLines();save();
+}
+function renderLines(){
+ const {fc,fruits}=totals();let fruitDone=false;const rows=[];
+ for(const d of DATA){if(!sel[d.id])continue;const q=sel[d.id];
+  if(d.k==='fruit'){if(fruitDone)continue;fruitDone=true;const fs=DATA.filter(x=>x.k==='fruit'&&sel[x.id]);
+   rows.push(`<li><img src="${IMG+d.im[0][0]}.jpg" alt=""><div class="t">פירות: ${fs.map(x=>esc(x.n)).join(', ')}<small>${fruits===4?'כל 4 הפירות – 20 ₪':fruits+' × 7 ₪'}</small></div><span class="v">${sh(fc)}</span><button class="rm" data-rmfruit aria-label="הסרה">✕</button></li>`);continue}
+  rows.push(`<li><img src="${IMG+d.im[0][0]}.jpg" alt=""><div class="t">${esc(d.n)}${q>1?` × ${q}`:''}${d.d?`<small>${esc(d.d)}</small>`:''}</div><span class="v">${sh(lineCost(d))}</span><button class="rm" data-rm="${d.id}" aria-label="הסרת ${esc(d.n)}">✕</button></li>`)}
+ $('#lines').innerHTML=rows.join('')||'<li>עדיין לא נבחרו אביזרים.</li>';
+}
+
+document.addEventListener('click',e=>{
+ const t=e.target.closest('[data-pick],[data-inc],[data-dec],[data-gal],[data-rm],[data-rmfruit],[data-close],[data-gclose]');if(!t)return;
+ if(t.dataset.pick){const id=t.dataset.pick;if(sel[id])delete sel[id];else sel[id]=1;paint()}
+ else if(t.dataset.inc){sel[t.dataset.inc]=Math.min(99,(sel[t.dataset.inc]||1)+1);paint()}
+ else if(t.dataset.dec){const id=t.dataset.dec;sel[id]=(sel[id]||1)-1;if(sel[id]<1)delete sel[id];paint()}
+ else if(t.dataset.gal)openGal(t.dataset.gal);
+ else if(t.dataset.rm){delete sel[t.dataset.rm];paint()}
+ else if(t.hasAttribute('data-rmfruit')){DATA.forEach(d=>{if(d.k==='fruit')delete sel[d.id]});paint()}
+ else if(t.hasAttribute('data-close'))closeSheet();
+ else if(t.hasAttribute('data-gclose'))closeGal();
+});
+
+const sheet=$('#sheet');
+$('#go').addEventListener('click',()=>{sheet.classList.add('open');sheet.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';setTimeout(()=>$('#sh').focus?.(),0)});
+sheet.addEventListener('click',e=>{if(e.target===sheet)closeSheet()});
+function closeSheet(){sheet.classList.remove('open');sheet.setAttribute('aria-hidden','true');document.body.style.overflow=''}
+
+// gallery
+const gal=$('#gal'),track=$('#track');
+function openGal(id){const d=byId[id];$('#gt').textContent=d.im.length>1?`${d.n} · ${d.im.length} תמונות – החליקו לצד`:d.n;
+ track.innerHTML=d.im.map(([k,w,h])=>`<div class="slide"><img src="${IMG+k}.jpg" width="${w}" height="${h}" alt="${esc(d.n)}"></div>`).join('');
+ $('#gp').style.display=$('#gx').style.display=d.im.length>1?'':'none';
+ gal.classList.add('open');gal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';track.scrollLeft=0}
+function closeGal(){gal.classList.remove('open');gal.setAttribute('aria-hidden','true');document.body.style.overflow=sheet.classList.contains('open')?'hidden':''}
+const step=dir=>{const w=track.clientWidth;track.scrollBy({left:dir*w,behavior:'smooth'})};
+$('#gp').addEventListener('click',()=>step(1));$('#gx').addEventListener('click',()=>step(-1));
+gal.addEventListener('click',e=>{if(e.target.classList.contains('slide'))closeGal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(gal.classList.contains('open'))closeGal();else if(sheet.classList.contains('open'))closeSheet()}
+ if(gal.classList.contains('open')){if(e.key==='ArrowLeft')step(-1);if(e.key==='ArrowRight')step(1)}});
+
+// search
+$('#q').addEventListener('input',e=>{const v=e.target.value.trim();let any=0;
+ document.querySelectorAll('.card').forEach(c=>{const m=!v||c.dataset.name.includes(v);c.style.display=m?'':'none';if(m)any++});
+ document.querySelectorAll('section').forEach(s=>{s.style.display=[...s.querySelectorAll('.card')].some(c=>c.style.display!=='none')?'':'none'});
+ $('#empty').style.display=any?'none':'block'});
+
+// active tab
+const tabs=[...document.querySelectorAll('[data-tab]')];
+const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting)tabs.forEach(a=>a.classList.toggle('on',a.dataset.tab===en.target.id))})},{rootMargin:'-30% 0px -60% 0px'});
+document.querySelectorAll('section').forEach(s=>io.observe(s));
+
+// send
+function orderText(){const {t,fc,fruits}=totals();const out=[];let fruitDone=false;
+ for(const d of DATA){if(!sel[d.id])continue;const q=sel[d.id];
+  if(d.k==='fruit'){if(fruitDone)continue;fruitDone=true;out.push(`• פירות (${DATA.filter(x=>x.k==='fruit'&&sel[x.id]).map(x=>x.n).join(', ')}) — ${fc} ₪`);continue}
+  out.push(`• ${d.n}${d.d?` (${d.d})`:''}${q>1?` × ${q}`:''} — ${lineCost(d)} ₪`)}
+ return {list:out.join('\n'),total:t}}
+const msg=$('#msg');
+const show=(cls,html)=>{msg.className='msg '+cls;msg.innerHTML=html};
+$('#f').addEventListener('submit',async e=>{e.preventDefault();
+ const name=$('#fn').value.trim(),phone=$('#fp').value.trim();
+ if(!Object.keys(sel).length){show('bad','לא נבחרו אביזרים.');return}
+ if(!name||phone.replace(/\D/g,'').length<9){show('bad','נא למלא שם מלא ומספר טלפון תקין.');(name?$('#fp'):$('#fn')).focus();return}
+ if(document.querySelector('.hp').value)return;
+ const {list,total}=orderText();
+ const btn=$('#send');btn.disabled=true;btn.textContent='שולח…';msg.className='msg';
+ const payload={_subject:`הזמנה חדשה מהקטלוג – ${name} – ${total} ₪`,_template:'table',_captcha:'false',
+  'שם':name,'טלפון':phone,'תאריך הצילום':$('#fd').value||'—','הערות':$('#fx').value.trim()||'—','פריטים':list,'סה״כ':total+' ₪'};
+ const waText=encodeURIComponent(`הזמנת אביזרים\nשם: ${name}\nטלפון: ${phone}\n${list}\nסה״כ: ${total} ₪`);
+ try{const r=await fetch('https://formsubmit.co/ajax/'+TO,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});
+  const j=await r.json().catch(()=>({}));
+  if(r.ok&&String(j.success)==='true'){show('ok',`<b>ההזמנה נשלחה בהצלחה!</b><br>סה״כ ${total} ₪. ניצור איתך קשר בהקדם לתיאום.`);sel={};paint();$('#f').reset();btn.textContent='נשלח ✓';return}
+  throw new Error(j.message||r.status)}
+ catch(err){show('bad',`השליחה לא הצליחה כרגע. אפשר לשלוח את ההזמנה <a href="https://wa.me/${WA}?text=${waText}" target="_blank" rel="noopener">בוואטסאפ</a> או להתקשר ל-058-3211623.`);btn.disabled=false;btn.textContent='שליחת ההזמנה'}
+});
+paint();
+}
+</script>
+</body>
+</html>
