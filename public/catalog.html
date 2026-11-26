@@ -336,11 +336,16 @@ $('#f').addEventListener('submit',async e=>{e.preventDefault();
  const payload={_subject:`הזמנה חדשה מהקטלוג – ${name} – ${total} ₪`,_template:'table',_captcha:'false',
   'שם':name,'טלפון':phone,'תאריך הצילום':$('#fd').value||'—','הערות':$('#fx').value.trim()||'—','פריטים':list,'סה״כ':total+' ₪'};
  const waText=encodeURIComponent(`הזמנת אביזרים\nשם: ${name}\nטלפון: ${phone}\n${list}\nסה״כ: ${total} ₪`);
- try{const r=await fetch('https://formsubmit.co/ajax/'+TO,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});
-  const j=await r.json().catch(()=>({}));
-  if(r.ok&&String(j.success)==='true'){show('ok',`<b>ההזמנה נשלחה בהצלחה!</b><br>סה״כ ${total} ₪. ניצור איתך קשר בהקדם לתיאום.`);sel={};paint();$('#f').reset();btn.textContent='נשלח ✓';return}
-  throw new Error(j.message||r.status)}
- catch(err){show('bad',`השליחה לא הצליחה כרגע. אפשר לשלוח את ההזמנה <a href="https://wa.me/${WA}?text=${waText}" target="_blank" rel="noopener">בוואטסאפ</a> או להתקשר ל-058-3211623.`);btn.disabled=false;btn.textContent='שליחת ההזמנה'}
+ let ok=false;
+ // 1) through the site's own server (works on filtered networks)
+ try{const r=await fetch('/api/catalog-order',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+   body:JSON.stringify({name,phone,date:$('#fd').value,notes:$('#fx').value.trim(),items:list,total})});
+  const j=await r.json().catch(()=>({}));ok=r.ok&&j.ok===true}catch(e){}
+ // 2) fallback: straight from the browser
+ if(!ok){try{const r=await fetch('https://formsubmit.co/ajax/'+TO,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});
+  const j=await r.json().catch(()=>({}));ok=r.ok&&String(j.success)==='true'}catch(e){}}
+ if(ok){show('ok',`<b>ההזמנה נשלחה בהצלחה!</b><br>סה״כ ${total} ₪. ניצור איתך קשר בהקדם לתיאום.`);sel={};paint();$('#f').reset();btn.textContent='נשלח ✓';return}
+ show('bad',`השליחה לא הצליחה כרגע. אפשר לשלוח את ההזמנה <a href="https://wa.me/${WA}?text=${waText}" target="_blank" rel="noopener">בוואטסאפ</a> או להתקשר ל-058-3211623.`);btn.disabled=false;btn.textContent='שליחת ההזמנה';
 });
 paint();
 }
