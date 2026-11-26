@@ -335,7 +335,6 @@ $('#f').addEventListener('submit',async e=>{e.preventDefault();
  const btn=$('#send');btn.disabled=true;btn.textContent='שולח…';msg.className='msg';
  const payload={_subject:`הזמנה חדשה מהקטלוג – ${name} – ${total} ₪`,_template:'table',_captcha:'false',
   'שם':name,'טלפון':phone,'תאריך הצילום':$('#fd').value||'—','הערות':$('#fx').value.trim()||'—','פריטים':list,'סה״כ':total+' ₪'};
- const waText=encodeURIComponent(`הזמנת אביזרים\nשם: ${name}\nטלפון: ${phone}\n${list}\nסה״כ: ${total} ₪`);
  let ok=false;
  // 1) through the site's own server (works on filtered networks)
  try{const r=await fetch('/api/catalog-order',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
@@ -345,7 +344,7 @@ $('#f').addEventListener('submit',async e=>{e.preventDefault();
  if(!ok){try{const r=await fetch('https://formsubmit.co/ajax/'+TO,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});
   const j=await r.json().catch(()=>({}));ok=r.ok&&String(j.success)==='true'}catch(e){}}
  if(ok){show('ok',`<b>ההזמנה נשלחה בהצלחה!</b><br>סה״כ ${total} ₪. ניצור איתך קשר בהקדם לתיאום.`);sel={};paint();$('#f').reset();btn.textContent='נשלח ✓';return}
- show('bad',`השליחה לא הצליחה כרגע. אפשר לשלוח את ההזמנה <a href="https://wa.me/${WA}?text=${waText}" target="_blank" rel="noopener">בוואטסאפ</a> או להתקשר ל-058-3211623.`);btn.disabled=false;btn.textContent='שליחת ההזמנה';
+ show('bad',`השליחה לא הצליחה כרגע. אפשר להתקשר ל-<a href="tel:0583211623">058-3211623</a> או לשלוח מייל ל-<a href="mailto:${TO}">${TO.toUpperCase()}</a>.`);btn.disabled=false;btn.textContent='שליחת ההזמנה';
 });
 paint();
 }
