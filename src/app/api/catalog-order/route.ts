@@ -3,8 +3,9 @@
  *
  * The browser posts to this same-origin route (so it works behind filtered
  * networks such as NetFree), and the server delivers the order by email:
- *  1. Resend, when RESEND_API_KEY is configured;
- *  2. otherwise FormSubmit (https://formsubmit.co), which needs a one-time
+ *  1. Gmail SMTP, when GMAIL_APP_PASSWORD is configured (App Password);
+ *  2. Resend, when RESEND_API_KEY is configured;
+ *  3. otherwise FormSubmit (https://formsubmit.co), which needs a one-time
  *     "Activate Form" click in the first email it sends to the inbox.
  *
  * The inbox is set in the Vercel environment variable CATALOG_TO_EMAIL
@@ -37,6 +38,42 @@ const escapeHtml = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
 type Order = { name: string; phone: string; date: string; notes: string; items: string; total: number };
+
+function renderOrder(order: Order) {
+  const rows: [string, string][] = [
+    ['שם', order.name],
+    ['טלפון', order.phone],
+    ['תאריך הצילום', order.date || '—'],
+    ['הערות', order.notes || '—'],
+  ];
+  const html = `<div dir="rtl" style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#1c2130">
+  <h2 style="margin:0 0 12px">הזמנה חדשה מהקטלוג</h2>
+  <table style="border-collapse:collapse">${rows
+    .map(([k, v]) => `<tr><td style="padding:4px 0 4px 16px;color:#6b6f7b">${k}</td><td><strong>${escapeHtml(v)}</strong></td></tr>`)
+    .join('')}</table>
+  <p style="margin:16px 0 4px;color:#6b6f7b">פריטים:</p>
+  <p style="margin:0;white-space:pre-wrap">${escapeHtml(order.items)}</p>
+  <p style="margin:16px 0 0;font-size:18px"><strong>סה״כ: ${order.total} ₪</strong></p>
+</div>`;
+  const text = `${rows.map(([k, v]) => `${k}: ${v}`).join('\n')}\n\nפריטים:\n${order.items}\n\nסה״כ: ${order.total} ₪`;
+  return { html, text };
+}
+
+/** Gmail SMTP with an App Password: GMAIL_APP_PASSWORD (+ GMAIL_USER, defaults to the inbox). */
+async function viaGmail(to: string, order: Order, subject: string) {
+  const nodemailer = (await import('nodemailer')).default;
+  const user = (process.env.GMAIL_USER || to).trim();
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: { user, pass: (process.env.GMAIL_APP_PASSWORD || '').replace(/\s+/g, '') },
+    connectionTimeout: 10_000,
+    socketTimeout: 15_000,
+  });
+  const { html, text } = renderOrder(order);
+  await transporter.sendMail({ from: `"קטלוג אביזרים" <${user}>`, to, subject, html, text });
+}
 
 async function viaResend(to: string, order: Order, subject: string) {
   const rows: [string, string][] = [
@@ -134,6 +171,15 @@ export async function POST(request: Request) {
   const subject = `הזמנה חדשה מהקטלוג – ${order.name} – ${order.total} ₪`;
   const origin = new URL(request.url).origin;
 
+  if (process.env.GMAIL_APP_PASSWORD) {
+    try {
+      await viaGmail(to, order, subject);
+      return json({ ok: true, via: 'gmail' });
+    } catch (err) {
+      console.error('[catalog-order] Gmail failed, trying the next channel:', err);
+    }
+  }
+
   if (process.env.RESEND_API_KEY) {
     try {
       await viaResend(to, order, subject);
@@ -153,5 +199,8 @@ export async function POST(request: Request) {
 }
 
 export function GET() {
-  return json({ ok: false, error: 'method_not_allowed', configured: Boolean(inbox()) }, 405);
+  return json(
+    { ok: false, error: 'method_not_allowed', configured: Boolean(inbox()), gmail: Boolean(process.env.GMAIL_APP_PASSWORD) },
+    405,
+  );
 }
